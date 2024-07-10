@@ -1,31 +1,29 @@
 package com.dungeonadventure.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import View.MainMenuScreen;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class DungeonAdventure extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class DungeonAdventure extends Game {
+	public SpriteBatch batch;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 800;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
 	}
-	
+
 	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
+	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 }
