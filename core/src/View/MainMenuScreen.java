@@ -18,8 +18,6 @@ public class MainMenuScreen implements Screen {
     Texture SettingsButtonActive;
     Texture SettingsButtonInactive;
 
-
-
     private static final int SETTINGS_BUTTON_WIDTH = 64;
     private static final int SETTINGS_BUTTON_HEIGHT = 64;
     private static final int DUNGEON_TITLE_WIDTH = 450;
@@ -32,7 +30,6 @@ public class MainMenuScreen implements Screen {
     private static final int PLAY_BUTTON_Y = 330;
     private static final int TITLE_Y = 300;
     private static final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
-
 
     public MainMenuScreen(final DungeonAdventure game) {
         this.game = game;
@@ -78,7 +75,6 @@ public class MainMenuScreen implements Screen {
             }
         });
     }
-
     @Override
     public void show() {
     }
@@ -89,8 +85,18 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
 
         int x = DungeonAdventure.WIDTH / 2 - DUNGEON_TITLE_WIDTH / 2;
+
         game.batch.draw(DungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);
-        x = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
+
+        exitButtonDraw();
+        playButtonDraw();
+        settingsButtonDraw();
+
+        game.batch.end();
+    }
+
+    public void exitButtonDraw() {
+        int x = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
         if (Gdx.input.getX() < x + EXIT_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y) {
@@ -99,8 +105,9 @@ public class MainMenuScreen implements Screen {
         } else {
             game.batch.draw(exitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         }
-
-        x = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+    }
+    public void playButtonDraw() {
+        int x = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
         if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
@@ -109,8 +116,9 @@ public class MainMenuScreen implements Screen {
         } else {
             game.batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
-
-        x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
+    }
+    public void settingsButtonDraw() {
+        int x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
         if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
@@ -119,10 +127,7 @@ public class MainMenuScreen implements Screen {
         } else {
             game.batch.draw(SettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
-
-        game.batch.end();
     }
-
     @Override
     public void resize(int width, int height) {
     }
