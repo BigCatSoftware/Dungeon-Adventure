@@ -1,11 +1,21 @@
 package View;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dungeonadventure.game.DungeonAdventure;
 
 public class SettingsScreen implements Screen {
    public DungeonAdventure game;
+
+   Texture SoundActive;
+   Texture SoundInactive;
+   Texture MuteActive;
+   Texture MuteInactive;
+   Texture PlusActive;
+   Texture PlusInactive;
+   Texture MinusActive;
+   Texture MinusInactive;
 
 
     public SettingsScreen (final DungeonAdventure game) {
