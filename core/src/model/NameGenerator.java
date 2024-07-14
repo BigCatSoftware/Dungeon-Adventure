@@ -65,5 +65,4 @@ public class NameGenerator {
         "Zexor Haggard",
         "Strelak The Mute"
     };
-    String[]
 }
