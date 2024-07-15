@@ -1,7 +1,23 @@
 package model;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+/**
+ * Picks a name for an entity created upon start of the game
+ * @author Nazarii Revitskyi
+ * @version July 14, 2024.
+ */
 public class NameGenerator {
-    String[] myWarriorNames = {"Skeithvirr The Wolf",
+    public static final String NEW_LINE = System.lineSeparator();
+    private static final int NAMES_NUM = 10;
+    /**
+     * Warrior names array.
+     */
+    private final String[] myWarriorNames = {"Skeithvirr The Wolf",
         "Rhaumm The Tower",
         "Hrurn The Ironclad",
         "Tirstald The Vengeful",
@@ -11,7 +27,10 @@ public class NameGenerator {
         "Drotrin The Bloody",
         "Sgolvammenn The Maneater",
         "Ignedr The Undying"};
-    String[] myPriestessNames = {"Ella the Loving",
+    /**
+     * Priestess names array.
+     */
+    private final String[] myPriestessNames = {"Ella the Loving",
         "Nissa the Gracious",
         "Valorie the Devoted",
         "Leeta the Faithful",
@@ -21,8 +40,10 @@ public class NameGenerator {
         "Helen the Lionheart",
         "Arianna the Righteous",
         "Yavia the Reliable"};
-
-    String[] myThiefNames = {
+    /**
+     * Thief names array.
+     */
+    private final String[] myThiefNames = {
         "Ciro The Ghost",
         "Ozul The Slayer",
         "Dante The Claw",
@@ -34,7 +55,10 @@ public class NameGenerator {
         "Arad The Poisoner",
         "Orion The Serpent"};
 
-    String[] myOgreNames = {"Gokug",
+    /**
+     * Ogre names array.
+     */
+    private final String[] myOgreNames = {"Gokug",
         "Drurok",
         "Wugrok",
         "Tonegrot",
@@ -44,7 +68,10 @@ public class NameGenerator {
         "Xukug",
         "Nezug",
         "Mulozir"};
-    String[] myGremlinNames = {"Boc",
+    /**
+     * Gremlin names array.
+     */
+    private final String[] myGremlinNames = {"Boc",
         "Chut",
         "Zag",
         "Ikdag",
@@ -54,7 +81,10 @@ public class NameGenerator {
         "Agzod",
         "Uzloc",
         "Ontroz"};
-    String[] mySkeletonNames = {"Stuqur Bonecall",
+    /**
+     * Skeleton names array.
+     */
+    private final String[] mySkeletonNames = {"Stuqur Bonecall",
         "Echralazar Metus",
         "Yauzhul Mallus",
         "Chrozhar Nyte",
@@ -65,4 +95,87 @@ public class NameGenerator {
         "Zexor Haggard",
         "Strelak The Mute"
     };
+    /**
+     * Random value generator used to select names.
+     */
+    private final Random myRandom;
+
+    /**
+     * Constructor initializes the object and Random value generator.
+     */
+    public NameGenerator(){
+        myRandom = new Random();
+    }
+
+    /**
+     * Returns random name out of list of Warrior names.
+     * @return String name of warrior character.
+     */
+    public String getWarriorName(){
+        return myWarriorNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+    /**
+     * Returns random name out of list of Priestess names.
+     * @return String name of priestess character.
+     */
+    public String getPriestessName(){
+        return myPriestessNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+
+    /**
+     * Returns random name out of list of Thief names.
+     * @return String name of thief character.
+     */
+    public String getThiefName(){
+        return myThiefNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+
+    /**
+     * Returns random name out of list of Ogre names.
+     * @return String name of ogre character.
+     */
+    public String getOgreName(){
+        return myOgreNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+
+    /**
+     * Returns random name out of list of Gremlin names.
+     * @return String name of gremlin character.
+     */
+    public String getGremlinName(){
+        return myGremlinNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+
+    /**
+     * Returns random name out of list of Skeleton names.
+     * @return String name of skeleton character.
+     */
+    public String getSkeletonName(){
+        return mySkeletonNames[myRandom.nextInt(NAMES_NUM+1)];
+    }
+
+    /**
+     * Method that converts all data present in the class to string.
+     * @return String representation of class data.
+     */
+    @Override
+    public String toString(){
+        final StringBuilder stringBuilder = new StringBuilder();
+        final Map<String, String[]> allArraysMap = new HashMap<>();
+        allArraysMap.put("Warrior Names", myWarriorNames);
+        allArraysMap.put("Priestess Names", myPriestessNames);
+        allArraysMap.put("Thief Names", myThiefNames);
+        allArraysMap.put("Ogre Names", myOgreNames);
+        allArraysMap.put("Gremlin Names", myGremlinNames);
+        allArraysMap.put("Skeleton Names", mySkeletonNames);
+        for(String strCharacterType : allArraysMap.keySet()){
+            stringBuilder.append(strCharacterType).append(NEW_LINE);
+            for(String name : allArraysMap.get(strCharacterType)){
+                stringBuilder.append(name).append(", ");
+            }
+            stringBuilder.delete(stringBuilder.length()-2, stringBuilder.length());
+            stringBuilder.append(NEW_LINE).append(NEW_LINE);
+        }
+        return stringBuilder.toString();
+    }
 }
