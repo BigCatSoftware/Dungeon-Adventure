@@ -1,5 +1,6 @@
 package View;
 
+import Controller.Settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -27,11 +28,11 @@ public class MainMenuScreen implements Screen {
     private static final int PLAY_BUTTON_WIDTH = 300;
     private static final int PLAY_BUTTON_HEIGHT = 120;
     private static final int EXIT_BUTTON_Y = 250;
-    private static final int PLAY_BUTTON_Y = 330;
+    private static final int PLAY_BUTTON_Y = 375;
     private static final int TITLE_Y = 300;
     private static final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
 
-    public MainMenuScreen(final DungeonAdventure game) {
+    public MainMenuScreen(final DungeonAdventure game, final Settings settings) {
         this.game = game;
         DungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
         exitButtonActive = new Texture("exit_button_active.png");
@@ -68,7 +69,7 @@ public class MainMenuScreen implements Screen {
                 if (screenX < x + SETTINGS_BUTTON_WIDTH && screenX > x &&
                         DungeonAdventure.HEIGHT - screenY < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
                         DungeonAdventure.HEIGHT - screenY > SETTINGS_BUTTON_Y) {
-                    game.setScreen(new SettingsScreen(game));
+                    game.setScreen(new SettingsScreen(game, settings));
                 }
 
                 return super.touchDown(screenX, screenY, pointer, button);
