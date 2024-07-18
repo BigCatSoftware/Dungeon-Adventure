@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
