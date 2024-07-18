@@ -1,10 +1,9 @@
 package com.dungeonadventure.game;
 
+import Controller.Settings;
 import View.MainMenuScreen;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class DungeonAdventure extends Game {
 	public SpriteBatch batch;
@@ -14,7 +13,7 @@ public class DungeonAdventure extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new MainMenuScreen(this, new Settings()));
 	}
 
 	@Override

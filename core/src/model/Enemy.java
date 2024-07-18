@@ -1,4 +1,4 @@
-package model;
+package Model;
 
-public class Enemy extends DungeonCharacter{
+public class Enemy extends DungeonCharacter {
 }
