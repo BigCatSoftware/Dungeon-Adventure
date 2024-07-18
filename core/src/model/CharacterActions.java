@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Defines methods that describe actions available to a dungeon character.
@@ -10,11 +10,7 @@ public interface CharacterActions {
     void moveCharacterDown();
     void moveCharacterLeft();
     void moveCharacterRight();
-    int receiveDamage();
+    void receiveDamage(final int incomingDamage);
     int attack();
-    void specialSkill();
-    boolean block();
-    boolean dodge();
-    int heal();
     boolean healChanceOnHit();
 }
