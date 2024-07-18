@@ -112,14 +112,14 @@ public class NameGenerator {
      * @return String name of warrior character.
      */
     public String getWarriorName(){
-        return myWarriorNames[myRandom.nextInt(NAMES_NUM+1)];
+        return myWarriorNames[myRandom.nextInt(NAMES_NUM)];
     }
     /**
      * Returns random name out of list of Priestess names.
      * @return String name of priestess character.
      */
     public String getPriestessName(){
-        return myPriestessNames[myRandom.nextInt(NAMES_NUM+1)];
+        return myPriestessNames[myRandom.nextInt(NAMES_NUM)];
     }
 
     /**
@@ -127,7 +127,7 @@ public class NameGenerator {
      * @return String name of thief character.
      */
     public String getThiefName(){
-        return myThiefNames[myRandom.nextInt(NAMES_NUM+1)];
+        return myThiefNames[myRandom.nextInt(NAMES_NUM)];
     }
 
     /**
@@ -135,7 +135,7 @@ public class NameGenerator {
      * @return String name of ogre character.
      */
     public String getOgreName(){
-        return myOgreNames[myRandom.nextInt(NAMES_NUM+1)];
+        return myOgreNames[myRandom.nextInt(NAMES_NUM)];
     }
 
     /**
@@ -143,7 +143,7 @@ public class NameGenerator {
      * @return String name of gremlin character.
      */
     public String getGremlinName(){
-        return myGremlinNames[myRandom.nextInt(NAMES_NUM+1)];
+        return myGremlinNames[myRandom.nextInt(NAMES_NUM)];
     }
 
     /**
@@ -151,7 +151,7 @@ public class NameGenerator {
      * @return String name of skeleton character.
      */
     public String getSkeletonName(){
-        return mySkeletonNames[myRandom.nextInt(NAMES_NUM+1)];
+        return mySkeletonNames[myRandom.nextInt(NAMES_NUM)];
     }
 
     /**
