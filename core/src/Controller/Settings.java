@@ -48,4 +48,10 @@ public class Settings {
             myVolumeLevel--;
         }
     }
+
+    public void setSoundOn(boolean isSoundOn) {
+    }
+
+    public void setMuted(boolean isMuted) {
+    }
 }

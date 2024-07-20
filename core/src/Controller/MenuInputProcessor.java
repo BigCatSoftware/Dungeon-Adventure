@@ -62,6 +62,8 @@ public class MenuInputProcessor extends InputAdapter {
         float x = touchPos.x;
         float y = touchPos.y;
 
+        System.out.println("Touch at: (" + x + ", " + y + ")");
+
         if (isInBounds(x, y, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT)) {
             Gdx.app.exit();
         } else if (isInBounds(x, y, PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT)) {
@@ -72,6 +74,7 @@ public class MenuInputProcessor extends InputAdapter {
 
         return true; // Return true if the event is handled
     }
+
 
     private boolean isInBounds(final float x, final float y, final float buttonX, final float buttonY, final float buttonWidth, final float buttonHeight) {
         return x >= buttonX && x <= buttonX + buttonWidth && y >= buttonY && y <= buttonY + buttonHeight;
