@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class DungeonAdventure extends Game {
 	public SpriteBatch batch;
 	public static Settings mySETTINGS;
-	private DatabaseHelper databaseHelper;
+	//private DatabaseHelper databaseHelper;
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
@@ -20,10 +20,10 @@ public class DungeonAdventure extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		databaseHelper = new DatabaseHelper();
+		//databaseHelper = new DatabaseHelper();
 
 		mySETTINGS = new Settings();
-		databaseHelper.loadSettings(mySETTINGS);
+		//databaseHelper.loadSettings(mySETTINGS);
 
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -35,8 +35,8 @@ public class DungeonAdventure extends Game {
 
 	@Override
 	public void dispose () {
-		databaseHelper.saveSettings(mySETTINGS.getVolumeLevel(), mySETTINGS.isSoundOn(), mySETTINGS.isMuted());
-		databaseHelper.close();
+		//databaseHelper.saveSettings(mySETTINGS.getVolumeLevel(), mySETTINGS.isSoundOn(), mySETTINGS.isMuted());
+		//databaseHelper.close();
 		batch.dispose();
 	}
 }
