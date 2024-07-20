@@ -3,6 +3,7 @@ package View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,71 +12,74 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.dungeonadventure.game.DungeonAdventure;
-import Controller.Settings;
 
-public class SettingsScreen implements Screen {
-    private final DungeonAdventure game;
-    private final OrthographicCamera camera;
-    private final SpriteBatch batch;
-    private final BitmapFont font;
-    private final Settings settings;
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
-    private final Texture SoundActive;
-    private final Texture SoundInactive;
-    private final Texture MuteActive;
-    private final Texture MuteInactive;
-    private final Texture PlusActive;
-    private final Texture PlusInactive;
-    private final Texture MinusActive;
-    private final Texture MinusInactive;
-    private final Texture BackActive;
-    private final Texture BackInactive;
-    private final Texture[] VolumeBars;
+public class SettingsScreen extends ScreenAdapter {
+    private final DungeonAdventure myGame;
+    private final Screen myPreviousScreen;
 
-    private final Rectangle soundButton;
-    private final Rectangle plusButton;
-    private final Rectangle minusButton;
-    private final Rectangle volumeBar;
-    private final Rectangle backButton;
+    private final OrthographicCamera myCamera;
+    private final SpriteBatch myBatch;
+    private final BitmapFont myFont;
 
-    private final int SOUND_BUTTON_WIDTH = 64;
-    private final int SOUND_BUTTON_HEIGHT = 64;
-    private final int PLUSMINUS_BUTTON_WIDTH = 64;
-    private final int PLUSMINUS_BUTTON_HEIGHT = 64;
-    private final int VOLUME_WIDTH = 512;
-    private final int VOLUME_HEIGHT = 64;
-    private final int BACK_BUTTON_WIDTH = 48;
-    private final int BACK_BUTTON_HEIGHT = 48;
+    private final Texture mySoundActive;
+    private final Texture mySoundInactive;
+    private final Texture myMuteActive;
+    private final Texture myMuteInactive;
+    private final Texture myPlusActive;
+    private final Texture myPlusInactive;
+    private final Texture myMinusActive;
+    private final Texture myMinusInactive;
+    private final Texture myBackActive;
+    //private final Texture myBackInactive;
+    private final Texture[] myVolumeBars;
 
-    public SettingsScreen(final DungeonAdventure game, final Settings settings) {
-        this.game = game;
-        this.settings = settings;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
+    private final Rectangle mySoundButton;
+    private final Rectangle myPlusButton;
+    private final Rectangle myMinusButton;
+    private final Rectangle myVolumeBar;
+    private final Rectangle myBackButton;
 
-        SoundActive = new Texture("SoundActive.png");
-        SoundInactive = new Texture("SoundInactive.png");
-        MuteActive = new Texture("MuteActive.png");
-        MuteInactive = new Texture("MuteInactive.png");
-        PlusActive = new Texture("PlusActive.png");
-        PlusInactive = new Texture("PlusInactive.png");
-        MinusActive = new Texture("MinusActive.png");
-        MinusInactive = new Texture("MinusInactive.png");
-        BackActive = new Texture("BackActive.png");
-        BackInactive = new Texture("BackInactive.png");
+    private static final int SOUND_BUTTON_WIDTH = 64;
+    private static final int SOUND_BUTTON_HEIGHT = 64;
+    private static final int PLUSMINUS_BUTTON_WIDTH = 64;
+    private static final int PLUSMINUS_BUTTON_HEIGHT = 64;
+    private static final int VOLUME_WIDTH = 512;
+    private static final int VOLUME_HEIGHT = 64;
+    private static final int BACK_BUTTON_WIDTH = 48;
+    private static final int BACK_BUTTON_HEIGHT = 48;
 
-        VolumeBars = new Texture[11];
+    public SettingsScreen(final DungeonAdventure theGame, final Screen previousScreen) {
+        myGame = theGame;
+        myPreviousScreen = previousScreen;
+
+        myCamera = new OrthographicCamera();
+        myCamera.setToOrtho(false, 800, 480);
+        myBatch = new SpriteBatch();
+        myFont = new BitmapFont();
+
+        mySoundActive = new Texture("SoundActive.png");
+        mySoundInactive = new Texture("SoundInactive.png");
+        myMuteActive = new Texture("MuteActive.png");
+        myMuteInactive = new Texture("MuteInactive.png");
+        myPlusActive = new Texture("PlusActive.png");
+        myPlusInactive = new Texture("PlusInactive.png");
+        myMinusActive = new Texture("MinusActive.png");
+        myMinusInactive = new Texture("MinusInactive.png");
+        myBackActive = new Texture("BackActive.png");
+        //myBackInactive = new Texture("BackInactive.png");
+
+        myVolumeBars = new Texture[11];
         for (int i = 0; i <= 10; i++) {
-            VolumeBars[i] = new Texture(i + "VolumeBar.png");
+            myVolumeBars[i] = new Texture(i + "VolumeBar.png");
         }
 
-        backButton = new Rectangle(0, 436, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
-        soundButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - (2 * ((float) SOUND_BUTTON_WIDTH / 2)) + 32, 250, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
-        minusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) - 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
-        plusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) + 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
-        volumeBar = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) VOLUME_WIDTH / 2) + 128, 350, VOLUME_WIDTH, VOLUME_HEIGHT);
+        myBackButton = new Rectangle(0, 436, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
+        mySoundButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - (2 * ((float) SOUND_BUTTON_WIDTH / 2)) + 32, 250, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
+        myMinusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) - 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
+        myPlusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) + 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
+        myVolumeBar = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) VOLUME_WIDTH / 2) + 128, 350, VOLUME_WIDTH, VOLUME_HEIGHT);
 
         setupInputProcessor();
     }
@@ -85,16 +89,16 @@ public class SettingsScreen implements Screen {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector3 touchPos = new Vector3(screenX, screenY, 0);
-                camera.unproject(touchPos);
+                myCamera.unproject(touchPos);
 
-                if (soundButton.contains(touchPos.x, touchPos.y)) {
-                    settings.toggleSound();
-                } else if (plusButton.contains(touchPos.x, touchPos.y)) {
-                    settings.increaseVolume();
-                } else if (minusButton.contains(touchPos.x, touchPos.y)) {
-                    settings.decreaseVolume();
-                } else if (backButton.contains(touchPos.x, touchPos.y)) {
-                    game.setScreen(new MainMenuScreen(game, settings));
+                if (mySoundButton.contains(touchPos.x, touchPos.y)) {
+                    mySETTINGS.toggleSound();
+                } else if (myPlusButton.contains(touchPos.x, touchPos.y)) {
+                    mySETTINGS.increaseVolume();
+                } else if (myMinusButton.contains(touchPos.x, touchPos.y)) {
+                    mySETTINGS.decreaseVolume();
+                } else if (myBackButton.contains(touchPos.x, touchPos.y)) {
+                    myGame.setScreen(myPreviousScreen);
                 }
 
                 return super.touchDown(screenX, screenY, pointer, button);
@@ -103,16 +107,12 @@ public class SettingsScreen implements Screen {
     }
 
     @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        myCamera.update();
+        myBatch.setProjectionMatrix(myCamera.combined);
 
-        batch.begin();
+        myBatch.begin();
 
         drawBackButton();
         drawSound();
@@ -120,59 +120,43 @@ public class SettingsScreen implements Screen {
         drawMinus();
         drawVolume();
 
-        batch.end();
+        myBatch.end();
     }
 
     private void drawSound() {
-        batch.draw(settings.isSoundOn() ? SoundActive : MuteActive, soundButton.x, soundButton.y, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
+        myBatch.draw(mySETTINGS.isSoundOn() ? mySoundActive : myMuteActive, mySoundButton.x, mySoundButton.y, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
     }
 
     private void drawPlus() {
-        batch.draw(PlusActive, plusButton.x, plusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
+        myBatch.draw(myPlusActive, myPlusButton.x, myPlusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
     }
 
     private void drawMinus() {
-        batch.draw(MinusActive, minusButton.x, minusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
+        myBatch.draw(myMinusActive, myMinusButton.x, myMinusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
     }
 
     private void drawVolume() {
-        batch.draw(VolumeBars[settings.getVolumeLevel()], volumeBar.x, volumeBar.y, VOLUME_WIDTH, VOLUME_HEIGHT);
+        myBatch.draw(myVolumeBars[mySETTINGS.getVolumeLevel()], myVolumeBar.x, myVolumeBar.y, VOLUME_WIDTH, VOLUME_HEIGHT);
     }
+
     private void drawBackButton() {
-        batch.draw(BackActive, backButton.x, backButton.y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
+        myBatch.draw(myBackActive, myBackButton.x, myBackButton.y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        font.dispose();
-        SoundActive.dispose();
-        SoundInactive.dispose();
-        MuteActive.dispose();
-        MuteInactive.dispose();
-        PlusActive.dispose();
-        PlusInactive.dispose();
-        MinusActive.dispose();
-        MinusInactive.dispose();
-        for (Texture texture : VolumeBars) {
+        myBatch.dispose();
+        myFont.dispose();
+        mySoundActive.dispose();
+        mySoundInactive.dispose();
+        myMuteActive.dispose();
+        myMuteInactive.dispose();
+        myPlusActive.dispose();
+        myPlusInactive.dispose();
+        myMinusActive.dispose();
+        myMinusInactive.dispose();
+        for (Texture texture : myVolumeBars) {
             texture.dispose();
         }
     }
 }
-

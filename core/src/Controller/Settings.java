@@ -1,51 +1,51 @@
 package Controller;
 
 public class Settings {
-    private int volumeLevel;
-    private boolean isSoundOn;
-    private boolean isMuted;
+    private int myVolumeLevel;
+    private boolean myIsSoundOn;
+    private boolean myIsMuted;
 
     public Settings() {
-        this.volumeLevel = 5; // Default volume level
-        this.isSoundOn = true; // Default sound state
-        this.isMuted = false; // Default mute state
+        myVolumeLevel = 5; // Default volume level
+        myIsSoundOn = true; // Default sound state
+        myIsMuted = false; // Default mute state
     }
 
     public int getVolumeLevel() {
-        return volumeLevel;
+        return myVolumeLevel;
     }
 
-    public void setVolumeLevel(int volumeLevel) {
-        if (volumeLevel >= 0 && volumeLevel <= 10) {
-            this.volumeLevel = volumeLevel;
+    public void setVolumeLevel(final int theVolumeLevel) {
+        if (myVolumeLevel >= 0 && myVolumeLevel <= 10) {
+            myVolumeLevel = theVolumeLevel;
         }
     }
 
     public boolean isSoundOn() {
-        return isSoundOn;
+        return myIsSoundOn;
     }
 
     public void toggleSound() {
-        this.isSoundOn = !isSoundOn;
+        myIsSoundOn = !myIsSoundOn;
     }
 
     public boolean isMuted() {
-        return isMuted;
+        return myIsMuted;
     }
 
     public void toggleMute() {
-        this.isMuted = !isMuted;
+        myIsMuted = !myIsMuted;
     }
 
     public void increaseVolume() {
-        if (volumeLevel < 10) {
-            volumeLevel++;
+        if (myVolumeLevel < 10) {
+            myVolumeLevel++;
         }
     }
 
     public void decreaseVolume() {
-        if (volumeLevel > 0) {
-            volumeLevel--;
+        if (myVolumeLevel > 0) {
+            myVolumeLevel--;
         }
     }
 }

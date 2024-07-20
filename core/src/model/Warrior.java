@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import java.util.Random;
 
@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 19, 2024.
  */
-final class Warrior extends Hero{
+public final class Warrior extends Hero{
     //CHARACTER PARAMETER CONSTANTS
     /**
      * Warrior health constant
@@ -55,7 +55,7 @@ final class Warrior extends Hero{
      * @param theX int position relative to x-axis
      * @param theY int position relative to y-axis
      */
-    Warrior(final String theName, final int theX, final int theY){
+    public Warrior(final String theName, final int theX, final int theY){
         super(theName, WARRIOR_HEALTH, WARRIOR_MIN_DAMAGE, WARRIOR_MAX_DAMAGE,
             WARRIOR_BLOCK_CHANCE, WARRIOR_HIT_CHANCE, WARRIOR_SPEED, theX, theY);
     }

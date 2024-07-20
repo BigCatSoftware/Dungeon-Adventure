@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import java.util.Random;
 /**
@@ -55,7 +55,7 @@ abstract public class Hero extends DungeonCharacter {
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(super.toString()).append(NEW_LINE).append(NEW_LINE)
-            .append("Hero Block Chance: ").append(myBlockChance);
+                .append("Hero Block Chance: ").append(myBlockChance);
         return stringBuilder.toString();
     }
 }

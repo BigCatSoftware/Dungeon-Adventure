@@ -1,156 +1,149 @@
 package View;
 
-import Controller.Settings;
+import Controller.MenuInputProcessor;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
 
 public class MainMenuScreen implements Screen {
-    final DungeonAdventure game;
+    private final DungeonAdventure myGame;
 
-    Texture exitButtonActive;
-    Texture exitButtonInactive;
-    Texture playButtonActive;
-    Texture playButtonInactive;
-    Texture DungeonAdventureTitle;
-    Texture SettingsButtonActive;
-    Texture SettingsButtonInactive;
+    private final OrthographicCamera myCamera;
 
-    private static final int SETTINGS_BUTTON_WIDTH = 64;
-    private static final int SETTINGS_BUTTON_HEIGHT = 64;
-    private static final int DUNGEON_TITLE_WIDTH = 450;
-    private static final int DUNGEON_TITLE_HEIGHT = 450;
-    private static final int EXIT_BUTTON_WIDTH = 250;
-    private static final int EXIT_BUTTON_HEIGHT = 120;
-    private static final int PLAY_BUTTON_WIDTH = 300;
-    private static final int PLAY_BUTTON_HEIGHT = 120;
-    private static final int EXIT_BUTTON_Y = 250;
-    private static final int PLAY_BUTTON_Y = 375;
-    private static final int TITLE_Y = 300;
-    private static final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
+    private final Texture myExitButtonActive;
+    private final Texture myExitButtonInactive;
+    private final Texture myPlayButtonActive;
+    private final Texture myPlayButtonInactive;
+    private final Texture myDungeonAdventureTitle;
+    private final Texture mySettingsButtonActive;
+    private final Texture mySettingsButtonInactive;
 
-    public MainMenuScreen(final DungeonAdventure game, final Settings settings) {
-        this.game = game;
-        DungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
-        exitButtonActive = new Texture("exit_button_active.png");
-        exitButtonInactive = new Texture("exit_button_inactive.png");
-        playButtonActive = new Texture("play_button_active.png");
-        playButtonInactive = new Texture("play_button_inactive.png");
-        SettingsButtonActive = new Texture("SettingsActive.png");
-        SettingsButtonInactive = new Texture("SettingsInactive.png");
+    private final int DUNGEON_TITLE_WIDTH = 450;
+    private final int DUNGEON_TITLE_HEIGHT = 450;
+    private final int EXIT_BUTTON_WIDTH = 250;
+    private final int EXIT_BUTTON_HEIGHT = 120;
+    private final int PLAY_BUTTON_WIDTH = 300;
+    private final int PLAY_BUTTON_HEIGHT = 120;
+    private final int EXIT_BUTTON_Y = 250;
+    private final int PLAY_BUTTON_Y = 375;
+    private final int TITLE_Y = 300;
+    private final int SETTINGS_BUTTON_WIDTH = 64;
+    private final int SETTINGS_BUTTON_HEIGHT = 64;
+    private final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
 
-        final MainMenuScreen mainMenuScreen = this;
+    private final int EXIT_BUTTON_X;
+    private final int PLAY_BUTTON_X;
+    private final int SETTINGS_BUTTON_X;
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
-            @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                int x = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
-                if (screenX < x + EXIT_BUTTON_WIDTH && screenX > x &&
-                        DungeonAdventure.HEIGHT - screenY < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                        DungeonAdventure.HEIGHT - screenY > EXIT_BUTTON_Y) {
+    public MainMenuScreen(final DungeonAdventure theGame) {
+        myGame = theGame;
 
-                    mainMenuScreen.dispose();
-                    Gdx.app.exit();
-                }
+        myCamera = new OrthographicCamera();
+        myCamera.setToOrtho(false, DungeonAdventure.WIDTH, DungeonAdventure.HEIGHT);
 
-                x = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
-                if (screenX < x + PLAY_BUTTON_WIDTH && screenX > x &&
-                        DungeonAdventure.HEIGHT - screenY < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                        DungeonAdventure.HEIGHT - screenY > PLAY_BUTTON_Y) {
+        myExitButtonActive = new Texture("exit_button_active.png");
+        myExitButtonInactive = new Texture("exit_button_inactive.png");
+        myPlayButtonActive = new Texture("play_button_active.png");
+        myPlayButtonInactive = new Texture("play_button_inactive.png");
+        mySettingsButtonActive = new Texture("SettingsActive.png");
+        mySettingsButtonInactive = new Texture("SettingsInactive.png");
+        myDungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
 
-                    mainMenuScreen.dispose();
-                   // game.setScreen(new GameScreen(game));
-                }
+        EXIT_BUTTON_X = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
+        PLAY_BUTTON_X = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+        SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
 
-                x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
-                if (screenX < x + SETTINGS_BUTTON_WIDTH && screenX > x &&
-                        DungeonAdventure.HEIGHT - screenY < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
-                        DungeonAdventure.HEIGHT - screenY > SETTINGS_BUTTON_Y) {
-                    game.setScreen(new SettingsScreen(game, settings));
-                }
-
-                return super.touchDown(screenX, screenY, pointer, button);
-            }
-        });
+        Gdx.input.setInputProcessor(new MenuInputProcessor(myGame, MainMenuScreen.this,myCamera, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT,
+                PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT,
+                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT));
     }
+
     @Override
     public void show() {
+        // Implement if needed
     }
 
     @Override
-    public void render(float delta) {
+    public void render(final float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
-        game.batch.begin();
+        myGame.batch.setProjectionMatrix(myCamera.combined);
+        myGame.batch.begin();
 
         int x = DungeonAdventure.WIDTH / 2 - DUNGEON_TITLE_WIDTH / 2;
-
-        game.batch.draw(DungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);
+        myGame.batch.draw(myDungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);
 
         exitButtonDraw();
         playButtonDraw();
         settingsButtonDraw();
 
-        game.batch.end();
+        myGame.batch.end();
     }
 
-    public void exitButtonDraw() {
-        int x = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
+    private void exitButtonDraw() {
+        int x = EXIT_BUTTON_X;
         if (Gdx.input.getX() < x + EXIT_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y) {
-
-            game.batch.draw(exitButtonActive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
+            myGame.batch.draw(myExitButtonActive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         } else {
-            game.batch.draw(exitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
+            myGame.batch.draw(myExitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         }
     }
-    public void playButtonDraw() {
-        int x = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+
+    private void playButtonDraw() {
+        int x = PLAY_BUTTON_X;
         if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
-
-            game.batch.draw(playButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+            myGame.batch.draw(myPlayButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         } else {
-            game.batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+            myGame.batch.draw(myPlayButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
     }
-    public void settingsButtonDraw() {
-        int x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
+
+    private void settingsButtonDraw() {
+        int x = SETTINGS_BUTTON_X;
         if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
-
-            game.batch.draw(SettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+            myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         } else {
-            game.batch.draw(SettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+            myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
     }
+
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
+        // Implement if needed
     }
 
     @Override
     public void pause() {
+        // Implement if needed
     }
 
     @Override
     public void resume() {
+        // Implement if needed
     }
 
     @Override
     public void hide() {
+        // Implement if needed
     }
 
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
-        exitButtonActive.dispose();
-        exitButtonInactive.dispose();
-        playButtonActive.dispose();
-        playButtonInactive.dispose();
+        myExitButtonActive.dispose();
+        myExitButtonInactive.dispose();
+        myPlayButtonActive.dispose();
+        myPlayButtonInactive.dispose();
+        mySettingsButtonActive.dispose();
+        mySettingsButtonInactive.dispose();
+        myDungeonAdventureTitle.dispose();
     }
 }

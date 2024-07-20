@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 /**
  * Defines methods that describe actions available to a dungeon character.

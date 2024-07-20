@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import java.util.Random;
 
@@ -52,28 +52,28 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * Initializes values upon creation of new Dungeon Character.
      */
-     DungeonCharacter(final String theName, final int theHealth, final int theMinDamage,
-                      final int theMaxDamage, final int theHitChance, final int theSpeed,
-                      final int theX, final int theY){
-         myName = theName;
-         myHealth = theHealth;
-         myMinDamage = theMinDamage;
-         myMaxDamage = theMaxDamage;
-         myHitChance = theHitChance;
-         mySpeed = theSpeed;
-         myPosition = new Position(theX, theY);
-         myIsDead = false;
-     }
+    DungeonCharacter(final String theName, final int theHealth, final int theMinDamage,
+                     final int theMaxDamage, final int theHitChance, final int theSpeed,
+                     final int theX, final int theY){
+        myName = theName;
+        myHealth = theHealth;
+        myMinDamage = theMinDamage;
+        myMaxDamage = theMaxDamage;
+        myHitChance = theHitChance;
+        mySpeed = theSpeed;
+        myPosition = new Position(theX, theY);
+        myIsDead = false;
+    }
 
     /**
      * Update Position of character by +1 on y-axis.
      */
     @Override
     public void moveCharacterUp() {
-         int currentY = myPosition.getMyY();
-         if(currentY != Integer.MAX_VALUE){
-             myPosition.setMyY(++currentY);
-         }
+        int currentY = myPosition.getMyY();
+        if(currentY != Integer.MAX_VALUE){
+            myPosition.setMyY(++currentY);
+        }
     }
 
     /**
@@ -103,10 +103,10 @@ abstract public class DungeonCharacter implements CharacterActions {
      */
     @Override
     public void moveCharacterRight() {
-         int currentX = myPosition.getMyX();
-         if(currentX != Integer.MAX_VALUE){
-             myPosition.setMyX(++currentX);
-         }
+        int currentX = myPosition.getMyX();
+        if(currentX != Integer.MAX_VALUE){
+            myPosition.setMyX(++currentX);
+        }
     }
 
     /**
@@ -117,7 +117,7 @@ abstract public class DungeonCharacter implements CharacterActions {
     public void receiveDamage(final int incomingDamage) {
         if(incomingDamage < 0){
             throw new IllegalArgumentException("receiveDamage, incoming damage parameter can't" +
-                "be negative.");
+                    "be negative.");
         }
         myHealth -= incomingDamage;
         checkIsDead();
@@ -231,12 +231,12 @@ abstract public class DungeonCharacter implements CharacterActions {
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Name: ").append(myName).append(NEW_LINE)
-            .append("Health: ").append(myHealth).append(NEW_LINE)
-            .append("Damage: ").append(myMinDamage).append("-").append(myMaxDamage).append(NEW_LINE)
-            .append("Hit Chance: ").append(myHitChance).append(NEW_LINE)
-            .append("Speed: ").append(mySpeed).append(NEW_LINE)
-            .append("Is Dead: ").append(myIsDead).append(NEW_LINE)
-            .append("Position: ").append(myPosition.toString());
+                .append("Health: ").append(myHealth).append(NEW_LINE)
+                .append("Damage: ").append(myMinDamage).append("-").append(myMaxDamage).append(NEW_LINE)
+                .append("Hit Chance: ").append(myHitChance).append(NEW_LINE)
+                .append("Speed: ").append(mySpeed).append(NEW_LINE)
+                .append("Is Dead: ").append(myIsDead).append(NEW_LINE)
+                .append("Position: ").append(myPosition.toString());
         return stringBuilder.toString();
     }
     /**
@@ -274,8 +274,8 @@ abstract public class DungeonCharacter implements CharacterActions {
         private void init(final int theX, final int theY){
             if(theX < 0 || theY < 0){
                 throw new IllegalArgumentException("The constructor arguments for position object" +
-                    " are numbers that are" +
-                    "not negative.");
+                        " are numbers that are" +
+                        "not negative.");
             }
         }
         /**
@@ -301,7 +301,7 @@ abstract public class DungeonCharacter implements CharacterActions {
         private void setMyX(final int theX){
             if(theX < 0){
                 throw new IllegalArgumentException("The x cannot be set to negative value for" +
-                    "character position.");
+                        "character position.");
             }
             myX = theX;
         }
@@ -313,7 +313,7 @@ abstract public class DungeonCharacter implements CharacterActions {
         private void setMyY(final int theY){
             if(theY < 0){
                 throw new IllegalArgumentException("The y cannot be set to negative value for" +
-                    "character position.");
+                        "character position.");
             }
             myY = theY;
         }
