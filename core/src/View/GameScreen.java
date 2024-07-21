@@ -2,11 +2,14 @@ package View;
 
 import Controller.PlayerInputProcessor;
 import Model.Hero;
+import Model.Dungeon;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
+
 
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_Y;
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_HEIGHT;
@@ -17,6 +20,9 @@ public class GameScreen implements Screen {
     private final DungeonAdventure myGame;
     private final Texture mySettingsButtonActive;
     private final Texture mySettingsButtonInactive;
+    private final DungeonRenderer myDungeonRenderer;
+    private Dungeon myDungeon;
+
 
     public GameScreen(final DungeonAdventure theGame, final Hero thePlayer) {
         myGame = theGame;
@@ -24,6 +30,9 @@ public class GameScreen implements Screen {
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
 
         Gdx.input.setInputProcessor(new PlayerInputProcessor(thePlayer, myGame, this));
+
+        myDungeon = new Dungeon();
+        myDungeonRenderer = new DungeonRenderer(myDungeon);
     }
 
     @Override
@@ -35,6 +44,9 @@ public class GameScreen implements Screen {
     public void render(final float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         myGame.batch.begin();
+
+        // Render the dungeon
+        myDungeonRenderer.render(myGame.batch);
 
         settingsButtonDraw();
 
