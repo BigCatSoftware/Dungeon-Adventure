@@ -1,4 +1,4 @@
 package model;
 
-public class Thief extends Hero{
-}
+//public class Thief extends Hero{
+//}

@@ -14,6 +14,7 @@ abstract public class Hero extends DungeonCharacter {
      */
     private final int myBlockChance;
 
+
     /**
      * Hero constructor instantiates block chance.
      */
@@ -25,6 +26,19 @@ abstract public class Hero extends DungeonCharacter {
     }
 
     /**
+     * Upon combat when hero received damage there is a chance to block it, otherwise the
+     * damage is applied to their health.
+     * @param incomingDamage int value of damage to apply to this character.
+     * @return String message description of state.
+     */
+    @Override
+    public String receiveDamage(final int incomingDamage){
+        if(checkForBlock()){
+            return getMyName() + " blocked the attack.";
+        }
+        return super.receiveDamage(incomingDamage);
+    }
+    /**
      *  Special Action that performs powerful attack.
      * @return int damage by character.
      */
@@ -34,7 +48,7 @@ abstract public class Hero extends DungeonCharacter {
      * Returns block chance for this character.
      * @return int chance to block attack to this character.
      */
-    private int getMyBlockChance(){
+    public int getMyBlockChance(){
         return myBlockChance;
     }
 

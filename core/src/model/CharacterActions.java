@@ -10,10 +10,9 @@ interface CharacterActions {
     void moveCharacterDown();
     void moveCharacterLeft();
     void moveCharacterRight();
-    void receiveDamage(final int incomingDamage);
+    String receiveDamage(final int incomingDamage);
     int attack();
     String getMyName();
-    void setMyName(final String theName);
     int getCurrentHealth();
     int getHitChance();
     int getMinDamage();

@@ -17,7 +17,7 @@ public class NameGenerator {
     /**
      * Warrior names array.
      */
-    private final String[] myWarriorNames = {"Skeithvirr The Wolf",
+    private static final String[] myWarriorNames = {"Skeithvirr The Wolf",
         "Rhaumm The Tower",
         "Hrurn The Ironclad",
         "Tirstald The Vengeful",
@@ -30,7 +30,7 @@ public class NameGenerator {
     /**
      * Priestess names array.
      */
-    private final String[] myPriestessNames = {"Ella the Loving",
+    private static final String[] myPriestessNames = {"Ella the Loving",
         "Nissa the Gracious",
         "Valorie the Devoted",
         "Leeta the Faithful",
@@ -43,7 +43,7 @@ public class NameGenerator {
     /**
      * Thief names array.
      */
-    private final String[] myThiefNames = {
+    private static final String[] myThiefNames = {
         "Ciro The Ghost",
         "Ozul The Slayer",
         "Dante The Claw",
@@ -58,7 +58,7 @@ public class NameGenerator {
     /**
      * Ogre names array.
      */
-    private final String[] myOgreNames = {"Gokug",
+    private static final String[] myOgreNames = {"Gokug",
         "Drurok",
         "Wugrok",
         "Tonegrot",
@@ -71,7 +71,7 @@ public class NameGenerator {
     /**
      * Gremlin names array.
      */
-    private final String[] myGremlinNames = {"Boc",
+    private static final String[] myGremlinNames = {"Boc",
         "Chut",
         "Zag",
         "Ikdag",
@@ -84,7 +84,7 @@ public class NameGenerator {
     /**
      * Skeleton names array.
      */
-    private final String[] mySkeletonNames = {"Stuqur Bonecall",
+    private static final String[] mySkeletonNames = {"Stuqur Bonecall",
         "Echralazar Metus",
         "Yauzhul Mallus",
         "Chrozhar Nyte",
@@ -98,27 +98,26 @@ public class NameGenerator {
     /**
      * Random value generator used to select names.
      */
-    private final Random myRandom;
+    private static final Random myRandom = new Random();
 
     /**
      * Constructor initializes the object and Random value generator.
      */
-    public NameGenerator(){
-        myRandom = new Random();
+    private NameGenerator(){
     }
 
     /**
      * Returns random name out of list of Warrior names.
      * @return String name of warrior character.
      */
-    public String getWarriorName(){
+    public static String getWarriorName(){
         return myWarriorNames[myRandom.nextInt(NAMES_NUM)];
     }
     /**
      * Returns random name out of list of Priestess names.
      * @return String name of priestess character.
      */
-    public String getPriestessName(){
+    public static String getPriestessName(){
         return myPriestessNames[myRandom.nextInt(NAMES_NUM)];
     }
 
@@ -126,7 +125,7 @@ public class NameGenerator {
      * Returns random name out of list of Thief names.
      * @return String name of thief character.
      */
-    public String getThiefName(){
+    public static String getThiefName(){
         return myThiefNames[myRandom.nextInt(NAMES_NUM)];
     }
 
@@ -134,7 +133,7 @@ public class NameGenerator {
      * Returns random name out of list of Ogre names.
      * @return String name of ogre character.
      */
-    public String getOgreName(){
+    public static String getOgreName(){
         return myOgreNames[myRandom.nextInt(NAMES_NUM)];
     }
 
@@ -142,7 +141,7 @@ public class NameGenerator {
      * Returns random name out of list of Gremlin names.
      * @return String name of gremlin character.
      */
-    public String getGremlinName(){
+    public static String getGremlinName(){
         return myGremlinNames[myRandom.nextInt(NAMES_NUM)];
     }
 
@@ -150,7 +149,7 @@ public class NameGenerator {
      * Returns random name out of list of Skeleton names.
      * @return String name of skeleton character.
      */
-    public String getSkeletonName(){
+    public static String getSkeletonName(){
         return mySkeletonNames[myRandom.nextInt(NAMES_NUM)];
     }
 
@@ -158,8 +157,7 @@ public class NameGenerator {
      * Method that converts all data present in the class to string.
      * @return String representation of class data.
      */
-    @Override
-    public String toString(){
+    public static String getDataAsString(){
         final StringBuilder stringBuilder = new StringBuilder();
         final Map<String, String[]> allArraysMap = new HashMap<>();
         allArraysMap.put("Warrior Names", myWarriorNames);

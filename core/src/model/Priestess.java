@@ -1,4 +1,4 @@
 package model;
 
-public class Priestess extends Hero {
-}
+//public class Priestess extends Hero {
+//}

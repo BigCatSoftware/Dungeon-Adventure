@@ -19,11 +19,15 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * String defines name that the character will have.
      */
-    private String myName;
+    private final String myName;
     /**
      * Number representing health of a character
      */
-    private int myHealth;
+    private int myCurrentHealth;
+    /**
+     * Maximum health for this character. Do not use in calculating current health.
+     */
+    private final int myMaxHealth;
     /**
      * Number representing minimum damage character can deal.
      */
@@ -48,7 +52,6 @@ abstract public class DungeonCharacter implements CharacterActions {
      * Wrapper for x y location and character movement.
      */
     private final Position myPosition;
-
     /**
      * Initializes values upon creation of new Dungeon Character.
      */
@@ -56,7 +59,8 @@ abstract public class DungeonCharacter implements CharacterActions {
                       final int theMaxDamage, final int theHitChance, final int theSpeed,
                       final int theX, final int theY){
          myName = theName;
-         myHealth = theHealth;
+         myCurrentHealth = theHealth;
+         myMaxHealth = theHealth;
          myMinDamage = theMinDamage;
          myMaxDamage = theMaxDamage;
          myHitChance = theHitChance;
@@ -112,23 +116,31 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * Applies damage to health of character.
      * @param incomingDamage int value of damage to apply to this character.
+     * @return String message description of state.
      */
     @Override
-    public void receiveDamage(final int incomingDamage) {
+    public String receiveDamage(final int incomingDamage){
         if(incomingDamage < 0){
             throw new IllegalArgumentException("receiveDamage, incoming damage parameter can't" +
                 "be negative.");
         }
-        myHealth -= incomingDamage;
+        myCurrentHealth -= incomingDamage;
         checkIsDead();
+        if(myIsDead){
+            return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
+                + incomingDamage + " damage and perished from their wounds.";
+        }
+        return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
+            + incomingDamage + " damage.";
     }
+
 
     /**
      * Checks current health. If health is less or equal zero the character is dead.
      */
     private void checkIsDead(){
-        if(myHealth <= 0){
-            myHealth = 0;
+        if(myCurrentHealth <= 0){
+            myCurrentHealth = 0;
             myIsDead = true;
         }
     }
@@ -164,19 +176,13 @@ abstract public class DungeonCharacter implements CharacterActions {
     public String getMyName(){
         return myName;
     }
-    public void setMyName(final String theName){
-        if(theName.contains("\n") || theName.contains("\r")){
-            throw new IllegalArgumentException("Name can't have new line characters.");
-        }
-        myName = theName;
-    }
     /**
      * Returns current health of this character.
      * @return int current health.
      */
     @Override
     public int getCurrentHealth() {
-        return myHealth;
+        return myCurrentHealth;
     }
 
     /**
@@ -231,7 +237,7 @@ abstract public class DungeonCharacter implements CharacterActions {
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Name: ").append(myName).append(NEW_LINE)
-            .append("Health: ").append(myHealth).append(NEW_LINE)
+            .append("Health: ").append(myCurrentHealth).append(NEW_LINE)
             .append("Damage: ").append(myMinDamage).append("-").append(myMaxDamage).append(NEW_LINE)
             .append("Hit Chance: ").append(myHitChance).append(NEW_LINE)
             .append("Speed: ").append(mySpeed).append(NEW_LINE)
@@ -274,7 +280,7 @@ abstract public class DungeonCharacter implements CharacterActions {
         private void init(final int theX, final int theY){
             if(theX < 0 || theY < 0){
                 throw new IllegalArgumentException("The constructor arguments for position object" +
-                    " are numbers that are" +
+                    " are numbers that are " +
                     "not negative.");
             }
         }
