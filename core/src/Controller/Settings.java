@@ -53,5 +53,6 @@ public class Settings {
     }
 
     public void setMuted(boolean isMuted) {
+
     }
 }

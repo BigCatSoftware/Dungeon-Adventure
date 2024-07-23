@@ -55,15 +55,13 @@ public class MainMenuScreen implements Screen {
         EXIT_BUTTON_X = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
         PLAY_BUTTON_X = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
         SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
-
-        Gdx.input.setInputProcessor(new MenuInputProcessor(myGame, MainMenuScreen.this,myCamera, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT,
-                PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT,
-                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT));
     }
 
     @Override
     public void show() {
-        // Implement if needed
+        Gdx.input.setInputProcessor(new MenuInputProcessor(myGame, MainMenuScreen.this, myCamera, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT,
+                PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT,
+                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT));
     }
 
     @Override
@@ -147,3 +145,4 @@ public class MainMenuScreen implements Screen {
         myDungeonAdventureTitle.dispose();
     }
 }
+

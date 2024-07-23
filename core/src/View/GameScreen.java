@@ -3,7 +3,6 @@ package View;
 import Controller.PlayerInputProcessor;
 import Model.Hero;
 import Model.Dungeon;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,23 +20,22 @@ public class GameScreen implements Screen {
     private final Texture mySettingsButtonActive;
     private final Texture mySettingsButtonInactive;
     private final DungeonRenderer myDungeonRenderer;
-    private Dungeon myDungeon;
+    private final Hero myPlayer;
 
 
     public GameScreen(final DungeonAdventure theGame, final Hero thePlayer) {
         myGame = theGame;
+        myPlayer = thePlayer;
         mySettingsButtonActive = new Texture("SettingsActive.png");
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
 
-        Gdx.input.setInputProcessor(new PlayerInputProcessor(thePlayer, myGame, this));
-
-        myDungeon = new Dungeon();
+        Dungeon myDungeon = new Dungeon();
         myDungeonRenderer = new DungeonRenderer(myDungeon);
     }
 
     @Override
     public void show() {
-        // Initialize or load resources if needed
+        Gdx.input.setInputProcessor(new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
     }
 
     @Override

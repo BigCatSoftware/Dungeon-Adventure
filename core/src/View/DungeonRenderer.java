@@ -38,7 +38,6 @@ public class DungeonRenderer {
             }
         }
     }
-
     public void dispose() {
         myWallTexture.dispose();
         myFloorTexture.dispose();

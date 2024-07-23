@@ -1,7 +1,7 @@
 package View;
 
+import Controller.SettingsInputProcessor;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.dungeonadventure.game.DungeonAdventure;
 
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
@@ -81,31 +80,12 @@ public class SettingsScreen extends ScreenAdapter {
         myPlusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) + 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
         myVolumeBar = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) VOLUME_WIDTH / 2) + 128, 350, VOLUME_WIDTH, VOLUME_HEIGHT);
 
-        setupInputProcessor();
     }
-
-    private void setupInputProcessor() {
-        Gdx.input.setInputProcessor(new InputAdapter() {
-            @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                Vector3 touchPos = new Vector3(screenX, screenY, 0);
-                myCamera.unproject(touchPos);
-
-                if (mySoundButton.contains(touchPos.x, touchPos.y)) {
-                    mySETTINGS.toggleSound();
-                } else if (myPlusButton.contains(touchPos.x, touchPos.y)) {
-                    mySETTINGS.increaseVolume();
-                } else if (myMinusButton.contains(touchPos.x, touchPos.y)) {
-                    mySETTINGS.decreaseVolume();
-                } else if (myBackButton.contains(touchPos.x, touchPos.y)) {
-                    myGame.setScreen(myPreviousScreen);
-                }
-
-                return super.touchDown(screenX, screenY, pointer, button);
-            }
-        });
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(new SettingsInputProcessor(myGame, myPreviousScreen, myCamera,
+                mySoundButton, myPlusButton, myMinusButton, myBackButton));
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -160,3 +140,4 @@ public class SettingsScreen extends ScreenAdapter {
         }
     }
 }
+
