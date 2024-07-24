@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DungeonInputProcessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,24 +32,31 @@ public class DungeonScreen implements Screen {
 
     private final int DUNGEON_TITLE_WIDTH = 450;
     private final int DUNGEON_TITLE_HEIGHT = 450;
+
     private final int BACK_BUTTON_WIDTH = 64;
     private final int BACK_BUTTON_HEIGHT = 64;
+
     private final int CHARACTER_BUTTON_WIDTH = 250;
     private final int CHARACTER_BUTTON_HEIGHT = 84;
+
     private final int OR_TITLE_WIDTH = 75;
     private final int OR_TITLE_HEIGHT = 75;
+
     private final int HERO_BUTTON_WIDTH = 175;
     private final int HERO_BUTTON_HEIGHT = 42;
+
     private final int LOAD_BUTTON_WIDTH = 300;
     private final int LOAD_BUTTON_HEIGHT = 120;
+
+    private final int SETTINGS_BUTTON_WIDTH = 64;
+    private final int SETTINGS_BUTTON_HEIGHT = 64;
+
     private final int BACK_BUTTON_Y = DungeonAdventure.HEIGHT - BACK_BUTTON_HEIGHT;
     private final int HERO_BUTTON_Y = 375;
     private final int LOAD_BUTTON_Y = 100;
     private final int CHARACTER_TITLE_Y = HERO_BUTTON_Y + 2 * HERO_BUTTON_HEIGHT;
     private final int OR_TITLE_Y = HERO_BUTTON_Y - 2 * HERO_BUTTON_HEIGHT - 30;
     private final int TITLE_Y = 300;
-    private final int SETTINGS_BUTTON_WIDTH = 64;
-    private final int SETTINGS_BUTTON_HEIGHT = 64;
     private final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
 
     private final int BACK_BUTTON_X;
@@ -98,7 +106,11 @@ public class DungeonScreen implements Screen {
 
     @Override
     public void show() {
-//        Gdx.input.setInputProcessor(myGame.getMenuInputProcessor()); // Set input processor
+        Gdx.input.setInputProcessor(new DungeonInputProcessor(myGame, DungeonScreen.this, myCamera,
+                BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT,
+                WARRIOR_BUTTON_X,  HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT,
+                THIEF_BUTTON_X, PRIESTESS_BUTTON_X, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT,
+                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)); // Set input processor
     }
 
     @Override
