@@ -14,6 +14,7 @@ interface CharacterActions {
     int attack();
     String getMyName();
     int getCurrentHealth();
+    int getMaxHealth();
     int getHitChance();
     int getMinDamage();
     int getMaxDamage();

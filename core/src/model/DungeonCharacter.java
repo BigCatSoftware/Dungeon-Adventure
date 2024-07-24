@@ -58,6 +58,7 @@ abstract public class DungeonCharacter implements CharacterActions {
      DungeonCharacter(final String theName, final int theHealth, final int theMinDamage,
                       final int theMaxDamage, final int theHitChance, final int theSpeed,
                       final int theX, final int theY){
+         init(theHealth, theMinDamage, theMaxDamage, theHitChance, theSpeed);
          myName = theName;
          myCurrentHealth = theHealth;
          myMaxHealth = theHealth;
@@ -68,7 +69,13 @@ abstract public class DungeonCharacter implements CharacterActions {
          myPosition = new Position(theX, theY);
          myIsDead = false;
      }
-
+     void init(final int theHealth, final int theMinDamage, final int theMaxDamage,
+               final int theHitChance, final int theSpeed){
+         if(theHealth <= 0 || theMinDamage <= 0 || theMaxDamage <= 0 || theHitChance <= 0 ||
+             theSpeed <= 0){
+             throw new IllegalArgumentException("Parameters can't be negative or zero.");
+         }
+     }
     /**
      * Update Position of character by +1 on y-axis.
      */
@@ -134,7 +141,29 @@ abstract public class DungeonCharacter implements CharacterActions {
             + incomingDamage + " damage.";
     }
 
+    /**
+     * Method used to return value to heal for this character
+     * @return int health to heal
+     */
+    abstract int heal();
 
+    /**
+     * Checks if passed value is correct and adds health to current health.
+     */
+    void addHealth(){
+        int amountToHeal = heal();
+        if(amountToHeal < 0){
+            throw new IllegalArgumentException("Can't add negative health to this character.");
+        }
+        if(myCurrentHealth > 0 && myCurrentHealth != myMaxHealth){
+            if(myCurrentHealth + amountToHeal > myMaxHealth){
+                myCurrentHealth = myMaxHealth;
+            }
+            else{
+                myCurrentHealth += amountToHeal;
+            }
+        }
+    }
     /**
      * Checks current health. If health is less or equal zero the character is dead.
      */
@@ -173,6 +202,7 @@ abstract public class DungeonCharacter implements CharacterActions {
      * Returns name assigned to this character.
      * @return String name for this character.
      */
+    @Override
     public String getMyName(){
         return myName;
     }
@@ -183,6 +213,10 @@ abstract public class DungeonCharacter implements CharacterActions {
     @Override
     public int getCurrentHealth() {
         return myCurrentHealth;
+    }
+    @Override
+    public int getMaxHealth(){
+        return myMaxHealth;
     }
 
     /**

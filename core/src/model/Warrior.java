@@ -66,7 +66,6 @@ public final class Warrior extends Hero{
      * if fails, deals 0 damage.
      * @return int damage by character.
      */
-    @Override
     public int specialAction() {
         int damage = 0;
         if(specialAttackChance()){
@@ -74,6 +73,14 @@ public final class Warrior extends Hero{
             damage = rand.nextInt(WARRIOR_SKILL_MIN_DAMAGE, WARRIOR_SKILL_MAX_DAMAGE+1);
         }
         return damage;
+    }
+
+    /**
+     * Method used to return value to heal for this character
+     * @return int amount to heal
+     */
+    int heal(){
+        return 0;
     }
     /**
      * Check with 40% chance of successful special attack.

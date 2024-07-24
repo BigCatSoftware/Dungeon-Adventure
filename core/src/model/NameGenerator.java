@@ -11,7 +11,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 14, 2024.
  */
-public class NameGenerator {
+public final class NameGenerator {
     public static final String NEW_LINE = System.lineSeparator();
     private static final int NAMES_NUM = 10;
     /**

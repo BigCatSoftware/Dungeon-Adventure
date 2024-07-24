@@ -18,13 +18,12 @@ public class TestWarrior {
      * Create warrior to test.
      */
     Warrior myWarrior = new Warrior(NameGenerator.getWarriorName(), 4, 2);
-   // DungeonCharacter myPriestess = new Priestess();
-    //DungeonCharacter myThief = new Thief();
     /**
      * Test initialization of all fields necessary for correct work of Warrior class.
      */
     @Test
     void createWarriorInstanceTest(){
+
         String result = myWarrior.toString();
         assertFalse(result.isEmpty());
         //Individual characteristics of Warrior character
