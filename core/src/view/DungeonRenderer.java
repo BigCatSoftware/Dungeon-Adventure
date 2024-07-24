@@ -1,9 +1,9 @@
-package View;
+package view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
-import Model.Dungeon;
-import Model.Tile;
+import model.Dungeon;
+import model.Tile;
 
 public class DungeonRenderer {
     private final Dungeon myDungeon;

@@ -1,6 +1,4 @@
-package Model;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
+package model;
 
 import java.util.HashMap;
 import java.util.Map;

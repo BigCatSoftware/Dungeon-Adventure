@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Enumeration representing the types of tiles in the dungeon map.

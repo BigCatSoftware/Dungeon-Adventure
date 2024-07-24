@@ -1,7 +1,6 @@
-package Model;
+package model;
 
 import java.util.*;
-import Model.Tile;
 
 /**
  * Class representing a BSP dungeon generator.

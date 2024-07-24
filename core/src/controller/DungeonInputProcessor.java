@@ -1,13 +1,10 @@
-package Controller;
+package controller;
 
-import Model.Priestess;
-import Model.Thief;
-import Model.Warrior;
-import View.DungeonScreen;
-import View.GameScreen;
-import View.MainMenuScreen;
-import View.SettingsScreen;
-import com.badlogic.gdx.Gdx;
+import model.Warrior;
+import view.DungeonScreen;
+import view.GameScreen;
+import view.MainMenuScreen;
+import view.SettingsScreen;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector3;

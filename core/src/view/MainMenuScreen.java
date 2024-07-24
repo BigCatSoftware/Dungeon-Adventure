@@ -1,6 +1,6 @@
-package View;
+package view;
 
-import Controller.MenuInputProcessor;
+import controller.MenuInputProcessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;

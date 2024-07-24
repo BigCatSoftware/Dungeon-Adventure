@@ -1,8 +1,8 @@
-package View;
+package view;
 
-import Controller.PlayerInputProcessor;
-import Model.Hero;
-import Model.Dungeon;
+import controller.PlayerInputProcessor;
+import model.Hero;
+import model.Dungeon;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;

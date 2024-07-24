@@ -1,6 +1,6 @@
 package com.dungeonadventure.database;
 
-import Controller.Settings;
+import controller.Settings;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

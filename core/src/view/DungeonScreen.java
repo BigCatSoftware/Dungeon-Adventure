@@ -1,6 +1,6 @@
-package View;
+package view;
 
-import Controller.DungeonInputProcessor;
+import controller.DungeonInputProcessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,7 +10,6 @@ import com.dungeonadventure.game.DungeonAdventure;
 
 public class DungeonScreen implements Screen {
     private final DungeonAdventure myGame;
-
     private final OrthographicCamera myCamera;
 
     private final Texture myBackButtonActive;
@@ -28,7 +27,6 @@ public class DungeonScreen implements Screen {
     private final Texture mySettingsButtonInactive;
     private final Texture myChooseCharacterTitle;
     private final Texture myOrTitle;
-
 
     private final int DUNGEON_TITLE_WIDTH = 450;
     private final int DUNGEON_TITLE_HEIGHT = 450;
@@ -128,66 +126,21 @@ public class DungeonScreen implements Screen {
         x = DungeonAdventure.WIDTH / 2 - OR_TITLE_WIDTH / 2;
         myGame.batch.draw(myOrTitle, x, OR_TITLE_Y, OR_TITLE_WIDTH, OR_TITLE_HEIGHT);
 
-        settingsButtonDraw();
-        warriorButtonDraw();
-        thiefButtonDraw();
-        priestessButtonDraw();
-        loadButtonDraw();
-        backButtonDraw();
+        drawButton(mySettingsButtonActive, mySettingsButtonInactive, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+        drawButton(myWarriorButtonActive, myWarriorButtonInactive, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
+        drawButton(myThiefButtonActive, myThiefButtonInactive, THIEF_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
+        drawButton(myPriestessButtonActive, myPriestessButtonInactive, PRIESTESS_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
+        drawButton(myLoadButtonActive, myLoadButtonInactive, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+        drawButton(myBackButtonActive, myBackButtonInactive, BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
+
         myGame.batch.end();
     }
 
-    private void backButtonDraw() {
-        int x = BACK_BUTTON_X;
-        if (isButtonHovered(x, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)) {
-            myGame.batch.draw(myBackButtonActive, x, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
+    private void drawButton(Texture activeTexture, Texture inactiveTexture, int x, int y, int width, int height) {
+        if (isButtonHovered(x, y, width, height)) {
+            myGame.batch.draw(activeTexture, x, y, width, height);
         } else {
-            myGame.batch.draw(myBackButtonInactive, x, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
-        }
-    }
-
-    private void loadButtonDraw() {
-        int x = LOAD_BUTTON_X;
-        if (isButtonHovered(x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT)) {
-            myGame.batch.draw(myLoadButtonActive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(myLoadButtonInactive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
-        }
-    }
-
-    private void warriorButtonDraw() {
-        int x = WARRIOR_BUTTON_X;
-        if (isButtonHovered(x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            myGame.batch.draw(myWarriorButtonActive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(myWarriorButtonInactive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        }
-    }
-
-    private void thiefButtonDraw() {
-        int x = THIEF_BUTTON_X;
-        if (isButtonHovered(x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            myGame.batch.draw(myThiefButtonActive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(myThiefButtonInactive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        }
-    }
-
-    private void priestessButtonDraw() {
-        int x = PRIESTESS_BUTTON_X;
-        if (isButtonHovered(x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            myGame.batch.draw(myPriestessButtonActive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(myPriestessButtonInactive, x, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT);
-        }
-    }
-
-    private void settingsButtonDraw() {
-        int x = SETTINGS_BUTTON_X;
-        if (isButtonHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
-            myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+            myGame.batch.draw(inactiveTexture, x, y, width, height);
         }
     }
 
