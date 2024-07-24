@@ -1,7 +1,6 @@
 package Controller;
 
-import Model.Warrior;
-import View.GameScreen;
+import View.DungeonScreen;
 import View.SettingsScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -67,7 +66,7 @@ public class MenuInputProcessor extends InputAdapter {
         if (isInBounds(x, y, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT)) {
             Gdx.app.exit();
         } else if (isInBounds(x, y, PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT)) {
-            myGame.setScreen(new GameScreen(myGame, new Warrior("theWarrior", 100, 100)));
+            myGame.setScreen(new DungeonScreen(myGame));
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
         }
