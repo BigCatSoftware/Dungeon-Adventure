@@ -9,6 +9,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+/**
+ * Handles user input on the main menu screen, allowing the player to start the game,
+ * adjust settings, or exit the application.
+ * @author alvarovaldez-duran
+ * @version 1.0
+ */
 public class MenuInputProcessor extends InputAdapter {
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
@@ -29,6 +35,25 @@ public class MenuInputProcessor extends InputAdapter {
     private final int SETTINGS_BUTTON_WIDTH;
     private final int SETTINGS_BUTTON_HEIGHT;
 
+    /**
+     * Constructs a new MenuInputProcessor.
+     *
+     * @param theGame the main game instance
+     * @param thePreviousScreen the previous screen to return to
+     * @param camera the camera used to render the screen
+     * @param EXIT_BUTTON_X the x-coordinate of the exit button
+     * @param EXIT_BUTTON_Y the y-coordinate of the exit button
+     * @param EXIT_BUTTON_WIDTH the width of the exit button
+     * @param EXIT_BUTTON_HEIGHT the height of the exit button
+     * @param PLAY_BUTTON_X the x-coordinate of the play button
+     * @param PLAY_BUTTON_Y the y-coordinate of the play button
+     * @param PLAY_BUTTON_WIDTH the width of the play button
+     * @param PLAY_BUTTON_HEIGHT the height of the play button
+     * @param SETTINGS_BUTTON_X the x-coordinate of the settings button
+     * @param SETTINGS_BUTTON_Y the y-coordinate of the settings button
+     * @param SETTINGS_BUTTON_WIDTH the width of the settings button
+     * @param SETTINGS_BUTTON_HEIGHT the height of the settings button
+     */
     public MenuInputProcessor(final DungeonAdventure theGame, final Screen thePreviousScreen, final OrthographicCamera camera,
                               final int EXIT_BUTTON_X, final int EXIT_BUTTON_Y, final int EXIT_BUTTON_WIDTH, final int EXIT_BUTTON_HEIGHT,
                               final int PLAY_BUTTON_X, final int PLAY_BUTTON_Y, final int PLAY_BUTTON_WIDTH, final int PLAY_BUTTON_HEIGHT,
@@ -53,6 +78,15 @@ public class MenuInputProcessor extends InputAdapter {
         this.SETTINGS_BUTTON_HEIGHT = SETTINGS_BUTTON_HEIGHT;
     }
 
+    /**
+     * Handles touch down events on the screen.
+     *
+     * @param screenX the x-coordinate of the touch
+     * @param screenY the y-coordinate of the touch
+     * @param pointer the pointer for the event
+     * @param button the button for the event
+     * @return true if the event is handled, false otherwise
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
@@ -74,9 +108,18 @@ public class MenuInputProcessor extends InputAdapter {
         return true; // Return true if the event is handled
     }
 
-
+    /**
+     * Checks if the touch is within the bounds of a button.
+     *
+     * @param x the x-coordinate of the touch
+     * @param y the y-coordinate of the touch
+     * @param buttonX the x-coordinate of the button
+     * @param buttonY the y-coordinate of the button
+     * @param buttonWidth the width of the button
+     * @param buttonHeight the height of the button
+     * @return true if the touch is within the bounds of the button, false otherwise
+     */
     private boolean isInBounds(final float x, final float y, final float buttonX, final float buttonY, final float buttonWidth, final float buttonHeight) {
         return x >= buttonX && x <= buttonX + buttonWidth && y >= buttonY && y <= buttonY + buttonHeight;
     }
 }
-

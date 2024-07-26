@@ -11,6 +11,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+/**
+ * Handles user input on the dungeon screen, allowing the player to navigate and select various options.
+ * @author alvarovaldez-duran
+ * @version 1.0
+ */
 public class DungeonInputProcessor extends InputAdapter {
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
@@ -39,6 +44,31 @@ public class DungeonInputProcessor extends InputAdapter {
     private final int SETTINGS_BUTTON_WIDTH;
     private final int SETTINGS_BUTTON_HEIGHT;
 
+    /**
+     * Constructs a new DungeonInputProcessor.
+     *
+     * @param theGame the main game instance
+     * @param thePreviousScreen the previous screen to return to
+     * @param theCamera the camera used to render the screen
+     * @param BACK_BUTTON_X the x-coordinate of the back button
+     * @param BACK_BUTTON_Y the y-coordinate of the back button
+     * @param BACK_BUTTON_WIDTH the width of the back button
+     * @param BACK_BUTTON_HEIGHT the height of the back button
+     * @param WARRIOR_BUTTON_X the x-coordinate of the warrior button
+     * @param HERO_BUTTON_Y the y-coordinate of the hero buttons
+     * @param HERO_BUTTON_WIDTH the width of the hero buttons
+     * @param HERO_BUTTON_HEIGHT the height of the hero buttons
+     * @param THIEF_BUTTON_X the x-coordinate of the thief button
+     * @param PRIESTESS_BUTTON_X the x-coordinate of the priestess button
+     * @param LOAD_BUTTON_X the x-coordinate of the load button
+     * @param LOAD_BUTTON_Y the y-coordinate of the load button
+     * @param LOAD_BUTTON_WIDTH the width of the load button
+     * @param LOAD_BUTTON_HEIGHT the height of the load button
+     * @param SETTINGS_BUTTON_X the x-coordinate of the settings button
+     * @param SETTINGS_BUTTON_Y the y-coordinate of the settings button
+     * @param SETTINGS_BUTTON_WIDTH the width of the settings button
+     * @param SETTINGS_BUTTON_HEIGHT the height of the settings button
+     */
     public DungeonInputProcessor(final DungeonAdventure theGame, final DungeonScreen thePreviousScreen, final OrthographicCamera theCamera,
                                  final int BACK_BUTTON_X, final int BACK_BUTTON_Y, final int BACK_BUTTON_WIDTH, final int BACK_BUTTON_HEIGHT,
                                  final int WARRIOR_BUTTON_X, final int HERO_BUTTON_Y, final int HERO_BUTTON_WIDTH, final int HERO_BUTTON_HEIGHT,
@@ -74,6 +104,15 @@ public class DungeonInputProcessor extends InputAdapter {
         this.SETTINGS_BUTTON_HEIGHT = SETTINGS_BUTTON_HEIGHT;
     }
 
+    /**
+     * Handles touch down events on the screen.
+     *
+     * @param screenX the x-coordinate of the touch
+     * @param screenY the y-coordinate of the touch
+     * @param pointer the pointer for the event
+     * @param button the button for the event
+     * @return true if the event is handled, false otherwise
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
@@ -99,6 +138,17 @@ public class DungeonInputProcessor extends InputAdapter {
         return true; // Return true if the event is handled
     }
 
+    /**
+     * Checks if the touch is within the bounds of a button.
+     *
+     * @param x the x-coordinate of the touch
+     * @param y the y-coordinate of the touch
+     * @param buttonX the x-coordinate of the button
+     * @param buttonY the y-coordinate of the button
+     * @param buttonWidth the width of the button
+     * @param buttonHeight the height of the button
+     * @return true if the touch is within the bounds of the button, false otherwise
+     */
     private boolean isInBounds(final float x, final float y, final float buttonX, final float buttonY, final float buttonWidth, final float buttonHeight) {
         return x >= buttonX && x <= buttonX + buttonWidth && y >= buttonY && y <= buttonY + buttonHeight;
     }
