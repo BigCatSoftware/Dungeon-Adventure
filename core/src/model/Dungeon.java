@@ -4,6 +4,8 @@ import java.util.*;
 
 /**
  * Class representing a BSP dungeon generator.
+ * This class generates a random dungeon layout using a binary space partitioning algorithm.
+ * The dungeon consists of rooms and corridors connected by doors.
  *
  * @author Tiger Schueler
  * @version 1.2
@@ -95,6 +97,11 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Creates a door on the east wall of a given room.
+     *
+     * @param theNode The node representing the room to create an east door in.
+     */
     private void createEastDoor(final Node theNode) {
         final int nodeX = theNode.getX();
         final int nodeY = theNode.getY();
@@ -113,6 +120,11 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Creates a door on the south wall of a given room.
+     *
+     * @param theNode The node representing the room to create a south door in.
+     */
     private void createSouthDoor(final Node theNode) {
         final int nodeX = theNode.getX();
         final int nodeY = theNode.getY();
@@ -167,10 +179,19 @@ public class Dungeon {
         System.out.println(mapBuilder);
     }
 
+    /**
+     * Gets the generated map of the dungeon.
+     *
+     * @return A 2D array representing the dungeon map.
+     */
     public Tile[][] getMap() {
         return MAP;
     }
 
+    /**
+     * Generates the dungeon layout, including rooms and doors.
+     * Regenerates the dungeon if the total number of rooms is less than 15.
+     */
     private void generateDungeon() {
         rooms.clear();
         initializeRoot();
