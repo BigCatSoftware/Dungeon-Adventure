@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 public class Settings {
     private int myVolumeLevel;

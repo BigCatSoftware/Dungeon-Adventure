@@ -1,7 +1,7 @@
-package Controller;
+package controller;
 
 import model.Hero;
-import View.SettingsScreen;
+import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;

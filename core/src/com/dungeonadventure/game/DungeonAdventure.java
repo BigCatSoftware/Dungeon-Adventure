@@ -1,8 +1,7 @@
 package com.dungeonadventure.game;
 
-import com.dungeonadventure.database.DatabaseHelper;
-import Controller.Settings;
-import View.MainMenuScreen;
+import controller.Settings;
+import view.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
