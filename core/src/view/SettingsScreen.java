@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.dungeonadventure.game.DungeonAdventure;
 
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -98,6 +99,7 @@ public class SettingsScreen extends ScreenAdapter {
     public void show() {
         Gdx.input.setInputProcessor(new SettingsInputProcessor(myGame, myPreviousScreen, myCamera,
                 mySoundButton, myPlusButton, myMinusButton, myBackButton));
+        mySETTINGS.updateMusic();
     }
 
     /**
@@ -113,6 +115,7 @@ public class SettingsScreen extends ScreenAdapter {
         myBatch.setProjectionMatrix(myCamera.combined);
 
         myBatch.begin();
+        mySETTINGS.updateMusic();
 
         drawBackButton();
         drawSound();

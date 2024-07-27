@@ -1,5 +1,10 @@
 package controller;
 
+import com.badlogic.gdx.Gdx;
+
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
+
 /**
  * Represents the settings for sound and volume in the game.
  * @author alvarovaldez-duran
@@ -18,6 +23,7 @@ public class Settings {
         myVolumeLevel = 5; // Default volume level
         myIsSoundOn = true; // Default sound state
         myIsMuted = false; // Default mute state
+
     }
 
     /**
@@ -106,5 +112,16 @@ public class Settings {
      */
     public void setMuted(boolean isMuted) {
         myIsMuted = isMuted;
+    }
+    public void updateMusic() {
+        if (this.isSoundOn()) {
+            if (!myBackgroundMusic.isPlaying()) {
+                myBackgroundMusic.setLooping(true);
+                myBackgroundMusic.play();
+            }
+            myBackgroundMusic.setVolume(this.getVolumeLevel() / 10f); // Assuming volume level is between 0 and 10
+        } else {
+            myBackgroundMusic.pause();
+        }
     }
 }

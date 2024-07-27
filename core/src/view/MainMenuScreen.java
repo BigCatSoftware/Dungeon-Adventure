@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
 
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+
+
 /**
  * Represents the main menu screen where players can start the game, adjust settings, or exit the game.
  * @author alvarovaldez-duran
@@ -60,6 +64,9 @@ public class MainMenuScreen implements Screen {
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
         myDungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
 
+        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MainScreenSound.mp3"));
+
+
         EXIT_BUTTON_X = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
         PLAY_BUTTON_X = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
         SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
@@ -75,6 +82,8 @@ public class MainMenuScreen implements Screen {
                 EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT,
                 PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT,
                 SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT));
+
+        mySETTINGS.updateMusic();
     }
 
     /**
@@ -91,6 +100,8 @@ public class MainMenuScreen implements Screen {
 
         int x = DungeonAdventure.WIDTH / 2 - DUNGEON_TITLE_WIDTH / 2;
         myGame.batch.draw(myDungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);
+
+        mySETTINGS.updateMusic();
 
         exitButtonDraw();
         playButtonDraw();

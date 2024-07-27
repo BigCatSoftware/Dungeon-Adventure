@@ -1,5 +1,6 @@
 package com.dungeonadventure.game;
 
+import com.badlogic.gdx.audio.Music;
 import controller.Settings;
 import view.MainMenuScreen;
 import com.badlogic.gdx.Game;
@@ -50,6 +51,8 @@ public class DungeonAdventure extends Game {
 	 * The y-position of the settings button.
 	 */
 	public static final int SETTINGS_BUTTON_Y = HEIGHT - SETTINGS_BUTTON_HEIGHT;
+
+	public static Music myBackgroundMusic;
 
 	/**
 	 * Creates and initializes the game, setting up the SpriteBatch,
