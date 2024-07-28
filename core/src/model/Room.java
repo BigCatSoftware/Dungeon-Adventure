@@ -81,6 +81,14 @@ public class Room {
         hasDoors = theDoorStatus;
     }
 
+    public boolean containsDoors() {
+        return hasDoors;
+    }
+
+    public void setHasDoors(boolean theDoorStatus) {
+        hasDoors = theDoorStatus;
+    }
+
     /**
      * Returns a string representation of the room.
      * The string includes the coordinates and dimensions of the room.
