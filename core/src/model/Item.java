@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * when used or collected by the player.
  *
  * @author Tiger Schueler
+ * @version 27JUL24
  */
 public class Item extends GameObject implements Usable, Collectible {
 

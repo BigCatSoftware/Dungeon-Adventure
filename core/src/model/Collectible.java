@@ -6,7 +6,7 @@ package model;
  * triggering some effect or state change within the game.
  *
  * @author Tiger Schueler
- * @version 1.1
+ * @version 26JUL24
  */
 public interface Collectible {
 
