@@ -8,7 +8,7 @@ import java.util.*;
  * The dungeon consists of rooms and corridors connected by doors.
  *
  * @author Tiger Schueler
- * @version 1.2
+ * @version 27JUL24
  */
 public class Dungeon {
 
