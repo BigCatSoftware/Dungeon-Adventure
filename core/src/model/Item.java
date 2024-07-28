@@ -28,8 +28,8 @@ public class Item extends GameObject implements Usable, Collectible {
      *
      * @param thePosition The position of the item in the game world.
      */
-    public Item(Position thePosition) {
-        super(thePosition);
+    public Item(final Position thePosition) {
+        myPosition = thePosition;
         myTexture = new Texture("item.png");
         myName = "Item";
         myType = "Item";
