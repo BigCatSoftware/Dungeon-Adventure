@@ -10,7 +10,7 @@ import java.util.List;
  * the layout and connections between rooms.
  *
  * @author Tiger Schueler
- * @version 27JUL24
+ * @version 28JUL24
  */
 public class Room {
     private final int myX;
@@ -19,6 +19,7 @@ public class Room {
     private final int myHeight;
     private final List<Room> myAdjacentRooms;
     private final List<Door> myDoors;
+    private boolean hasDoors;
 
     /**
      * Constructs a room with the specified coordinates and dimensions.
@@ -35,6 +36,7 @@ public class Room {
         myHeight = theHeight;
         myAdjacentRooms = new ArrayList<>();
         myDoors = new ArrayList<>();
+        hasDoors = false;
     }
 
     /**
@@ -68,6 +70,14 @@ public class Room {
             }
         }
         return null;
+    }
+
+    public boolean containsDoors() {
+        return hasDoors;
+    }
+
+    public void setHasDoors(boolean theDoorStatus) {
+        hasDoors = theDoorStatus;
     }
 
     /**
