@@ -1,6 +1,5 @@
 package controller;
 
-import model.Hero;
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -8,19 +7,37 @@ import com.badlogic.gdx.Screen;
 import com.dungeonadventure.game.DungeonAdventure;
 
 import static com.dungeonadventure.game.DungeonAdventure.*;
-import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_Y;
+import static controller.DungeonInputProcessor.GAME_MASTER;
 
+/**
+ * Handles user input for player actions and settings navigation in the game.
+ * @author alvarovaldez-duran
+ * @version 1.0
+ */
 public class PlayerInputProcessor extends InputAdapter {
-    private final Hero myPlayer;
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
 
-    public PlayerInputProcessor(final Hero thePlayer, final DungeonAdventure theGame, final Screen thePreviousScreen) {
-        myPlayer = thePlayer;
+    /**
+     * Constructs a new PlayerInputProcessor.
+     *
+     * @param theGame the main game instance
+     * @param thePreviousScreen the previous screen to return to
+     */
+    public PlayerInputProcessor(final DungeonAdventure theGame, final Screen thePreviousScreen) {
         myGame = theGame;
         myPreviousScreen = thePreviousScreen;
     }
 
+    /**
+     * Handles touch down events on the screen, specifically for navigating to the settings screen.
+     *
+     * @param screenX the x-coordinate of the touch
+     * @param screenY the y-coordinate of the touch
+     * @param pointer the pointer for the event
+     * @param button the button for the event
+     * @return true if the touch event is handled, false otherwise
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // Convert screen coordinates to match the game's coordinate system
@@ -36,23 +53,29 @@ public class PlayerInputProcessor extends InputAdapter {
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
+    /**
+     * Handles key down events for player movement and actions.
+     *
+     * @param keycode the key code of the pressed key
+     * @return true if the key event is handled, false otherwise
+     */
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.UP:
-                myPlayer.moveCharacterUp();
+                GAME_MASTER.getPlayer().moveCharacterUp();
                 break;
             case Input.Keys.DOWN:
-                myPlayer.moveCharacterDown();
+                GAME_MASTER.getPlayer().moveCharacterDown();
                 break;
             case Input.Keys.LEFT:
-                myPlayer.moveCharacterLeft();
+                GAME_MASTER.getPlayer().moveCharacterLeft();
                 break;
             case Input.Keys.RIGHT:
-                myPlayer.moveCharacterRight();
+                GAME_MASTER.getPlayer().moveCharacterRight();
                 break;
             case Input.Keys.SPACE:
-                myPlayer.attack();
+                GAME_MASTER.getPlayer().attack();
                 break;
             default:
                 return false; // Indicates that the key event was not handled
@@ -60,5 +83,3 @@ public class PlayerInputProcessor extends InputAdapter {
         return true; // Indicates that the key event was handled
     }
 }
-
-

@@ -53,7 +53,7 @@ public final class Position{
      * Set x position of this object to new value. Value has to be non-negative.
      * @param theX int new x coordinate for this object.
      */
-    private void setMyX(final int theX){
+    void setMyX(final int theX){
         if(theX < 0){
             throw new IllegalArgumentException("The x cannot be set to negative value for" +
                     "character position.");
@@ -65,7 +65,7 @@ public final class Position{
      * Set y position of this object to new value. Value has to be non-negative.
      * @param theY int new y coordinate for this object.
      */
-    private void setMyY(final int theY){
+    void setMyY(final int theY){
         if(theY < 0){
             throw new IllegalArgumentException("The y cannot be set to negative value for" +
                     "character position.");
