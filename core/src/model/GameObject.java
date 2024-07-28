@@ -20,10 +20,9 @@ public class GameObject {
     /**
      * Constructs a GameObject with the specified position and texture.
      *
-     * @param thePosition The position of the object in the game world.
      */
-    public GameObject(final Position thePosition) {
-        myPosition = thePosition;
+    public GameObject() {
+        myPosition = new Position (1, 1);
     }
 
     /**
