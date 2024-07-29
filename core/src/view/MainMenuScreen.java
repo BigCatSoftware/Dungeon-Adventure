@@ -82,8 +82,6 @@ public class MainMenuScreen implements Screen {
                 EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT,
                 PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT,
                 SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT));
-
-        mySETTINGS.updateMusic();
     }
 
     /**
@@ -116,9 +114,7 @@ public class MainMenuScreen implements Screen {
      */
     private void exitButtonDraw() {
         int x = EXIT_BUTTON_X;
-        if (Gdx.input.getX() < x + EXIT_BUTTON_WIDTH && Gdx.input.getX() > x &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y) {
+        if (isHovered(x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT)) {
             myGame.batch.draw(myExitButtonActive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         } else {
             myGame.batch.draw(myExitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
@@ -131,9 +127,7 @@ public class MainMenuScreen implements Screen {
      */
     private void playButtonDraw() {
         int x = PLAY_BUTTON_X;
-        if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
+        if (isHovered(x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT)) {
             myGame.batch.draw(myPlayButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         } else {
             myGame.batch.draw(myPlayButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
@@ -146,13 +140,25 @@ public class MainMenuScreen implements Screen {
      */
     private void settingsButtonDraw() {
         int x = SETTINGS_BUTTON_X;
-        if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
+        if (isHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         } else {
             myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
+    }
+    /**
+     * Checks if the mouse is hovering over a specified button.
+     *
+     * @param buttonX the x-coordinate of the button
+     * @param buttonY the y-coordinate of the button
+     * @param buttonWidth the width of the button
+     * @param buttonHeight the height of the button
+     * @return true if the mouse is hovering over the button, false otherwise
+     */
+    private boolean isHovered(int buttonX, int buttonY, int buttonWidth, int buttonHeight) {
+        return Gdx.input.getX() < buttonX + buttonWidth && Gdx.input.getX() > buttonX &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < buttonY + buttonHeight &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > buttonY;
     }
 
     /**

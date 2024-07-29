@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+
 /**
  * Handles user input on the dungeon screen, allowing the player to navigate and select various options.
  * @author alvarovaldez-duran
@@ -122,8 +124,10 @@ public class DungeonInputProcessor extends InputAdapter {
         float y = touchPos.y;
 
         if (isInBounds(x, y, BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)) {
+            myBackgroundMusic.stop();
             myGame.setScreen(new MainMenuScreen(myGame));
         } else if (isInBounds(x, y, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
+            myBackgroundMusic.stop();
             myGame.setScreen(new GameScreen(myGame, new Warrior("WARRIOR", 0, 0)));
         } else if (isInBounds(x, y, THIEF_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             //myGame.setScreen(new DungeonScreen(myGame, new Thief("THIEF", 0, 0)));

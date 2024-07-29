@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
 
-import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_Y;
-import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_HEIGHT;
-import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_WIDTH;
+import static com.dungeonadventure.game.DungeonAdventure.*;
 
 /**
  * Represents the main game screen where the dungeon is rendered and the player interacts with the game.
@@ -25,6 +23,8 @@ public class GameScreen implements Screen {
     private final Texture mySettingsButtonInactive;
     private final DungeonRenderer myDungeonRenderer;
     private final Hero myPlayer;
+    private final int SETTINGS_BUTTON_X;
+
 
     /**
      * Constructs a new GameScreen.
@@ -40,6 +40,10 @@ public class GameScreen implements Screen {
 
         Dungeon myDungeon = new Dungeon();
         myDungeonRenderer = new DungeonRenderer(myDungeon);
+
+        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("DungeonSound.mp3"));
+
+        SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
     }
 
     /**
@@ -62,6 +66,8 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         myGame.batch.begin();
 
+        mySETTINGS.updateMusic();
+
         // Render the dungeon
         myDungeonRenderer.render(myGame.batch);
 
@@ -75,14 +81,26 @@ public class GameScreen implements Screen {
      * The button changes appearance based on whether it is hovered over or not.
      */
     private void settingsButtonDraw() {
-        int x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
-        if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
+        int x = SETTINGS_BUTTON_X;
+        if (isHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         } else {
             myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
+    }
+    /**
+     * Checks if the mouse is hovering over a specified button.
+     *
+     * @param buttonX the x-coordinate of the button
+     * @param buttonY the y-coordinate of the button
+     * @param buttonWidth the width of the button
+     * @param buttonHeight the height of the button
+     * @return true if the mouse is hovering over the button, false otherwise
+     */
+    private boolean isHovered(int buttonX, int buttonY, int buttonWidth, int buttonHeight) {
+        return Gdx.input.getX() < buttonX + buttonWidth && Gdx.input.getX() > buttonX &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < buttonY + buttonHeight &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > buttonY;
     }
 
     /**

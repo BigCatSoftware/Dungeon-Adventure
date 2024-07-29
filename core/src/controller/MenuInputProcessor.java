@@ -102,8 +102,8 @@ public class MenuInputProcessor extends InputAdapter {
         if (isInBounds(x, y, EXIT_BUTTON_X, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT)) {
             Gdx.app.exit();
         } else if (isInBounds(x, y, PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT)) {
-            myGame.setScreen(new DungeonScreen(myGame));
             myBackgroundMusic.stop();
+            myGame.setScreen(new DungeonScreen(myGame));
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
         }
