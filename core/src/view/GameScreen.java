@@ -41,8 +41,6 @@ public class GameScreen implements Screen {
         Dungeon myDungeon = new Dungeon();
         myDungeonRenderer = new DungeonRenderer(myDungeon);
 
-        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("DungeonSound.mp3"));
-
         SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
     }
 
@@ -53,6 +51,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
+        mySETTINGS.updateMusic();
     }
 
     /**
