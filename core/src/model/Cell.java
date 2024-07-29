@@ -87,7 +87,9 @@ public final class Cell {
     public Item getItem(){
         return myItem;
     }
-
+    public boolean isWalkable(){
+        return myWalkable;
+    }
     /**
      * Sets the tile for this cell. Used upon grid creation.
      * @param theTile type of tile on this cell.
@@ -97,14 +99,15 @@ public final class Cell {
             case WALL:
             case DOOR:
                 myWalkable = false;
+                myTile = theTile;
                 break;
             case FLOOR:
                 myWalkable = true;
+                myTile = theTile;
                 break;
             default:
                 throw new IllegalArgumentException("Bad tile state for cell parameter.");
         }
-        myTile = theTile;
     }
     /**
      * Adds monster to monster list stored in this cell.

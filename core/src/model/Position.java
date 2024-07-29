@@ -37,7 +37,7 @@ public final class Position{
      * Returns integer x coordinate of this entity.
      * @return int of x coordinate.
      */
-    int getMyX(){
+    public int getMyX(){
         return myX;
     }
 
@@ -45,7 +45,7 @@ public final class Position{
      * Returns integer y coordinate of this entity.
      * @return int of y coordinate.
      */
-    int getMyY(){
+    public int getMyY(){
         return myY;
     }
 

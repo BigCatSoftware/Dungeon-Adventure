@@ -63,16 +63,25 @@ public class PlayerInputProcessor extends InputAdapter {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.UP:
-                GAME_MASTER.getPlayer().moveCharacterUp();
+                //check if cell at up is walkable
+                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()][GAME_MASTER.getPlayerY()+1].isWalkable()){
+                    GAME_MASTER.getPlayer().moveCharacterUp();
+                }
                 break;
             case Input.Keys.DOWN:
-                GAME_MASTER.getPlayer().moveCharacterDown();
+                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()][GAME_MASTER.getPlayerY()-1].isWalkable()){
+                    GAME_MASTER.getPlayer().moveCharacterDown();
+                }
                 break;
             case Input.Keys.LEFT:
-                GAME_MASTER.getPlayer().moveCharacterLeft();
+                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()-1][GAME_MASTER.getPlayerY()].isWalkable()){
+                    GAME_MASTER.getPlayer().moveCharacterLeft();
+                }
                 break;
             case Input.Keys.RIGHT:
-                GAME_MASTER.getPlayer().moveCharacterRight();
+                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()+1][GAME_MASTER.getPlayerY()].isWalkable()){
+                    GAME_MASTER.getPlayer().moveCharacterRight();
+                }
                 break;
             case Input.Keys.SPACE:
                 GAME_MASTER.getPlayer().attack();

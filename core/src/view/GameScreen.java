@@ -1,5 +1,6 @@
 package view;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import controller.DungeonInputProcessor;
 import controller.PlayerInputProcessor;
 import com.badlogic.gdx.Gdx;
@@ -7,6 +8,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
+import model.Position;
+import model.Priestess;
+import model.Thief;
+import model.Warrior;
 
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_Y;
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_HEIGHT;
@@ -19,10 +24,12 @@ import static controller.DungeonInputProcessor.GAME_MASTER;
  * @version 1.0
  */
 public class GameScreen implements Screen {
+    private static final int TILE_SIZE = 16;
 
     private final DungeonAdventure myGame;
     private final Texture mySettingsButtonActive;
     private final Texture mySettingsButtonInactive;
+    private final Texture myPlayerTexture;
     private final DungeonRenderer myDungeonRenderer;
 
     /**
@@ -34,10 +41,26 @@ public class GameScreen implements Screen {
         myGame = theGame;
         mySettingsButtonActive = new Texture("SettingsActive.png");
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
-
+        myPlayerTexture = initPlayerTexture();
         myDungeonRenderer = new DungeonRenderer();
     }
-
+    private Texture initPlayerTexture(){
+        Texture playerTexture = null;
+        if(GAME_MASTER.getPlayer() instanceof Warrior){
+            playerTexture = new Texture("Pixel Warrior.png");
+        }
+        else if(GAME_MASTER.getPlayer() instanceof Priestess){
+            playerTexture = new Texture("Pixel Priestess.png");
+        }
+        else if(GAME_MASTER.getPlayer() instanceof Thief){
+            playerTexture = new Texture("Pixel Thief.png");
+        }
+        else{
+            throw new IllegalArgumentException("Can't determine hero class from game master to" +
+                " draw its texture");
+        }
+        return playerTexture;
+    }
     /**
      * Called when the screen is shown.
      * Sets the input processor to handle player inputs.
@@ -60,7 +83,8 @@ public class GameScreen implements Screen {
 
         // Render the dungeon
         myDungeonRenderer.render(myGame.batch);
-
+        // Render character
+        myGame.batch.draw(myPlayerTexture, getPlayerPos().getMyX()*TILE_SIZE,getPlayerPos().getMyY()*TILE_SIZE,TILE_SIZE,TILE_SIZE);
         settingsButtonDraw();
 
         myGame.batch.end();
@@ -80,7 +104,9 @@ public class GameScreen implements Screen {
             myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
     }
-
+    private Position getPlayerPos(){
+        return GAME_MASTER.getPlayer().getPosition();
+    }
     /**
      * Called when the screen is resized.
      *

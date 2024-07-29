@@ -47,7 +47,7 @@ public class DungeonRenderer {
                     texture = myDoorTexture;
                 }
                 if (texture != null) {
-                    theBatch.draw(texture, j * TILE_SIZE, i * TILE_SIZE,
+                    theBatch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, //fixed typo where x is j and y is i resulting in mirrored dungeon on x axis.
                             TILE_SIZE, TILE_SIZE);
                 }
             }

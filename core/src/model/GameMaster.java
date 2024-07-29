@@ -28,6 +28,7 @@ public final class GameMaster {
      */
     public GameMaster(final Hero thePlayer){
         myDungeon = new Dungeon();
+        myDungeon.printMap();
         myMap = myDungeon.getMap();
         myPlayer = thePlayer;
     }
@@ -42,7 +43,12 @@ public final class GameMaster {
         }
         return myPlayer;
     }
-
+    public int getPlayerX(){
+        return myPlayer.getPosition().getMyX();
+    }
+    public int getPlayerY(){
+        return myPlayer.getPosition().getMyY();
+    }
     /**
      * Returns Cell[][] grid of cells that define the game grid and store tile, position,
      * enemy arraylist, item.
