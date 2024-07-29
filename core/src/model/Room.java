@@ -92,6 +92,7 @@ public class Room {
 //        return ("myX: " + myX + " myY: " + myY + " myWidth: " + myWidth + " myHeight: " + myHeight);
         return myName;
     }
+    //
 
     /**
      * Gets the x-coordinate of the room.
