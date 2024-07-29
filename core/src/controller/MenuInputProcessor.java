@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+
 /**
  * Handles user input on the main menu screen, allowing the player to start the game,
  * adjust settings, or exit the application.
@@ -102,6 +104,7 @@ public class MenuInputProcessor extends InputAdapter {
         } else if (isInBounds(x, y, PLAY_BUTTON_X, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT)) {
             myPreviousScreen.dispose();
             myGame.setScreen(new DungeonScreen(myGame));
+            myBackgroundMusic.stop();
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
         }

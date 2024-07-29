@@ -181,5 +181,6 @@ public class SettingsScreen extends ScreenAdapter {
         for (Texture texture : myVolumeBars) {
             texture.dispose();
         }
+        myBackgroundMusic.dispose();
     }
 }
