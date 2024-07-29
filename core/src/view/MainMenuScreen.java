@@ -204,6 +204,7 @@ public class MainMenuScreen implements Screen {
         mySettingsButtonActive.dispose();
         mySettingsButtonInactive.dispose();
         myDungeonAdventureTitle.dispose();
+        myBackgroundMusic.dispose();
     }
 }
 
