@@ -1,9 +1,7 @@
 package controller;
 
-import com.badlogic.gdx.Gdx;
 
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
-import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
  * Represents the settings for sound and volume in the game.

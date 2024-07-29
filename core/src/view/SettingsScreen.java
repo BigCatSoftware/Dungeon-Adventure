@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.dungeonadventure.game.DungeonAdventure;
 
-import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -181,6 +180,5 @@ public class SettingsScreen extends ScreenAdapter {
         for (Texture texture : myVolumeBars) {
             texture.dispose();
         }
-        myBackgroundMusic.dispose();
     }
 }
