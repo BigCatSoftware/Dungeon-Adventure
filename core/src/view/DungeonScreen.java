@@ -125,6 +125,7 @@ public class DungeonScreen implements Screen {
                 WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT,
                 THIEF_BUTTON_X, PRIESTESS_BUTTON_X, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT,
                 SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)); // Set input processor
+        mySETTINGS.updateMusic();
     }
 
     /**
