@@ -83,8 +83,9 @@ public class Dungeon {
 
         if (theNode.myLeftChild == null && theNode.myRightChild == null) {
             myTotalRooms++;
+            final String roomName = "Room " + myTotalRooms;
 //            rooms.add(theNode);
-            final Room newRoom = new Room(theNode.getX(), theNode.getY(),
+            final Room newRoom = new Room(roomName, theNode.getX(), theNode.getY(),
                     theNode.getWidth(), theNode.getHeight());
             myRoomList.add(newRoom);
             placeFloorTiles(newRoom);
@@ -153,8 +154,30 @@ public class Dungeon {
         for (final Room room1 : myRoomList) {
             if(room1.containsDoors()) {
                 for (final Door door : room1.getDoors()) {
+                    int doorX = door.getPosition().getMyX();
+                    int doorY = door.getPosition().getMyY();
+                    if (MAP[doorY][doorX + 1] == Tile.FLOOR
+                    && MAP[doorY + 1][doorX] == Tile.WALL) {
+                        doorX++;
+                    } else if (MAP[doorY + 1][doorX] == Tile.FLOOR
+                    && MAP[doorY][doorX + 1] == Tile.WALL) {
+                        doorY++;
+                    }
                     for (final Room room2 : myRoomList) {
+                        boolean isAdjacent = room1.findRoom(room2, doorX, doorY);
+                        if (isAdjacent) {
+                            if (!room1.getAdjacentRooms().contains(room2)) {
+                                room1.getAdjacentRooms().add(room2);
+//                                room2.getDoors().add(door);
+//                                room2.setHasDoors(true);
+                            }
+                            if (!room2.getAdjacentRooms().contains(room1)) {
+                                room2.getAdjacentRooms().add(room1);
+                            }
 
+//                            room2.setHasDoors(true);
+//                            room2.getDoors().add(door);
+                        }
                     }
                 }
             }
@@ -229,13 +252,20 @@ public class Dungeon {
         splitMap(ROOT);
         createRooms(ROOT);
         createDoors();
+        createRoomAdjacency();
         if (myTotalRooms < 15) {
             myTotalRooms = 0;
             generateDungeon();
         } else {
             System.out.println("Dungeon Rooms " + myTotalRooms + ": ");
+            int i = 0;
             for (Room room : myRoomList) {
+                System.out.println();
                 System.out.println(room);
+//                System.out.println(i);
+                System.out.print("Adjacent Rooms");
+                System.out.println(room.getAdjacentRooms());
+                i++;
             }
         }
 

@@ -13,6 +13,7 @@ import java.util.List;
  * @version 28JUL24
  */
 public class Room {
+    private final String myName;
     private final int myX;
     private final int myY;
     private final int myWidth;
@@ -29,7 +30,9 @@ public class Room {
      * @param theWidth the width of the room
      * @param theHeight the height of the room
      */
-    public Room(final int theX, final int theY, final int theWidth, final int theHeight) {
+    public Room(final String theName, final int theX, final int theY,
+                final int theWidth, final int theHeight) {
+        myName = theName;
         myX = theX;
         myY = theY;
         myWidth = theWidth;
@@ -62,14 +65,12 @@ public class Room {
      * @param theY the y-coordinate to find
      * @return the room containing the specified coordinates, or null if no such room is found
      */
-    private Room findRoom(final List<Room> theRooms, final int theX, final int theY) {
-        for (final Room room : theRooms) {
-            if (theX >= room.getX() && theX < room.getX() + room.getWidth()
-            && theY >= room.getY() && theY < room.getY() + room.getHeight()) {
-                return room;
-            }
+    boolean findRoom(final Room theRoom, final int theX, final int theY) {
+            if (theX >= theRoom.getX() && theX < theRoom.getX() + theRoom.getWidth()
+            && theY >= theRoom.getY() && theY < theRoom.getY() + theRoom.getHeight()) {
+                return true;
         }
-        return null;
+        return false;
     }
 
     public boolean containsDoors() {
@@ -88,7 +89,8 @@ public class Room {
      */
     @Override
     public String toString() {
-        return ("myX: " + myX + " myY: " + myY + " myWidth: " + myWidth + " myHeight: " + myHeight);
+//        return ("myX: " + myX + " myY: " + myY + " myWidth: " + myWidth + " myHeight: " + myHeight);
+        return myName;
     }
 
     /**
