@@ -15,9 +15,7 @@ public class EntityMovementTests {
     Dungeon myDungeon = new Dungeon();
     @Test
     void getMap(){
-        Cell[][] myMap = myDungeon.getMap();
         myDungeon.printMap();
-        printMap(myMap);
     }
     void printMap(final Cell[][] map){
         StringBuilder sb = new StringBuilder();

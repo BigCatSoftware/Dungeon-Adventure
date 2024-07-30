@@ -1,10 +1,10 @@
 package view;
 
-import static controller.DungeonInputProcessor.GAME_MASTER;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import model.Cell;
+import model.GameMaster;
 import model.Tile;
 
 /**
@@ -35,15 +35,15 @@ public class DungeonRenderer {
      * @param theBatch The SpriteBatch used for drawing textures.
      */
     public void render(final SpriteBatch theBatch) {
-        Cell[][] map = GAME_MASTER.getMap(); //Tile[][] to Cell[][]
+        Tile[][] map = GameMaster.getInstance().getMap(); //Tile[][] to Cell[][]
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;
-                if (map[i][j].getTile() == Tile.WALL) {//added .getTile()
+                if (map[i][j] == Tile.WALL) {//added .getTile()
                     texture = myWallTexture;
-                } else if (map[i][j].getTile() == Tile.FLOOR) { //.getTile()
+                } else if (map[i][j] == Tile.FLOOR) { //.getTile()
                     texture = myFloorTexture;
-                } else if (map[i][j].getTile() == Tile.DOOR) { //.getTile()
+                } else if (map[i][j] == Tile.DOOR) { //.getTile()
                     texture = myDoorTexture;
                 }
                 if (texture != null) {

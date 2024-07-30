@@ -1,6 +1,5 @@
 package model;
 
-import static controller.DungeonInputProcessor.GAME_MASTER;
 import static model.DungeonCharacter.RANDOM_FROM_HUNDRED;
 
 import javax.naming.Name;

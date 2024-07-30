@@ -15,13 +15,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+
 /**
  * Handles user input on the dungeon screen, allowing the player to navigate and select various options.
  * @author alvarovaldez-duran
  * @version 1.0
  */
 public class DungeonInputProcessor extends InputAdapter {
-    public static  GameMaster GAME_MASTER = null;
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
     private final OrthographicCamera myCamera;
@@ -107,7 +108,6 @@ public class DungeonInputProcessor extends InputAdapter {
         this.SETTINGS_BUTTON_Y = SETTINGS_BUTTON_Y;
         this.SETTINGS_BUTTON_WIDTH = SETTINGS_BUTTON_WIDTH;
         this.SETTINGS_BUTTON_HEIGHT = SETTINGS_BUTTON_HEIGHT;
-
     }
 
     /**
@@ -128,23 +128,22 @@ public class DungeonInputProcessor extends InputAdapter {
         float y = touchPos.y;
 
         if (isInBounds(x, y, BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)) {
+            myBackgroundMusic.stop();
             myGame.setScreen(new MainMenuScreen(myGame));
         } else if (isInBounds(x, y, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            GAME_MASTER = new GameMaster(new Warrior(NameGenerator.getWarriorName(), 1, 1));
+            GameMaster.getInstance().setPlayer(new Warrior(NameGenerator.getWarriorName(), 1, 1));
             myGame.setScreen(new GameScreen(myGame));
-            //myGame.setScreen(new GameScreen(myGame, new Warrior("WARRIOR", 0, 0)));
         } else if (isInBounds(x, y, THIEF_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            GAME_MASTER = new GameMaster(new Thief(NameGenerator.getThiefName(), 1, 1));
-            myGame.setScreen(new GameScreen(myGame));
-            //myGame.setScreen(new DungeonScreen(myGame, new Thief("THIEF", 0, 0)));
+            GameMaster.getInstance().setPlayer(new Thief(NameGenerator.getThiefName(), 1, 1));
+            myGame.setScreen(new DungeonScreen(myGame));
         } else if (isInBounds(x, y, PRIESTESS_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            GAME_MASTER = new GameMaster(new Priestess(NameGenerator.getPriestessName(), 1, 1));
-            myGame.setScreen(new GameScreen(myGame));
-            //myGame.setScreen(new DungeonScreen(myGame, new Priestess("PRIESTESS", 0, 0)));
+            GameMaster.getInstance().setPlayer(new Priestess(NameGenerator.getPriestessName(), 1,1));
+            myGame.setScreen(new DungeonScreen(myGame));
         } else if (isInBounds(x, y, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT)) {
             // Load functionality
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
+
         }
 
         return true; // Return true if the event is handled

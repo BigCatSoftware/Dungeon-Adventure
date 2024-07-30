@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
+import model.GameMaster;
 import model.Position;
 import model.Priestess;
 import model.Thief;
@@ -16,7 +17,6 @@ import model.Warrior;
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_Y;
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_HEIGHT;
 import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_WIDTH;
-import static controller.DungeonInputProcessor.GAME_MASTER;
 
 /**
  * Represents the main game screen where the dungeon is rendered and the player interacts with the game.
@@ -46,13 +46,13 @@ public class GameScreen implements Screen {
     }
     private Texture initPlayerTexture(){
         Texture playerTexture = null;
-        if(GAME_MASTER.getPlayer() instanceof Warrior){
+        if(GameMaster.getInstance().getPlayer() instanceof Warrior){
             playerTexture = new Texture("Pixel Warrior.png");
         }
-        else if(GAME_MASTER.getPlayer() instanceof Priestess){
+        else if(GameMaster.getInstance().getPlayer() instanceof Priestess){
             playerTexture = new Texture("Pixel Priestess.png");
         }
-        else if(GAME_MASTER.getPlayer() instanceof Thief){
+        else if(GameMaster.getInstance().getPlayer() instanceof Thief){
             playerTexture = new Texture("Pixel Thief.png");
         }
         else{
@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
         }
     }
     private Position getPlayerPos(){
-        return GAME_MASTER.getPlayer().getPosition();
+        return GameMaster.getInstance().getPlayer().getPosition();
     }
     /**
      * Called when the screen is resized.

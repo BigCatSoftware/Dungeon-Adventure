@@ -1,5 +1,6 @@
 package controller;
 
+import model.GameMaster;
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -7,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.dungeonadventure.game.DungeonAdventure;
 
 import static com.dungeonadventure.game.DungeonAdventure.*;
-import static controller.DungeonInputProcessor.GAME_MASTER;
 
 /**
  * Handles user input for player actions and settings navigation in the game.
@@ -61,30 +61,32 @@ public class PlayerInputProcessor extends InputAdapter {
      */
     @Override
     public boolean keyDown(int keycode) {
+        GameMaster gm = GameMaster.getInstance();
         switch (keycode) {
             case Input.Keys.UP:
                 //check if cell at up is walkable
-                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()][GAME_MASTER.getPlayerY()+1].isWalkable()){
-                    GAME_MASTER.getPlayer().moveCharacterUp();
+                if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()+1].isWalkable()){
+                    gm.getPlayer().moveCharacterUp();
                 }
                 break;
             case Input.Keys.DOWN:
-                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()][GAME_MASTER.getPlayerY()-1].isWalkable()){
-                    GAME_MASTER.getPlayer().moveCharacterDown();
+                if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
+                    gm.getPlayer().moveCharacterDown();
                 }
                 break;
             case Input.Keys.LEFT:
-                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()-1][GAME_MASTER.getPlayerY()].isWalkable()){
-                    GAME_MASTER.getPlayer().moveCharacterLeft();
+                if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
+                    gm.getPlayer().moveCharacterLeft();
                 }
                 break;
             case Input.Keys.RIGHT:
-                if(GAME_MASTER.getMap()[GAME_MASTER.getPlayerX()+1][GAME_MASTER.getPlayerY()].isWalkable()){
-                    GAME_MASTER.getPlayer().moveCharacterRight();
+                if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
+                    gm.getPlayer().moveCharacterRight();
                 }
                 break;
             case Input.Keys.SPACE:
-                GAME_MASTER.getPlayer().attack();
+                gm.getPlayer().attack();
+                //TODO: place combat screen to test combat.
                 break;
             default:
                 return false; // Indicates that the key event was not handled

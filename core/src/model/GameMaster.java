@@ -8,6 +8,7 @@ package model;
  */
 public final class GameMaster {
     //Class fields.
+    private static GameMaster myInstance = new GameMaster();
     /**
      * This is a dungeon generator that will produce a map to store.
      */
@@ -15,22 +16,25 @@ public final class GameMaster {
     /**
      * This is a grid of cells that will be used to check game status.
      */
-    private final Cell[][] myMap;
+    private final Tile[][] myMap; //TODO: change to Room array to send to Entity and Item loader to populate.
     /**
      * Hero to track on game grid and update the data based on events or changes in this object.
      */
     private Hero myPlayer;
     //methods
-
+    private boolean myHeroSet;
     /**
      * Create GameMaster that will drive the main game logic.
-     * @param thePlayer hero playable character by a user.
      */
-    public GameMaster(final Hero thePlayer){
+    private GameMaster(){
         myDungeon = new Dungeon();
         myDungeon.printMap();
         myMap = myDungeon.getMap();
-        myPlayer = thePlayer;
+        myPlayer = null;
+        myHeroSet = false;
+    }
+    public static synchronized GameMaster getInstance(){
+        return myInstance;
     }
 
     /**
@@ -43,6 +47,13 @@ public final class GameMaster {
         }
         return myPlayer;
     }
+    public void setPlayer(final Hero thePlayer){
+        if(thePlayer == null || myHeroSet){
+            throw new IllegalArgumentException("Can't set player for this GameMaster instance.");
+        }
+        myPlayer = thePlayer;
+        myHeroSet = true;
+    }
     public int getPlayerX(){
         return myPlayer.getPosition().getMyX();
     }
@@ -54,7 +65,7 @@ public final class GameMaster {
      * enemy arraylist, item.
      * @return Cell[][] grid of cells that define the game grid.
      */
-    public Cell[][] getMap(){
+    public Tile[][] getMap(){
         return myMap;
     }
 }

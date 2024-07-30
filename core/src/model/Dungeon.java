@@ -8,21 +8,25 @@ import java.util.*;
  * The dungeon consists of rooms and corridors connected by doors.
  *
  * @author Tiger Schueler
- * @version 1.2
+ * @version 28JUL24
  */
 public class Dungeon {
 
     private final int MAP_SIZE = 50;
-    private final Cell[][] MAP; //Tile[][] Map;
+    private final Tile[][] MAP;
     private static final int MIN_ROOM_SIZE = 10;
     private final Node ROOT;
-    private final List<Node> rooms;
+//    private final List<Node> rooms;
+    private final List<Room> myRoomList;
+    private final List<Door> myDoorList;
     private int myTotalRooms = 0;
 
     public Dungeon() {
-        MAP = new Cell[MAP_SIZE][MAP_SIZE];
+        MAP = new Tile[MAP_SIZE][MAP_SIZE];
         ROOT = new Node(1, 1, MAP_SIZE - 1, MAP_SIZE - 1);
-        rooms = new ArrayList<>();
+//        rooms = new ArrayList<>();
+        myRoomList = new ArrayList<>();
+        myDoorList = new ArrayList<>();
         generateDungeon();
     }
 
@@ -40,7 +44,7 @@ public class Dungeon {
     private void initializeMap() {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
-                MAP[i][j] = new Cell(Tile.WALL, new Position(i, j), false);//Tile.WALL;
+                MAP[i][j] = Tile.WALL;
             }
         }
     }
@@ -79,8 +83,12 @@ public class Dungeon {
 
         if (theNode.myLeftChild == null && theNode.myRightChild == null) {
             myTotalRooms++;
-            rooms.add(theNode);
-            placeFloorTiles(theNode);
+            final String roomName = "Room " + myTotalRooms;
+//            rooms.add(theNode);
+            final Room newRoom = new Room(roomName, theNode.getX(), theNode.getY(),
+                    theNode.getWidth(), theNode.getHeight());
+            myRoomList.add(newRoom);
+            placeFloorTiles(newRoom);
         } else {
             createRooms(theNode.myLeftChild);
             createRooms(theNode.myRightChild);
@@ -88,10 +96,25 @@ public class Dungeon {
     }
 
     /**
+     * Creates a room within the node.
+     *
+     * @param theRoom The node to create a room in.
+     */
+    private void placeFloorTiles(final Room theRoom) {
+        for (int i = theRoom.getY(); i < theRoom.getY() + theRoom.getHeight() - 1; i++) {
+            for (int j = theRoom.getX(); j < theRoom.getX() + theRoom.getWidth() - 1; j++) {
+                if (i > 0 && j > 0) {
+                    MAP[i][j] = Tile.FLOOR;
+                }
+            }
+        }
+    }
+
+    /**
      * Creates doorways connecting adjacent doors on the North, South, East, and West walls.
      */
     private void createDoors() {
-        for (final Node room : rooms) {
+        for (final Room room : myRoomList) {
             createEastDoor(room);
             createSouthDoor(room);
         }
@@ -100,22 +123,64 @@ public class Dungeon {
     /**
      * Creates a door on the east wall of a given room.
      *
-     * @param theNode The node representing the room to create an east door in.
+     * @param theRoom The node representing the room to create an east door in.
      */
-    private void createEastDoor(final Node theNode) {
-        final int nodeX = theNode.getX();
-        final int nodeY = theNode.getY();
-        final int width = theNode.getWidth();
-        final int height = theNode.getHeight();
+    private void createEastDoor(final Room theRoom) {
+        final int roomX = theRoom.getX();
+        final int roomY = theRoom.getY();
+        final int width = theRoom.getWidth();
+        final int height = theRoom.getHeight();
         final int rand = new Random().nextInt(height / 2);
         for (int i = rand; i <= height; i++) {
-            if (nodeY + i < MAP_SIZE - 1
-                    && nodeX + width < MAP_SIZE - 1
-                    && MAP[nodeY + i][nodeX + width - 2].getTile() == Tile.FLOOR //added .getTile()
-                    && MAP[nodeY + i][nodeX + width - 1].getTile() == Tile.WALL
-                    && MAP[nodeY + i][nodeX + width].getTile() == Tile.FLOOR) {
-                MAP[nodeY + i][nodeX + width - 1].setTile(Tile.DOOR); //added .setTile(Tile.DOOR); = Tile.DOOR
+            if (roomY + i < MAP_SIZE - 1
+                    && roomX + width < MAP_SIZE - 1
+                    && MAP[roomY + i][roomX + width - 2] == Tile.FLOOR
+                    && MAP[roomY + i][roomX + width - 1] == Tile.WALL
+                    && MAP[roomY + i][roomX + width] == Tile.FLOOR) {
+                MAP[roomY + i][roomX + width - 1] = Tile.DOOR;
+                final Door newDoor = new Door(new Position(roomX + width - 1,
+                        roomY + i));
+                theRoom.getDoors().add(newDoor);
+                theRoom.setHasDoors(true);
                 break;
+            }
+        }
+    }
+    //
+
+    /**
+     * if room has doors add adjacent door to adjacency list.
+     */
+    private void createRoomAdjacency() {
+        for (final Room room1 : myRoomList) {
+            if(room1.containsDoors()) {
+                for (final Door door : room1.getDoors()) {
+                    int doorX = door.getPosition().getMyX();
+                    int doorY = door.getPosition().getMyY();
+                    if (MAP[doorY][doorX + 1] == Tile.FLOOR
+                    && MAP[doorY + 1][doorX] == Tile.WALL) {
+                        doorX++;
+                    } else if (MAP[doorY + 1][doorX] == Tile.FLOOR
+                    && MAP[doorY][doorX + 1] == Tile.WALL) {
+                        doorY++;
+                    }
+                    for (final Room room2 : myRoomList) {
+                        boolean isAdjacent = room1.findRoom(room2, doorX, doorY);
+                        if (isAdjacent) {
+                            if (!room1.getAdjacentRooms().contains(room2)) {
+                                room1.getAdjacentRooms().add(room2);
+//                                room2.getDoors().add(door);
+//                                room2.setHasDoors(true);
+                            }
+                            if (!room2.getAdjacentRooms().contains(room1)) {
+                                room2.getAdjacentRooms().add(room1);
+                            }
+
+//                            room2.setHasDoors(true);
+//                            room2.getDoors().add(door);
+                        }
+                    }
+                }
             }
         }
     }
@@ -123,37 +188,25 @@ public class Dungeon {
     /**
      * Creates a door on the south wall of a given room.
      *
-     * @param theNode The node representing the room to create a south door in.
+     * @param theRoom The node representing the room to create a south door in.
      */
-    private void createSouthDoor(final Node theNode) {
-        final int nodeX = theNode.getX();
-        final int nodeY = theNode.getY();
-        final int width = theNode.getWidth();
-        final int height = theNode.getHeight();
+    private void createSouthDoor(final Room theRoom) {
+        final int roomX = theRoom.getX();
+        final int roomY = theRoom.getY();
+        final int width = theRoom.getWidth();
+        final int height = theRoom.getHeight();
         final int rand = new Random().nextInt(width / 2);
         for (int i = rand; i <= width; i++) {
-            if (nodeX + i < MAP_SIZE - 1
-                    && nodeY + height < MAP_SIZE - 1
-                    && MAP[nodeY + height - 2][nodeX + i].getTile() == Tile.FLOOR
-                    && MAP[nodeY + height - 1][nodeX + i].getTile() == Tile.WALL
-                    && MAP[nodeY + height][nodeX + i].getTile() == Tile.FLOOR) {
-                MAP[nodeY + height - 1][nodeX + i].setTile(Tile.DOOR);// = Tile.DOOR;
+            if (roomX + i < MAP_SIZE - 1
+                    && roomY + height < MAP_SIZE - 1
+                    && MAP[roomY + height - 2][roomX + i] == Tile.FLOOR
+                    && MAP[roomY + height - 1][roomX + i] == Tile.WALL
+                    && MAP[roomY + height][roomX + i] == Tile.FLOOR) {
+                MAP[roomY + height - 1][roomX + i] = Tile.DOOR;
+                final Door newDoor = new Door(new Position(roomX + width - 1,
+                        roomY + i));
+                theRoom.getDoors().add(newDoor);
                 break;
-            }
-        }
-    }
-
-    /**
-     * Creates a room within the node.
-     *
-     * @param theNode The node to create a room in.
-     */
-    private void placeFloorTiles(final Node theNode) {
-        for (int i = theNode.getY(); i < theNode.getY() + theNode.getHeight() - 1; i++) {
-            for (int j = theNode.getX(); j < theNode.getX() + theNode.getWidth() - 1; j++) {
-                if (i > 0 && j > 0) {
-                    MAP[i][j].setTile(Tile.FLOOR);// = Tile.FLOOR;
-                }
             }
         }
     }
@@ -165,9 +218,9 @@ public class Dungeon {
         StringBuilder mapBuilder = new StringBuilder();
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
-                if (MAP[i][j].getTile() == Tile.WALL) {
+                if (MAP[i][j] == Tile.WALL) {
                     mapBuilder.append('#');
-                } else if (MAP[i][j].getTile() == Tile.FLOOR){
+                } else if (MAP[i][j] == Tile.FLOOR){
                     mapBuilder.append('.');
                 } else {
                     mapBuilder.append('D');
@@ -184,7 +237,7 @@ public class Dungeon {
      *
      * @return A 2D array representing the dungeon map.
      */
-    public Cell[][] getMap() {
+    public Tile[][] getMap() {
         return MAP;
     }
 
@@ -193,16 +246,31 @@ public class Dungeon {
      * Regenerates the dungeon if the total number of rooms is less than 15.
      */
     private void generateDungeon() {
-        rooms.clear();
+//        rooms.clear();
+        myRoomList.clear();
         initializeRoot();
         initializeMap();
         splitMap(ROOT);
         createRooms(ROOT);
         createDoors();
+        createRoomAdjacency();
         if (myTotalRooms < 15) {
             myTotalRooms = 0;
             generateDungeon();
+        } else {
+            System.out.println("Dungeon Rooms " + myTotalRooms + ": ");
+            int i = 0;
+            for (Room room : myRoomList) {
+                System.out.println();
+                System.out.println(room);
+//                System.out.println(i);
+                System.out.print("Adjacent Rooms");
+                System.out.println(room.getAdjacentRooms());
+                i++;
+            }
         }
+
+
     }
 
     /**
