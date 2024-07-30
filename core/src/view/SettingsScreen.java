@@ -36,6 +36,7 @@ public class SettingsScreen extends ScreenAdapter {
     private final Texture myMinusActive;
     private final Texture myMinusInactive;
     private final Texture myBackActive;
+    private final Texture myBackInactive;
     private final Texture[] myVolumeBars;
 
     private final Rectangle mySoundButton;
@@ -77,6 +78,7 @@ public class SettingsScreen extends ScreenAdapter {
         myMinusActive = new Texture("MinusActive.png");
         myMinusInactive = new Texture("MinusInactive.png");
         myBackActive = new Texture("BackActive.png");
+        myBackInactive = new Texture("BackInactive.png");
 
         myVolumeBars = new Texture[11];
         for (int i = 0; i <= 10; i++) {
@@ -130,14 +132,16 @@ public class SettingsScreen extends ScreenAdapter {
      * The button changes appearance based on the sound setting.
      */
     private void drawSound() {
-        myBatch.draw(mySETTINGS.isSoundOn() ? mySoundActive : myMuteActive, mySoundButton.x, mySoundButton.y, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
+        Texture activeTexture = mySETTINGS.isSoundOn() ? mySoundActive : myMuteActive;
+        Texture inactiveTexture = mySETTINGS.isSoundOn() ? mySoundInactive : myMuteInactive;
+        myBatch.draw(isHovered(mySoundButton, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT) ? inactiveTexture : activeTexture, mySoundButton.x, mySoundButton.y, SOUND_BUTTON_WIDTH, SOUND_BUTTON_HEIGHT);
     }
 
     /**
      * Draws the plus button for increasing the volume.
      */
     private void drawPlus() {
-        myBatch.draw(myPlusActive, myPlusButton.x, myPlusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
+        myBatch.draw(isHovered(myPlusButton, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT) ? myPlusInactive : myPlusActive, myPlusButton.x, myPlusButton.y, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
     }
 
     /**
@@ -159,6 +163,18 @@ public class SettingsScreen extends ScreenAdapter {
      */
     private void drawBackButton() {
         myBatch.draw(myBackActive, myBackButton.x, myBackButton.y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT);
+    }
+
+    /**
+     * Checks if the mouse is hovering over a specified button.
+     *
+     * @param theButton the rectangle representing the button
+     * @return true if the mouse is hovering over the button, false otherwise
+     */
+    private boolean isHovered(final Rectangle theButton, final int theButtonWidth, final int theButtonHeight) {
+        return Gdx.input.getX() < theButton.x + theButtonWidth && Gdx.input.getX() > theButton.x &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < theButton.y + theButtonHeight &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > theButton.y;
     }
 
     /**

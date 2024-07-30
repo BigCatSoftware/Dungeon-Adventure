@@ -70,6 +70,8 @@ public class SettingsInputProcessor extends InputAdapter {
             mySETTINGS.decreaseVolume();
         } else if (myBackButton.contains(touchPos.x, touchPos.y)) {
             myGame.setScreen(myPreviousScreen);
+        } else {
+            System.out.println("Touch event did not match any button.");
         }
 
         return super.touchDown(screenX, screenY, pointer, button);

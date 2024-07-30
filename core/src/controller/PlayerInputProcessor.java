@@ -51,6 +51,8 @@ public class PlayerInputProcessor extends InputAdapter {
                 screenY >= y && screenY <= y + SETTINGS_BUTTON_HEIGHT) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
             return true; // Indicates that the touch event was handled
+        } else {
+            System.out.println("Touch event did not match any button.");
         }
 
         return super.touchDown(screenX, screenY, pointer, button);
