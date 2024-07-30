@@ -107,6 +107,8 @@ public class MenuInputProcessor extends InputAdapter {
             myBackgroundMusic.stop();
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
+        } else {
+            System.out.println("Touch event did not match any button.");
         }
 
         return true; // Return true if the event is handled
