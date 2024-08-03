@@ -1,12 +1,9 @@
 package controller;
 
-<<<<<<< HEAD:core/src/controller/DungeonInputProcessor.java
-=======
 import model.GameMaster;
 import model.NameGenerator;
 import model.Priestess;
 import model.Thief;
->>>>>>> nazarii_branch:core/src/Controller/DungeonInputProcessor.java
 import model.Warrior;
 import view.DungeonScreen;
 import view.GameScreen;
@@ -135,7 +132,7 @@ public class DungeonInputProcessor extends InputAdapter {
             myGame.setScreen(new MainMenuScreen(myGame));
         } else if (isInBounds(x, y, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             GameMaster.getInstance().setPlayer(new Warrior(NameGenerator.getWarriorName(), 1, 1));
-            myGame.setScreen(new GameScreen(myGame));
+            //myGame.setScreen(new GameScreen(myGame));
         } else if (isInBounds(x, y, THIEF_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             GameMaster.getInstance().setPlayer(new Thief(NameGenerator.getThiefName(), 1, 1));
             myGame.setScreen(new DungeonScreen(myGame));
@@ -146,12 +143,8 @@ public class DungeonInputProcessor extends InputAdapter {
             // Load functionality
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
-<<<<<<< HEAD:core/src/controller/DungeonInputProcessor.java
         } else {
             System.out.println("Touch event did not match any button.");
-=======
-
->>>>>>> nazarii_branch:core/src/Controller/DungeonInputProcessor.java
         }
 
         return true; // Return true if the event is handled

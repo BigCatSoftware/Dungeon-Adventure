@@ -1,10 +1,7 @@
 package controller;
 
-<<<<<<< HEAD:core/src/controller/PlayerInputProcessor.java
 import model.Hero;
-=======
 import model.GameMaster;
->>>>>>> nazarii_branch:core/src/Controller/PlayerInputProcessor.java
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -21,23 +18,17 @@ import static com.dungeonadventure.game.DungeonAdventure.*;
 public class PlayerInputProcessor extends InputAdapter {
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
+    private final Hero myPlayer;
 
     /**
      * Constructs a new PlayerInputProcessor.
      *
-<<<<<<< HEAD:core/src/controller/PlayerInputProcessor.java
      * @param thePlayer the player character
      * @param theGame the main game instance
      * @param thePreviousScreen the previous screen to return to
      */
     public PlayerInputProcessor(final Hero thePlayer, final DungeonAdventure theGame, final Screen thePreviousScreen) {
         myPlayer = thePlayer;
-=======
-     * @param theGame the main game instance
-     * @param thePreviousScreen the previous screen to return to
-     */
-    public PlayerInputProcessor(final DungeonAdventure theGame, final Screen thePreviousScreen) {
->>>>>>> nazarii_branch:core/src/Controller/PlayerInputProcessor.java
         myGame = theGame;
         myPreviousScreen = thePreviousScreen;
     }

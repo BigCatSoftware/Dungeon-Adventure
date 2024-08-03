@@ -1,9 +1,7 @@
 package model;
-<<<<<<< HEAD
-=======
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
->>>>>>> nazarii_branch
+
 
 import java.util.HashMap;
 import java.util.Map;

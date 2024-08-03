@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.dungeonadventure.game.DungeonAdventure;
 
-import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -37,10 +36,7 @@ public class SettingsScreen extends ScreenAdapter {
     private final Texture myMinusActive;
     private final Texture myMinusInactive;
     private final Texture myBackActive;
-<<<<<<< HEAD
     private final Texture myBackInactive;
-=======
->>>>>>> nazarii_branch
     private final Texture[] myVolumeBars;
 
     private final Rectangle mySoundButton;
@@ -82,10 +78,7 @@ public class SettingsScreen extends ScreenAdapter {
         myMinusActive = new Texture("MinusActive.png");
         myMinusInactive = new Texture("MinusInactive.png");
         myBackActive = new Texture("BackActive.png");
-<<<<<<< HEAD
         myBackInactive = new Texture("BackInactive.png");
-=======
->>>>>>> nazarii_branch
 
         myVolumeBars = new Texture[11];
         for (int i = 0; i <= 10; i++) {
@@ -173,7 +166,6 @@ public class SettingsScreen extends ScreenAdapter {
     }
 
     /**
-<<<<<<< HEAD
      * Checks if the mouse is hovering over a specified button.
      *
      * @param theButton the rectangle representing the button
@@ -186,8 +178,6 @@ public class SettingsScreen extends ScreenAdapter {
     }
 
     /**
-=======
->>>>>>> nazarii_branch
      * Called when the screen is disposed.
      * Releases all resources.
      */
