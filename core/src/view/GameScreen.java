@@ -1,7 +1,6 @@
 package view;
 
 import controller.PlayerInputProcessor;
-import model.Hero;
 import model.Dungeon;
 
 import com.badlogic.gdx.Gdx;
@@ -33,26 +32,23 @@ public class GameScreen implements Screen {
     private final Texture mySettingsButtonActive;
     private final Texture mySettingsButtonInactive;
     private final DungeonRenderer myDungeonRenderer;
-    private final Hero myPlayer;
     private final int SETTINGS_BUTTON_X;
-    private Texture myPlayerTexture;
+    private final Texture myPlayerTexture;
 
     /**
      * Constructs a new GameScreen.
      *
      * @param theGame the main game instance
-     * @param thePlayer the player's hero character
      */
-    public GameScreen(final DungeonAdventure theGame, final Hero thePlayer) {
+    public GameScreen(final DungeonAdventure theGame) {
         myGame = theGame;
-        myPlayer = thePlayer;
         mySettingsButtonActive = new Texture("SettingsActive.png");
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
+        myPlayerTexture = initPlayerTexture();
+        SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
 
         Dungeon myDungeon = new Dungeon();
         myDungeonRenderer = new DungeonRenderer(myDungeon);
-
-        SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
     }
     private Texture initPlayerTexture(){
         Texture playerTexture = null;
@@ -67,7 +63,7 @@ public class GameScreen implements Screen {
         }
         else{
             throw new IllegalArgumentException("Can't determine hero class from game master to" +
-                " draw its texture");
+                    " draw its texture");
         }
         return playerTexture;
     }
@@ -77,10 +73,9 @@ public class GameScreen implements Screen {
      */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
+        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
         mySETTINGS.updateMusic();
     }
-
     /**
      * Renders the screen.
      * Clears the screen, renders the dungeon, and draws the settings button.
@@ -125,16 +120,16 @@ public class GameScreen implements Screen {
     /**
      * Checks if the mouse is hovering over a specified button.
      *
-     * @param buttonX the x-coordinate of the button
-     * @param buttonY the y-coordinate of the button
-     * @param buttonWidth the width of the button
-     * @param buttonHeight the height of the button
+     * @param theButtonX the x-coordinate of the button
+     * @param theButtonY the y-coordinate of the button
+     * @param theButtonWidth the width of the button
+     * @param theButtonHeight the height of the button
      * @return true if the mouse is hovering over the button, false otherwise
      */
-    private boolean isHovered(int buttonX, int buttonY, int buttonWidth, int buttonHeight) {
-        return Gdx.input.getX() < buttonX + buttonWidth && Gdx.input.getX() > buttonX &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < buttonY + buttonHeight &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > buttonY;
+    private boolean isHovered(final int theButtonX, final int theButtonY,final int theButtonWidth,final int theButtonHeight) {
+        return Gdx.input.getX() < theButtonX + theButtonWidth && Gdx.input.getX() > theButtonX &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < theButtonY + theButtonHeight &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > theButtonY;
     }
 
     private Position getPlayerPos(){

@@ -87,6 +87,7 @@ public final class Cell {
     public Item getItem(){
         return myItem;
     }
+
     public boolean isWalkable(){
         return myWalkable;
     }

@@ -43,6 +43,20 @@ public class Room {
     }
 
     /**
+     * Finds a room in the given list of rooms that contains the specified coordinates.
+     * This method is private and used internally for determining room locations.
+     *
+     * @param theRoom the list of rooms to search in
+     * @param theX the x-coordinate to find
+     * @param theY the y-coordinate to find
+     * @return the room containing the specified coordinates, or null if no such room is found
+     */
+    boolean findRoom(final Room theRoom, final int theX, final int theY) {
+        return theX >= theRoom.getX() && theX < theRoom.getX() + theRoom.getWidth()
+                && theY >= theRoom.getY() && theY < theRoom.getY() + theRoom.getHeight();
+    }
+
+    /**
      * Adds an adjacent room to this room.
      * This method is private and is used to establish bidirectional connections
      * between rooms.
@@ -54,23 +68,6 @@ public class Room {
             myAdjacentRooms.add(theRoom);
             theRoom.getAdjacentRooms().add(this);
         }
-    }
-
-    /**
-     * Finds a room in the given list of rooms that contains the specified coordinates.
-     * This method is private and used internally for determining room locations.
-     *
-     * @param theRooms the list of rooms to search in
-     * @param theX the x-coordinate to find
-     * @param theY the y-coordinate to find
-     * @return the room containing the specified coordinates, or null if no such room is found
-     */
-    boolean findRoom(final Room theRoom, final int theX, final int theY) {
-            if (theX >= theRoom.getX() && theX < theRoom.getX() + theRoom.getWidth()
-            && theY >= theRoom.getY() && theY < theRoom.getY() + theRoom.getHeight()) {
-                return true;
-        }
-        return false;
     }
 
     public boolean containsDoors() {

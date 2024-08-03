@@ -1,6 +1,5 @@
 package controller;
 
-import model.Hero;
 import model.GameMaster;
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
@@ -18,17 +17,14 @@ import static com.dungeonadventure.game.DungeonAdventure.*;
 public class PlayerInputProcessor extends InputAdapter {
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
-    private final Hero myPlayer;
 
     /**
      * Constructs a new PlayerInputProcessor.
      *
-     * @param thePlayer the player character
      * @param theGame the main game instance
      * @param thePreviousScreen the previous screen to return to
      */
-    public PlayerInputProcessor(final Hero thePlayer, final DungeonAdventure theGame, final Screen thePreviousScreen) {
-        myPlayer = thePlayer;
+    public PlayerInputProcessor(final DungeonAdventure theGame, final Screen thePreviousScreen) {
         myGame = theGame;
         myPreviousScreen = thePreviousScreen;
     }
@@ -52,8 +48,6 @@ public class PlayerInputProcessor extends InputAdapter {
                 screenY >= y && screenY <= y + SETTINGS_BUTTON_HEIGHT) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
             return true; // Indicates that the touch event was handled
-        } else {
-            System.out.println("Touch event did not match any button.");
         }
 
         return super.touchDown(screenX, screenY, pointer, button);
