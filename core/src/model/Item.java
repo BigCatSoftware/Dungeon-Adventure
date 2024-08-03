@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * when used or collected by the player.
  *
  * @author Tiger Schueler
+<<<<<<< HEAD
  * @version 27JUL24
+=======
+>>>>>>> nazarii_branch
  */
 public class Item extends GameObject implements Usable, Collectible {
 
@@ -29,8 +32,13 @@ public class Item extends GameObject implements Usable, Collectible {
      *
      * @param thePosition The position of the item in the game world.
      */
+<<<<<<< HEAD
     public Item(final Position thePosition) {
         myPosition = thePosition;
+=======
+    public Item(Position thePosition) {
+        super(thePosition);
+>>>>>>> nazarii_branch
         myTexture = new Texture("item.png");
         myName = "Item";
         myType = "Item";

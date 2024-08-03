@@ -20,9 +20,16 @@ public class GameObject {
     /**
      * Constructs a GameObject with the specified position and texture.
      *
+<<<<<<< HEAD
      */
     public GameObject() {
         myPosition = new Position (1, 1);
+=======
+     * @param thePosition The position of the object in the game world.
+     */
+    public GameObject(final Position thePosition) {
+        myPosition = thePosition;
+>>>>>>> nazarii_branch
     }
 
     /**

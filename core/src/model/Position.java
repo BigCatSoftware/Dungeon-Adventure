@@ -37,7 +37,11 @@ public final class Position{
      * Returns integer x coordinate of this entity.
      * @return int of x coordinate.
      */
+<<<<<<< HEAD
     int getMyX(){
+=======
+    public int getMyX(){
+>>>>>>> nazarii_branch
         return myX;
     }
 
@@ -45,7 +49,11 @@ public final class Position{
      * Returns integer y coordinate of this entity.
      * @return int of y coordinate.
      */
+<<<<<<< HEAD
     int getMyY(){
+=======
+    public int getMyY(){
+>>>>>>> nazarii_branch
         return myY;
     }
 
@@ -53,7 +61,11 @@ public final class Position{
      * Set x position of this object to new value. Value has to be non-negative.
      * @param theX int new x coordinate for this object.
      */
+<<<<<<< HEAD
     private void setMyX(final int theX){
+=======
+    void setMyX(final int theX){
+>>>>>>> nazarii_branch
         if(theX < 0){
             throw new IllegalArgumentException("The x cannot be set to negative value for" +
                     "character position.");
@@ -65,7 +77,11 @@ public final class Position{
      * Set y position of this object to new value. Value has to be non-negative.
      * @param theY int new y coordinate for this object.
      */
+<<<<<<< HEAD
     private void setMyY(final int theY){
+=======
+    void setMyY(final int theY){
+>>>>>>> nazarii_branch
         if(theY < 0){
             throw new IllegalArgumentException("The y cannot be set to negative value for" +
                     "character position.");

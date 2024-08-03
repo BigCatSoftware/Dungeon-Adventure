@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
-
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 

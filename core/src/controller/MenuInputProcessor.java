@@ -9,8 +9,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
 
+<<<<<<< HEAD:core/src/controller/MenuInputProcessor.java
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 
+=======
+>>>>>>> nazarii_branch:core/src/Controller/MenuInputProcessor.java
 /**
  * Handles user input on the main menu screen, allowing the player to start the game,
  * adjust settings, or exit the application.

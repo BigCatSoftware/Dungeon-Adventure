@@ -10,27 +10,29 @@ public enum Tile {
     /**
      * Wall tile, represented by the '# symbol.
      */
-    WALL('#'),
+    WALL('#', false),
 
     /**
      * Floor tile, represented by the '.' symbol.
      */
-    FLOOR('.'),
+    FLOOR('.', true),
 
     /**
      * Door tile, represented by the 'D' symbol.
      */
-    DOOR('D');
+    DOOR('D',false);
 
     private final char mySymbol;
+    private final boolean myWalkable;
 
     /**
      * Constructor for the Tile enum.
      *
      * @param theSymbol The character symbol representing the tile.
      */
-    Tile(final char theSymbol) {
+    Tile(final char theSymbol, final boolean theWalkable) {
         mySymbol = theSymbol;
+        myWalkable = theWalkable;
     }
 
     /**
@@ -40,5 +42,9 @@ public enum Tile {
      */
     public char getSymbol() {
         return mySymbol;
+    }
+
+    public boolean isWalkable() {
+        return myWalkable;
     }
 }
