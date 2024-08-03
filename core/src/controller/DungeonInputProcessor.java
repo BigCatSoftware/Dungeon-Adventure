@@ -131,7 +131,7 @@ public class DungeonInputProcessor extends InputAdapter {
             myGame.setScreen(new MainMenuScreen(myGame));
         } else if (isInBounds(x, y, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             GameMaster.getInstance().setPlayer(new Warrior(NameGenerator.getWarriorName(), 1, 1));
-            myGame.setScreen(new GameScreen(myGame));
+            //myGame.setScreen(new GameScreen(myGame));
         } else if (isInBounds(x, y, THIEF_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             GameMaster.getInstance().setPlayer(new Thief(NameGenerator.getThiefName(), 1, 1));
             myGame.setScreen(new GameScreen(myGame));

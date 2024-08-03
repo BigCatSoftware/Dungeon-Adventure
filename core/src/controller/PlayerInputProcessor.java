@@ -1,8 +1,7 @@
 package controller;
 
+import model.Hero;
 import model.GameMaster;
-import view.CombatScreen;
-import view.GameScreen;
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -18,17 +17,46 @@ import static com.dungeonadventure.game.DungeonAdventure.*;
  */
 public class PlayerInputProcessor extends InputAdapter {
     private final DungeonAdventure myGame;
-    private final GameScreen myPreviousScreen;
+    private final Screen myPreviousScreen;
+    private final Hero myPlayer;
 
     /**
      * Constructs a new PlayerInputProcessor.
      *
+     * @param thePlayer the player character
      * @param theGame the main game instance
      * @param thePreviousScreen the previous screen to return to
      */
-    public PlayerInputProcessor(final DungeonAdventure theGame, final GameScreen thePreviousScreen) {
+    public PlayerInputProcessor(final Hero thePlayer, final DungeonAdventure theGame, final Screen thePreviousScreen) {
+        myPlayer = thePlayer;
         myGame = theGame;
         myPreviousScreen = thePreviousScreen;
+    }
+
+    /**
+     * Handles touch down events on the screen, specifically for navigating to the settings screen.
+     *
+     * @param screenX the x-coordinate of the touch
+     * @param screenY the y-coordinate of the touch
+     * @param pointer the pointer for the event
+     * @param button the button for the event
+     * @return true if the touch event is handled, false otherwise
+     */
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // Convert screen coordinates to match the game's coordinate system
+        int x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
+        int y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_Y - SETTINGS_BUTTON_HEIGHT;
+
+        if (screenX >= x && screenX <= x + SETTINGS_BUTTON_WIDTH &&
+                screenY >= y && screenY <= y + SETTINGS_BUTTON_HEIGHT) {
+            myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
+            return true; // Indicates that the touch event was handled
+        } else {
+            System.out.println("Touch event did not match any button.");
+        }
+
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     /**
@@ -46,40 +74,29 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()+1].isWalkable()){
                     gm.getPlayer().moveCharacterUp();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
-                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
-                }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
                     gm.getPlayer().moveCharacterDown();
-                }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
-                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
                 break;
             case Input.Keys.LEFT:
                 if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterLeft();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
-                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
-                }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterRight();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
-                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
-                }
                 break;
-            case Input.Keys.ESCAPE:
-                myPreviousScreen.showMenu();
+            case Input.Keys.SPACE:
+                gm.getPlayer().attack();
+                //TODO: place combat screen to test combat.
+                break;
             default:
                 return false; // Indicates that the key event was not handled
         }
-        myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
     }
 }

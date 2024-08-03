@@ -1,6 +1,5 @@
 package controller;
 
-
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 
 /**
