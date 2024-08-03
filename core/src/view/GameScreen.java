@@ -86,9 +86,7 @@ public class GameScreen implements Screen {
     public void render(final float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         myGame.batch.begin();
-
         mySETTINGS.updateMusic();
-
         // Render the dungeon
         myDungeonRenderer.render(myGame.batch);
         // Render the dungeon
