@@ -16,7 +16,7 @@ public class Dungeon {
     private final Tile[][] MAP;
     private static final int MIN_ROOM_SIZE = 10;
     private final Node ROOT;
-//    private final List<Node> rooms;
+    //    private final List<Node> rooms;
     private final List<Room> myRoomList;
     private final List<Door> myDoorList;
     private int myTotalRooms = 0;
@@ -158,10 +158,10 @@ public class Dungeon {
                     int doorX = door.getPosition().getMyX();
                     int doorY = door.getPosition().getMyY();
                     if (MAP[doorY][doorX + 1] == Tile.FLOOR
-                    && MAP[doorY + 1][doorX] == Tile.WALL) {
+                            && MAP[doorY + 1][doorX] == Tile.WALL) {
                         doorX++;
                     } else if (MAP[doorY + 1][doorX] == Tile.FLOOR
-                    && MAP[doorY][doorX + 1] == Tile.WALL) {
+                            && MAP[doorY][doorX + 1] == Tile.WALL) {
                         doorY++;
                     }
                     for (final Room room2 : myRoomList) {

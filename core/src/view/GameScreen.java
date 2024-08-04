@@ -1,15 +1,11 @@
 package view;
 
 import controller.PlayerInputProcessor;
-import model.Dungeon;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
-
-import static com.dungeonadventure.game.DungeonAdventure.*;
 import model.GameMaster;
 import model.Position;
 import model.Priestess;
@@ -26,14 +22,13 @@ import static com.dungeonadventure.game.DungeonAdventure.SETTINGS_BUTTON_WIDTH;
  * @version 1.0
  */
 public class GameScreen implements Screen {
-
     private static final int TILE_SIZE = 16;
+
     private final DungeonAdventure myGame;
     private final Texture mySettingsButtonActive;
     private final Texture mySettingsButtonInactive;
-    private final DungeonRenderer myDungeonRenderer;
-    private final int SETTINGS_BUTTON_X;
     private final Texture myPlayerTexture;
+    private final DungeonRenderer myDungeonRenderer;
 
     /**
      * Constructs a new GameScreen.
@@ -45,10 +40,7 @@ public class GameScreen implements Screen {
         mySettingsButtonActive = new Texture("SettingsActive.png");
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
         myPlayerTexture = initPlayerTexture();
-        SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
-
-        Dungeon myDungeon = new Dungeon();
-        myDungeonRenderer = new DungeonRenderer(myDungeon);
+        myDungeonRenderer = new DungeonRenderer();
     }
     private Texture initPlayerTexture(){
         Texture playerTexture = null;
@@ -74,8 +66,8 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
-        mySETTINGS.updateMusic();
     }
+
     /**
      * Renders the screen.
      * Clears the screen, renders the dungeon, and draws the settings button.
@@ -86,9 +78,7 @@ public class GameScreen implements Screen {
     public void render(final float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         myGame.batch.begin();
-        mySETTINGS.updateMusic();
-        // Render the dungeon
-        myDungeonRenderer.render(myGame.batch);
+
         // Render the dungeon
         myDungeonRenderer.render(myGame.batch);
         // Render character
@@ -103,33 +93,15 @@ public class GameScreen implements Screen {
      * The button changes appearance based on whether it is hovered over or not.
      */
     private void settingsButtonDraw() {
-        int x = SETTINGS_BUTTON_X;
-        if (isHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
-            x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
-            if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
-                    DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
-                    DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
-                myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
-            } else {
-                myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
-            }
+        int x = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
+        if (Gdx.input.getX() < x + SETTINGS_BUTTON_WIDTH && Gdx.input.getX() > x &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < SETTINGS_BUTTON_Y + SETTINGS_BUTTON_HEIGHT &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > SETTINGS_BUTTON_Y) {
+            myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+        } else {
+            myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
         }
     }
-    /**
-     * Checks if the mouse is hovering over a specified button.
-     *
-     * @param theButtonX the x-coordinate of the button
-     * @param theButtonY the y-coordinate of the button
-     * @param theButtonWidth the width of the button
-     * @param theButtonHeight the height of the button
-     * @return true if the mouse is hovering over the button, false otherwise
-     */
-    private boolean isHovered(final int theButtonX, final int theButtonY,final int theButtonWidth,final int theButtonHeight) {
-        return Gdx.input.getX() < theButtonX + theButtonWidth && Gdx.input.getX() > theButtonX &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < theButtonY + theButtonHeight &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > theButtonY;
-    }
-
     private Position getPlayerPos(){
         return GameMaster.getInstance().getPlayer().getPosition();
     }

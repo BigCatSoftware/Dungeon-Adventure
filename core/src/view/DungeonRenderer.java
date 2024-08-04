@@ -4,6 +4,7 @@ package view;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import model.Dungeon;
+import model.GameMaster;
 import model.Tile;
 
 /**
@@ -14,15 +15,13 @@ public class DungeonRenderer {
     private final Texture myWallTexture;
     private final Texture myFloorTexture;
     private final Texture myDoorTexture;
-    private final Dungeon myDungeon;
     private final int TILE_SIZE = 16;
 
     /**
      * Constructor for creating a DungeonRenderer.
      *
      */
-    public DungeonRenderer(final Dungeon theDungeon) {
-        myDungeon = theDungeon;
+    public DungeonRenderer() {
         myWallTexture = new Texture("wall.png");
         myFloorTexture = new Texture("floor.png");
         myDoorTexture = new Texture("door.png");
@@ -36,7 +35,7 @@ public class DungeonRenderer {
      * @param theBatch The SpriteBatch used for drawing textures.
      */
     public void render(final SpriteBatch theBatch) {
-        Tile[][] map = myDungeon.getMap(); //Tile[][] to Cell[][]
+        Tile[][] map = GameMaster.getInstance().getMap(); //Tile[][] to Cell[][]
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;

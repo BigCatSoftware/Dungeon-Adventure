@@ -21,9 +21,6 @@ public class GameObject {
      * Constructs a GameObject with the specified position and texture.
      *
      */
-    public GameObject() {
-        myPosition = new Position(1, 1);
-    }
     public GameObject(final Position thePosition) {
         myPosition = thePosition;
     }
@@ -47,6 +44,4 @@ public class GameObject {
         theBatch.draw(myTexture, myPosition.getMyX() * TILE_SIZE,
                 myPosition.getMyY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
-
-
 }
