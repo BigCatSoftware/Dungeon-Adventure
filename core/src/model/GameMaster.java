@@ -21,6 +21,8 @@ public final class GameMaster {
      * Hero to track on game grid and update the data based on events or changes in this object.
      */
     private Hero myPlayer;
+    //TODO: change enemy to arraylist of enemies.
+    private final Enemy myEnemy = EntityLoader.randomEnemy(1,2);
     //methods
     private boolean myHeroSet;
     /**
@@ -60,10 +62,16 @@ public final class GameMaster {
     public int getPlayerY(){
         return myPlayer.getPosition().getMyY();
     }
+    public Enemy getEnemy(){
+        return myEnemy;
+    }
+    public boolean isHeroNearEnemy(){
+        return myPlayer.getPosition().equals(myEnemy.getPosition());
+    }
     /**
-     * Returns Cell[][] grid of cells that define the game grid and store tile, position,
+     * Returns Tile[][] grid of cells that define the game grid and store tile, position,
      * enemy arraylist, item.
-     * @return Cell[][] grid of cells that define the game grid.
+     * @return Tile[][] grid of cells that define the game grid.
      */
     public Tile[][] getMap(){
         return myMap;

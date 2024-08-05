@@ -3,7 +3,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.badlogic.gdx.graphics.Texture;
-import model.Cell;
 import model.Dungeon;
 import model.NameGenerator;
 import model.Tile;
@@ -17,21 +16,21 @@ public class EntityMovementTests {
     void getMap(){
         myDungeon.printMap();
     }
-    void printMap(final Cell[][] map){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                Texture texture = null;
-                if (map[i][j].getTile() == Tile.WALL) {//added .getTile()
-                    sb.append('#');
-                } else if (map[i][j].getTile() == Tile.FLOOR) { //.getTile()
-                    sb.append('.');
-                } else if (map[i][j].getTile() == Tile.DOOR) { //.getTile()
-                    sb.append('D');
-                }
-            }
-            sb.append(System.lineSeparator());
-        }
-        System.out.println(sb.toString());
-    }
+//    void printMap(final [][] map){
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < map.length; i++) {
+//            for (int j = 0; j < map[i].length; j++) {
+//                Texture texture = null;
+//                if (map[i][j].getTile() == Tile.WALL) {//added .getTile()
+//                    sb.append('#');
+//                } else if (map[i][j].getTile() == Tile.FLOOR) { //.getTile()
+//                    sb.append('.');
+//                } else if (map[i][j].getTile() == Tile.DOOR) { //.getTile()
+//                    sb.append('D');
+//                }
+//            }
+//            sb.append(System.lineSeparator());
+//        }
+//        System.out.println(sb.toString());
+//    }
 }

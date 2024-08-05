@@ -66,13 +66,24 @@ public final class Warrior extends Hero{
      * if fails, deals 0 damage.
      * @return int damage by character.
      */
-    public int specialAction() {
-        int damage = 0;
-        if(specialAttackChance()){
-            Random rand = new Random();
-            damage = rand.nextInt(WARRIOR_SKILL_MIN_DAMAGE, WARRIOR_SKILL_MAX_DAMAGE+1);
+    public String specialAction(final Enemy theEnemy) {
+        if(theEnemy == null){
+            throw new IllegalArgumentException("Can't call attack on null character at DungeonCharacter attack().");
         }
-        return damage;
+        int damage = 0;
+        final StringBuilder sb = new StringBuilder();
+        if(specialAttackChance()){
+            final Random rand = new Random();
+            damage = rand.nextInt(WARRIOR_SKILL_MIN_DAMAGE, WARRIOR_SKILL_MAX_DAMAGE+1);
+            sb.append("[").append(getMyName()).append("] used <<")
+                .append(getSpecialActionName()).append(">> and dealt ").append(damage)
+                .append(" damage. -> ").append(theEnemy.receiveDamage(damage));
+        }
+        else{
+            sb.append("[").append(getMyName()).append("] used <<")
+                .append(getSpecialActionName()).append(">> but missed.");
+        }
+        return sb.toString();
     }
 
     /**

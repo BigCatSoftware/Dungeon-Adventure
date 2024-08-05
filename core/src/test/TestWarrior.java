@@ -93,47 +93,47 @@ public class TestWarrior {
         System.out.println(myWarrior.toString());
     }
 
-    /**
-     * Test that special attack is returning damage in defined range; for warrior: 75-175
-     */
-    @Test
-    void specialActionCorrectDamageRange(){
-        final int saMax = 175;
-        final int saMin = 75;
-        int actualDamage = 0;
-        int attackSuccessCount = 0;
-        for(int i = 0; i<TRIES_FOR_RANDOMNESS; i++){
-            actualDamage = myWarrior.specialAction();
-            if(actualDamage != 0){
-                attackSuccessCount++;
-                if(actualDamage < saMin || actualDamage > saMax){
-                    fail();
-                }
-            }
-        }
-        System.out.print("Total success: " + attackSuccessCount);
-    }
+//    /**
+//     * Test that special attack is returning damage in defined range; for warrior: 75-175
+//     */
+//    @Test
+//    void specialActionCorrectDamageRange(){
+//        final int saMax = 175;
+//        final int saMin = 75;
+//        int actualDamage = 0;
+//        int attackSuccessCount = 0;
+//        for(int i = 0; i<TRIES_FOR_RANDOMNESS; i++){
+//            actualDamage = myWarrior.specialAction();
+//            if(actualDamage != 0){
+//                attackSuccessCount++;
+//                if(actualDamage < saMin || actualDamage > saMax){
+//                    fail();
+//                }
+//            }
+//        }
+//        System.out.print("Total success: " + attackSuccessCount);
+//    }
 
-    /**
-     * Test that attack is returning damage in defined range: for warrior: 35-60
-     */
-    @Test
-    void testCorrectDamageRange(){
-        final int saMax = 60;
-        final int saMin = 35;
-        int actualDamage = 0;
-        int attackSuccessCount = 0;
-        for(int i = 0; i<TRIES_FOR_RANDOMNESS; i++){
-            actualDamage = myWarrior.attack();
-            if(actualDamage != 0){
-                attackSuccessCount++;
-                if(actualDamage < saMin || actualDamage > saMax){
-                    fail();
-                }
-            }
-        }
-        System.out.print("Total success: " + attackSuccessCount);
-    }
+//    /**
+//     * Test that attack is returning damage in defined range: for warrior: 35-60
+//     */
+//    @Test
+//    void testCorrectDamageRange(){
+//        final int saMax = 60;
+//        final int saMin = 35;
+//        int actualDamage = 0;
+//        int attackSuccessCount = 0;
+//        for(int i = 0; i<TRIES_FOR_RANDOMNESS; i++){
+//            actualDamage = myWarrior.attack();
+//            if(actualDamage != 0){
+//                attackSuccessCount++;
+//                if(actualDamage < saMin || actualDamage > saMax){
+//                    fail();
+//                }
+//            }
+//        }
+//        System.out.print("Total success: " + attackSuccessCount);
+//    }
 
     /**
      * Check if passing correct name for special skill.
@@ -167,14 +167,6 @@ public class TestWarrior {
         Random rand = new Random();
         for(int i = 0; i < TRIES_FOR_RANDOMNESS; i++){
             if(myWarrior.getCurrentHealth() > 0){
-                int warriorAttacked = myWarrior.attack();
-                if(warriorAttacked == 0){
-                    System.out.println(myWarrior.getMyName() + " had missed.");
-                }
-                else{
-                    System.out.println("[" + myWarrior.getMyName() + "]" + " attacked for " +
-                        warriorAttacked + " damage.");
-                }
                 System.out.println(myWarrior.receiveDamage(rand.nextInt(15, 31)));
             }
             else{

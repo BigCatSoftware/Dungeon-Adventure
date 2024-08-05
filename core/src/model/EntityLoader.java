@@ -40,23 +40,22 @@ public final class EntityLoader {
 
     /**
      * Call to this function will populate the dungeon with enemies.
-     * @param theMap the game grid of cells
      * @return new game grid of cells that has enemy positions in it.
      */
-    Cell[][] placeEntities(final Cell[][] theMap){
-        //entities must be away from the player in 5 cell radius.
-        Random rand = new Random();
-        int monstersAdded = 0;
-        while(monstersAdded != MONSTER_COUNT){
-            int randX = rand.nextInt(CELLS_CLOSE_TO_PLAYER,theMap.length);
-            int randY = rand.nextInt(CELLS_CLOSE_TO_PLAYER,theMap.length);
-            if(theMap[randX][randY].isWalkable()){
-                theMap[randX][randY].addMonster(randomEnemy(randX, randY));
-            }
-        }
-        return null;
-    }
-    private Enemy randomEnemy(final int theX, final int theY){
+//     placeEntities(final ] theMap){
+//        //entities must be away from the player in 5 cell radius.
+//        Random rand = new Random();
+//        int monstersAdded = 0;
+//        while(monstersAdded != MONSTER_COUNT){
+//            int randX = rand.nextInt(CELLS_CLOSE_TO_PLAYER,theMap.length);
+//            int randY = rand.nextInt(CELLS_CLOSE_TO_PLAYER,theMap.length);
+//            if(theMap[randX][randY].isWalkable()){
+//                theMap[randX][randY].addMonster(randomEnemy(randX, randY));
+//            }
+//        }
+//        return null;
+//    }
+    public static Enemy randomEnemy(final int theX, final int theY){
         final Random rand = new Random();
         final Enemy enemy;
         final int theRandomNum = rand.nextInt(RANDOM_FROM_HUNDRED);

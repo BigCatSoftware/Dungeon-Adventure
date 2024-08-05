@@ -58,9 +58,10 @@ public final class Priestess extends Hero {
 
     /**
      * Priestess special skill "Heal" adds 30-50 to its health.
+     * @return string message of action.
      */
-    public void specialAction(){
-        addHealth();
+    public String specialAction(){
+        return addHealth();
     }
 
     /**

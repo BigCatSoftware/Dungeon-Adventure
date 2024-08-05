@@ -39,14 +39,6 @@ public class TestOgre {
         Random rand = new Random();
         for(int i = 0; i < TRIES_FOR_RANDOMNESS; i++){
             if(myOgre.getCurrentHealth() > 0){
-                int ogreAttacked = myOgre.attack();
-                if(ogreAttacked == 0){
-                    System.out.println(myOgre.getMyName() + " had missed.");
-                }
-                else{
-                    System.out.println("[" + myOgre.getMyName() + "]" + " attacked for " +
-                        ogreAttacked + " damage.");
-                }
                 System.out.println(myOgre.receiveDamage(rand.nextInt(15, 31)));
             }
             else{

@@ -3,7 +3,6 @@ package view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
-import model.Cell;
 import model.GameMaster;
 import model.Tile;
 
@@ -35,19 +34,19 @@ public class DungeonRenderer {
      * @param theBatch The SpriteBatch used for drawing textures.
      */
     public void render(final SpriteBatch theBatch) {
-        Tile[][] map = GameMaster.getInstance().getMap(); //Tile[][] to Cell[][]
+        Tile[][] map = GameMaster.getInstance().getMap();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;
-                if (map[i][j] == Tile.WALL) {//added .getTile()
+                if (map[i][j] == Tile.WALL) {
                     texture = myWallTexture;
-                } else if (map[i][j] == Tile.FLOOR) { //.getTile()
+                } else if (map[i][j] == Tile.FLOOR) {
                     texture = myFloorTexture;
-                } else if (map[i][j] == Tile.DOOR) { //.getTile()
+                } else if (map[i][j] == Tile.DOOR) {
                     texture = myDoorTexture;
                 }
                 if (texture != null) {
-                    theBatch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, //fixed typo where x is j and y is i resulting in mirrored dungeon on x axis.
+                    theBatch.draw(texture, i * TILE_SIZE, j * TILE_SIZE,
                             TILE_SIZE, TILE_SIZE);
                 }
             }

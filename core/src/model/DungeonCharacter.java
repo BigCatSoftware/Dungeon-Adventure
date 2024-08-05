@@ -69,8 +69,9 @@ abstract public class DungeonCharacter implements CharacterActions {
          myPosition = new Position(theX, theY);
          myIsDead = false;
      }
-     void init(final int theHealth, final int theMinDamage, final int theMaxDamage,
+     private void init(final int theHealth, final int theMinDamage, final int theMaxDamage,
                final int theHitChance, final int theSpeed){
+         //TODO: separate the possible problem variables.
          if(theHealth <= 0 || theMinDamage <= 0 || theMaxDamage <= 0 || theHitChance <= 0 ||
              theSpeed <= 0){
              throw new IllegalArgumentException("Parameters can't be negative or zero.");
@@ -122,25 +123,25 @@ abstract public class DungeonCharacter implements CharacterActions {
 
     /**
      * Applies damage to health of character.
-     * @param incomingDamage int value of damage to apply to this character.
+     * @param theIncomingDamage int value of damage to apply to this character.
      * @return String message description of state.
      */
     @Override
-    public String receiveDamage(final int incomingDamage){
-        if(incomingDamage < 0){
+    public String receiveDamage(final int theIncomingDamage){
+        if(theIncomingDamage < 0){
             throw new IllegalArgumentException("receiveDamage, incoming damage parameter can't" +
                 "be negative.");
         }
-        myCurrentHealth -= incomingDamage;
+        myCurrentHealth -= theIncomingDamage;
         checkIsDead();
         if(myIsDead){
             return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
-                + incomingDamage + " damage and perished from their wounds.";
+                + theIncomingDamage + " damage and perished from their wounds.";
         }
         return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
-            + incomingDamage + " damage.";
+            + theIncomingDamage + " damage. ";
     }
-
+    //TODO: Review Healable interface.
     /**
      * Method used to return value to heal for this character
      * @return int health to heal
@@ -150,7 +151,9 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * Checks if passed value is correct and adds health to current health.
      */
-    void addHealth(){
+    String addHealth(){
+        StringBuilder builder = new StringBuilder();
+        int healthBeforeHeal = myCurrentHealth;
         int amountToHeal = heal();
         if(amountToHeal < 0){
             throw new IllegalArgumentException("Can't add negative health to this character.");
@@ -162,7 +165,12 @@ abstract public class DungeonCharacter implements CharacterActions {
             else{
                 myCurrentHealth += amountToHeal;
             }
+
         }
+        builder.append(" [").append(myName).append("] healed for ").append(amountToHeal).
+            append(" <").append(healthBeforeHeal).append(" -> ").append(myCurrentHealth).
+            append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
+        return builder.toString();
     }
     /**
      * Checks current health. If health is less or equal zero the character is dead.
@@ -175,18 +183,27 @@ abstract public class DungeonCharacter implements CharacterActions {
     }
 
     /**
-     * If hit chance check was successful, returns random damage value between min and max
-     * values for this character, otherwise returns 0.
-     * @return int random value of damage between min and max values for this character.
+     * If hit chance check was successful, applies random damage value between min and max
+     * values to other specified character, otherwise returns 0.
      */
     @Override
-    public int attack() {
+    public String attack(final DungeonCharacter theCharacter) {
+        StringBuilder actionDescBuild = new StringBuilder();
+        if(theCharacter == null){
+            throw new IllegalArgumentException("Can't call attack on null character at DungeonCharacter attack().");
+        }
         int damage = 0;
         if(attackSuccessCheck()){
             final Random rand = new Random();
             damage = rand.nextInt(myMinDamage, myMaxDamage+1);
+            actionDescBuild.append("[").append(getMyName()).append("] attacked for ")
+                .append(damage).append(" damage. -> ").append(
+                    theCharacter.receiveDamage(damage));
         }
-        return damage;
+        else{
+            actionDescBuild.append("[").append(getMyName()).append("] had missed.");
+        }
+        return actionDescBuild.toString();
     }
 
     /**

@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameMaster;
+import view.CombatScreen;
 import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -68,25 +69,33 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()+1].isWalkable()){
                     gm.getPlayer().moveCharacterUp();
                 }
+                if(GameMaster.getInstance().isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
+                }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
                     gm.getPlayer().moveCharacterDown();
+                }
+                if(GameMaster.getInstance().isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
                 break;
             case Input.Keys.LEFT:
                 if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterLeft();
                 }
+                if(GameMaster.getInstance().isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
+                }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterRight();
                 }
-                break;
-            case Input.Keys.SPACE:
-                gm.getPlayer().attack();
-                //TODO: place combat screen to test combat.
+                if(GameMaster.getInstance().isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
+                }
                 break;
             default:
                 return false; // Indicates that the key event was not handled

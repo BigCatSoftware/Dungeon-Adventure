@@ -10,8 +10,8 @@ interface CharacterActions {
     void moveCharacterDown();
     void moveCharacterLeft();
     void moveCharacterRight();
-    String receiveDamage(final int incomingDamage);
-    int attack();
+    String receiveDamage(final int theIncomingDamage);
+    String attack(final DungeonCharacter theOtherCharacter);
     String getMyName();
     int getCurrentHealth();
     int getMaxHealth();

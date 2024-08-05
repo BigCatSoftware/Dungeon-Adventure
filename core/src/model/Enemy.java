@@ -73,7 +73,7 @@ abstract public class Enemy extends DungeonCharacter {
             if(!getIsDead()){
                 int healthBeforeHeal = getCurrentHealth();
                 addHealth();
-                message += " and healed for " + (getCurrentHealth() - healthBeforeHeal)+
+                message += "-> and healed for " + (getCurrentHealth() - healthBeforeHeal)+
                     " HP: " + getCurrentHealth() + "/" + getMaxHealth();
             }
         }

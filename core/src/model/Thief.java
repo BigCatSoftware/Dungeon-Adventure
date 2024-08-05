@@ -63,20 +63,27 @@ public class Thief extends Hero{
      * in one turn, 40% chance to perform normal attack, 20% chance to fail action.
      * @return int 0 - no turns, 1 - one turn, 2 - two turns.
      */
-    public int specialAction(){
-        Random rand = new Random(RANDOM_FROM_HUNDRED+1);
-        final int result;
-        final int randomInt = rand.nextInt();
+    public String specialAction(final Enemy theEnemy){
+        if(theEnemy == null){
+            throw new IllegalArgumentException("Can't call attack on null character at DungeonCharacter attack().");
+        }
+        Random rand = new Random();
+        final int randomInt = rand.nextInt(RANDOM_FROM_HUNDRED+1);
+        final String outputString;
         if(randomInt <= THIEF_SKILL_FAIL){
-            result = 0;
+            outputString = "[" + getMyName() + "] uses <<" + getSpecialActionName() + ">> but misses.";
         }
         else if(randomInt <= THIEF_SKILL_FAIL + THIEF_SKILL_NO_OUTCOME){
-            result = 1;
+            outputString = "[" + getMyName() + "] uses <<" + getSpecialActionName() +
+                ">> but deals partial damage - \n[" + getSpecialActionName() +"] "
+                + attack(theEnemy);
         }
         else{
-            result = 2;
+            outputString = "[" + getMyName() + "] uses <<" + getSpecialActionName() + ">>" +
+                " and does twice the damage!!! - \n[" + getSpecialActionName() +"] "
+                + attack(theEnemy) + "\n[" + getSpecialActionName() +"] " + attack(theEnemy);
         }
-        return result;
+        return outputString;
     }
 
     /**

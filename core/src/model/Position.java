@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public final class Position{
     /**
      * X coordinate.
@@ -72,7 +74,21 @@ public final class Position{
         }
         myY = theY;
     }
-
+    @Override
+    public boolean equals(Object theOther){
+        boolean isEqual = false;
+        if(theOther instanceof Position){
+            final Position otherPosition = (Position)theOther;
+            if(getMyY() == otherPosition.getMyY() && getMyX() == otherPosition.getMyX()){
+                isEqual = true;
+            }
+        }
+        return isEqual;
+    }
+    @Override
+    public int hashCode(){
+        return Objects.hash(getMyX(),getMyY());
+    }
     /**
      * Returns string of data for this class
      * @return string of data.

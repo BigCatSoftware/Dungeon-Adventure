@@ -55,29 +55,13 @@ public class TestPriestess {
                 }
                 //attack choice
                 else{
-                    int priestessAttacked = myPriestess.attack();
-                    if(priestessAttacked == 0){
-                        System.out.println("[" + myPriestess.getMyName() + "] had missed.");
-                    }
-                    else{
-                        System.out.println("[" + myPriestess.getMyName() + "]" + " attacked for " +
-                            priestessAttacked + " damage.");
-                        System.out.println(mySkeleton.receiveDamage(priestessAttacked));
-                    }
+                    System.out.println(myPriestess.attack(mySkeleton));
                     isHeroTurn = false;
                 }
             }
             else{
                 numOfTurns++;
-                int skeletonAttacked = mySkeleton.attack();
-                if(skeletonAttacked == 0){
-                    System.out.println("[" + mySkeleton.getMyName() + "] had missed.");
-                }
-                else{
-                    System.out.println("[" + mySkeleton.getMyName() + "] attacked for " +
-                        skeletonAttacked + " damage.");
-                    System.out.println(myPriestess.receiveDamage(skeletonAttacked));
-                }
+                System.out.println(mySkeleton.attack(myPriestess));
                 isHeroTurn = true;
             }
         }
