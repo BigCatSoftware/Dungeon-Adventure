@@ -1,5 +1,11 @@
 package model;
 
+import static model.DungeonCharacter.NEW_LINE;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
 /**
  * Class that tracks the activity, receives requests and sends necessary responses.
  * Tracks progress from start to end of the adventure.
@@ -12,17 +18,18 @@ public final class GameMaster {
     /**
      * This is a dungeon generator that will produce a map to store.
      */
-    private final Dungeon myDungeon;
+    private Dungeon myDungeon;
     /**
      * This is a grid of cells that will be used to check game status.
      */
-    private final Tile[][] myMap; //TODO: change to Room array to send to Entity and Item loader to populate.
+    private Tile[][] myMap; //TODO: change to Room array to send to Entity and Item loader to populate.
     /**
      * Hero to track on game grid and update the data based on events or changes in this object.
      */
     private Hero myPlayer;
     //TODO: change enemy to arraylist of enemies.
-    private final Enemy myEnemy = EntityLoader.randomEnemy(1,2);
+    private ArrayList<Enemy> myEnemies;
+    private Enemy myCurrentEnemy;
     //methods
     private boolean myHeroSet;
     /**
@@ -34,6 +41,9 @@ public final class GameMaster {
         myMap = myDungeon.getMap();
         myPlayer = null;
         myHeroSet = false;
+        myEnemies = new ArrayList<>();
+        populate();
+        System.out.println(getEnemyPositionsToString());
     }
     public static synchronized GameMaster getInstance(){
         return myInstance;
@@ -63,10 +73,57 @@ public final class GameMaster {
         return myPlayer.getPosition().getMyY();
     }
     public Enemy getEnemy(){
-        return myEnemy;
+        return myCurrentEnemy;
+    }
+    public ArrayList<Enemy> getAllEnemies(){
+        return myEnemies;
+    }
+    public String getEnemyPositionsToString(){
+        StringBuilder sb = new StringBuilder();
+        for(Enemy e : myEnemies){
+            sb.append("[").append(e.getMyName()).append("] is a ").
+                append(e.getClass().getSimpleName()).append(" and is at ").append(e.getPosition().
+                    toString()).append(NEW_LINE);
+        }
+        return sb.toString();
     }
     public boolean isHeroNearEnemy(){
-        return myPlayer.getPosition().equals(myEnemy.getPosition());
+        boolean isEnemy = false;
+        for(Enemy e : myEnemies){
+            isEnemy = myPlayer.getPosition().equals(e.getPosition());
+            if(isEnemy){
+                myCurrentEnemy = e;
+                return isEnemy;
+            }
+        }
+        return isEnemy;
+    }
+    private void populate(){
+        Random rand = new Random();
+        myEnemies.add(EntityLoader.randomEnemy(1,2));
+        System.out.println("Current Enemy Count: " + myEnemies.size());
+        while(myEnemies.size() != 20){
+            int x = rand.nextInt(50);
+            int y = rand.nextInt(50);
+            if(myMap[x][y].isWalkable()){
+                myEnemies.add(EntityLoader.randomEnemy(x,y));
+            }
+        }
+    }
+    public void removeCurrentEnemyIfDead(){
+        if(myCurrentEnemy.getIsDead()){
+            myEnemies.remove(myCurrentEnemy);
+        }
+    }
+    public void restart(){
+        myDungeon = new Dungeon();
+        myDungeon.printMap();
+        myMap = myDungeon.getMap();
+        myPlayer = null;
+        myHeroSet = false;
+        myEnemies = new ArrayList<>();
+        populate();
+        System.out.println(getEnemyPositionsToString());
     }
     /**
      * Returns Tile[][] grid of cells that define the game grid and store tile, position,

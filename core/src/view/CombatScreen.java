@@ -229,12 +229,15 @@ public final class CombatScreen extends ScreenAdapter {
         final Image image;
         if(GameMaster.getInstance().getEnemy() instanceof Gremlin){
             texture = new Texture("GremlinCombatIcon.png");
+            Gdx.audio.newSound(Gdx.files.internal("sounds/GremlinApproaching.ogg")).play();
         }
         else if(GameMaster.getInstance().getEnemy() instanceof Skeleton){
             texture = new Texture("SkeletonCombatIcon.png");
+            Gdx.audio.newSound(Gdx.files.internal("sounds/SkeletonApproaching.ogg")).play();
         }
         else if(GameMaster.getInstance().getEnemy() instanceof Ogre){
             texture = new Texture("OgreCombatIcon.png");
+            Gdx.audio.newSound(Gdx.files.internal("sounds/OgreApproaching.ogg")).play();
         }
         else{
             throw new IllegalStateException("Failed to draw enemy combat icon because of" +
@@ -311,6 +314,7 @@ public final class CombatScreen extends ScreenAdapter {
         theButtons[0].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 //update log
                 final Label logLabel = (Label) myCombatLog.getActor();
                 logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().getPlayer().attack(GameMaster.getInstance().getEnemy())));
@@ -348,6 +352,7 @@ public final class CombatScreen extends ScreenAdapter {
         theButtons[1].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 final Label logLabel = (Label) myCombatLog.getActor();
                 //warrior and thief apply damage to enemy while priestess heals self.
                 if(GameMaster.getInstance().getPlayer() instanceof Warrior){
@@ -397,11 +402,13 @@ public final class CombatScreen extends ScreenAdapter {
         theButtons[2].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 final Label logLabel = (Label) myCombatLog.getActor();
                 final Random rand = new Random();
                 if(rand.nextBoolean()){
                     myGame.setScreen(myPreviousScreen);
                     dispose();
+
                 }
                 else{
                     logLabel.setText(updateLog(
@@ -422,6 +429,7 @@ public final class CombatScreen extends ScreenAdapter {
         theButtons[3].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 final Label logLabel = (Label) myCombatLog.getActor();
                 logLabel.setText(updateLog(
                     String.valueOf(logLabel.getText()), "<Opened inventory and used health potion!>"));
@@ -441,8 +449,10 @@ public final class CombatScreen extends ScreenAdapter {
         theButtons[4].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 if(GameMaster.getInstance().getEnemy().getIsDead()){
                     myGame.setScreen(myPreviousScreen);
+                    GameMaster.getInstance().removeCurrentEnemyIfDead();
                 }
                 else{
                     Gdx.app.exit();

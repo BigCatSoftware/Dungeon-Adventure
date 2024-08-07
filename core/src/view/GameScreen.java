@@ -16,12 +16,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
+import model.Enemy;
 import model.GameMaster;
+import model.Gremlin;
+import model.Ogre;
 import model.Priestess;
+import model.Skeleton;
 import model.Thief;
 import model.Tile;
 import model.Warrior;
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+
+import java.util.ArrayList;
 
 /**
  * Represents the main game screen where the dungeon is rendered and the player interacts with the game.
@@ -46,6 +52,9 @@ public class GameScreen implements Screen {
     private final Texture myWallTexture;
     private final Texture myDoorTexture;
     private final Texture myFloorTexture;
+    private final Texture myGremlinTexture;
+    private final Texture mySkeletonTexture;
+    private final Texture myOgreTexture;
     private boolean myMenuShown = false;
     //private final DungeonRenderer myDungeonRenderer;
 
@@ -69,6 +78,9 @@ public class GameScreen implements Screen {
         myWallTexture = new Texture("wall.png");
         myDoorTexture = new Texture("door.png");
         myFloorTexture = new Texture("floor.png");
+        myGremlinTexture = new Texture("Pixel Gremlin.png");
+        mySkeletonTexture = new Texture("Pixel Skeleton.png");
+        myOgreTexture = new Texture("Pixel Ogre.png");
         myGameTable.setFillParent(true);
         myStage.addActor(myGameTable);
         //add to table
@@ -123,6 +135,7 @@ public class GameScreen implements Screen {
         // Render the dungeon
         myGame.batch.begin();
         initMap();
+        initEntities();
         myGame.batch.end();
         myStage.act(Gdx.graphics.getDeltaTime());
         myStage.draw();
@@ -149,6 +162,23 @@ public class GameScreen implements Screen {
             }
         }
     }
+    private void initEntities(){
+        final ArrayList<Enemy> list = GameMaster.getInstance().getAllEnemies();
+        for(Enemy e : list){
+            if(e instanceof Gremlin){
+                myGame.batch.draw(myGremlinTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+            else if(e instanceof Skeleton){
+                myGame.batch.draw(mySkeletonTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+            else if(e instanceof Ogre){
+                myGame.batch.draw(myOgreTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+            else{
+                throw new IllegalStateException("Unknown enemy type when drawing on map. Entity name: " + e.getClass().getSimpleName());
+            }
+        }
+    }
     public void setPlayerImagePosition(){
         myPlayerImage.setPosition(GameMaster.getInstance().getPlayerX()*TILE_SIZE, GameMaster.getInstance().getPlayerY()*TILE_SIZE);
     }
@@ -168,6 +198,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 showMenu();
             }
         });
@@ -179,6 +210,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 myGame.setScreen(new SettingsScreen(myGame, GameScreen.this));
                 myGameMenuTable.setVisible(false);
                 myMenuShown = false;
@@ -193,9 +225,11 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 dispose();
                 myGame.setScreen(new MainMenuScreen(myGame));
                 //TODO: auto save and go to menu
+                GameMaster.getInstance().restart();
             }
         });
         myGameMenuTable.addActor(button);
