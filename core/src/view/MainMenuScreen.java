@@ -64,7 +64,7 @@ public class MainMenuScreen implements Screen {
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
         myDungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
 
-        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MainScreenSound.mp3"));
+        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("WindChimes.ogg"));
 
 
         EXIT_BUTTON_X = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
@@ -197,6 +197,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
+        myBackgroundMusic.dispose();
         myExitButtonActive.dispose();
         myExitButtonInactive.dispose();
         myPlayButtonActive.dispose();

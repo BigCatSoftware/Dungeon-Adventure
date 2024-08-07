@@ -8,7 +8,7 @@ package model;
  */
 public final class GameMaster {
     //Class fields.
-    private static GameMaster myInstance = new GameMaster();
+    private static final GameMaster myInstance = new GameMaster();
     /**
      * This is a dungeon generator that will produce a map to store.
      */

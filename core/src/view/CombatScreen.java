@@ -1,8 +1,6 @@
 package view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -69,36 +67,29 @@ public final class CombatScreen extends ScreenAdapter {
     private final BitmapFont myFont;
     private final Label myHeroHP;
     private final Label myEnemyHP;
-
     private final ScrollPane myCombatLog;
     /**
      * Initialize the class.
+     * @param theGame this is the game instance that will change the screen to a previous screen.
+     * @param thePreviousScreen this is the screen that the game will change to.
      */
-    public CombatScreen(final DungeonAdventure theGame, final Screen thePreviousScreen){ //removed previous screen and game instance
+    public CombatScreen(final DungeonAdventure theGame, final Screen thePreviousScreen){
+        //init
         myGame = theGame;
         myPreviousScreen = thePreviousScreen;
         myCombatBack = new Image(new Texture("CombatScreenBack.png"));
-        //myPlayerCombatIcon = initPlayerIcon();
-        //TODO: Upon implementing enemy spawn - remove the line below
-        //myEnemyCombatIcon = initEnemyIcon();
         myStage = new Stage();
-        Gdx.input.setInputProcessor(myStage);
-
         myTable = new Table();
         myFont = new BitmapFont(Gdx.files.internal("fonts/alagard.fnt"), Gdx.files.internal("fonts/alagard.png"), false);
+
         myTable.setFillParent(true);
         myStage.addActor(myTable);
-        myTable.setDebug(true);
+
         //add widgets to table here
         myTable.addActor(myCombatBack);
         myTable.addActor(initPlayerIcon());
         myTable.addActor(initEnemyIcon());
         TextButton[] buttons = initCombatButtons(myFont);
-        attackButtonListener(buttons);
-        specialActionButtonListener(buttons);
-        fleeButtonListener(buttons);
-        inventoryButtonListener(buttons);
-        exitForfeitButtonListener(buttons);
         for(TextButton b : buttons){
             myTable.addActor(b);
         }
@@ -137,11 +128,24 @@ public final class CombatScreen extends ScreenAdapter {
      */
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(myStage);
     }
+
+    /**
+     * When called gives string representation of hero health that can be used in UI
+     * @return String of hero health.
+     */
     private String heroHealth(){
         return GameMaster.getInstance().getPlayer().getCurrentHealth() + "/"
             + GameMaster.getInstance().getPlayer().getMaxHealth();
     }
+
+    /**
+     * This method compares health to max health and returns color. Green - good, Yellow - ok,
+     * Red - bad.
+     * @param theEntity entity to check.
+     * @return color level of health.
+     */
     private Color updateHPColor(final DungeonCharacter theEntity){
 
         final int currentHealth;
@@ -167,16 +171,34 @@ public final class CombatScreen extends ScreenAdapter {
         }
         return color;
     }
+
+    /**
+     * When called gives string representation of enemy health that can be used in UI
+     * @return String of enemy health.
+     */
     private String enemyHealth(){
         return GameMaster.getInstance().getEnemy().getCurrentHealth() + "/" +
             GameMaster.getInstance().getEnemy().getMaxHealth();
     }
+
+    /**
+     * Checks if the log is too big, if it is - removes few earlier messages.
+     * Takes previous message and concatenates new message to the log.
+     * @param thePreviousText string previous text to update
+     * @param theNewText string new text to add to previous text
+     * @return String updated log with new message.
+     */
     private String updateLog(final String thePreviousText, final String theNewText){
         if(thePreviousText.length() > Short.MAX_VALUE/7){
             return thePreviousText.substring(200) + System.lineSeparator() + theNewText;
         }
         return thePreviousText + System.lineSeparator() + theNewText;
     }
+
+    /**
+     * Helper method that will decide player icon based on hero instance.
+     * @return image hero image on the combat screen.
+     */
     private Image initPlayerIcon(){
         final Texture texture;
         final Image image;
@@ -197,6 +219,11 @@ public final class CombatScreen extends ScreenAdapter {
         image.setPosition(HERO_ICON_X, HERO_ICON_Y);
         return image;
     }
+
+    /**
+     * Helper method that will decide enemy icon based on enemy instance.
+     * @return image enemy image on the combat screen.
+     */
     private Image initEnemyIcon(){
         final Texture texture;
         final Image image;
@@ -217,6 +244,13 @@ public final class CombatScreen extends ScreenAdapter {
         image.setPosition(ENEMY_ICON_X, ENEMY_ICON_Y);
         return image;
     }
+
+    /**
+     * Helper method that creates a list of buttons that will be used for user to combat the
+     * enemy.
+     * @param theFont font for the text on the buttons
+     * @return textbutton array.
+     */
     private TextButton[] initCombatButtons(final BitmapFont theFont){
         String[] buttonText = {"ATTACK", "SPECIAL ACTION", "FLEE", "INVENTORY", "EXIT/FORFEIT"};
         int xPos = 5;
@@ -235,8 +269,24 @@ public final class CombatScreen extends ScreenAdapter {
             buttons[i] = buttonMaker(buttonText[i], style,(xPos + i*BUTTON_WIDTH),yPos,BUTTON_WIDTH,BUTTON_HEIGHT);
             xPos+=xIncr;
         }
+        attackButtonListener(buttons);
+        specialActionButtonListener(buttons);
+        fleeButtonListener(buttons);
+        inventoryButtonListener(buttons);
+        exitForfeitButtonListener(buttons);
         return buttons;
     }
+
+    /**
+     * Helper method that will make a button using parameters.
+     * @param theText string text on the button
+     * @param theStyle textbuttonstyle of the button up, down, disabled, font
+     * @param theX int x pos on screen
+     * @param theY int y pos on screen
+     * @param theWidth int button width
+     * @param theHeight int button height
+     * @return textbutton to add to the array.
+     */
     private TextButton buttonMaker(final String theText,
                                    final TextButton.TextButtonStyle theStyle,
                                    final int theX, final int theY,
@@ -248,17 +298,22 @@ public final class CombatScreen extends ScreenAdapter {
         button.getLabel().setFontScale(0.6f, 1.2f);
         return button;
     }
+
+    /**
+     * This method specifies what the attack button will do on press.
+     * @param theButtons takes the array of buttons to change the attack button listener.
+     */
     private void attackButtonListener(final TextButton[] theButtons){
         if(theButtons.length != BUTTON_NUM){
-            throw new IllegalStateException("Trying to initialize attackButton for wrong count of buttons (has to be updated)");
+            throw new IllegalStateException("Trying to initialize attackButton for wrong " +
+                "count of buttons (has to be updated)");
         }
         theButtons[0].addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //update log
                 final Label logLabel = (Label) myCombatLog.getActor();
-                logLabel.setText(updateLog(
-                    String.valueOf(logLabel.getText()), GameMaster.getInstance().getPlayer().attack(GameMaster.getInstance().getEnemy())));
+                logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().getPlayer().attack(GameMaster.getInstance().getEnemy())));
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
@@ -271,6 +326,7 @@ public final class CombatScreen extends ScreenAdapter {
                     myHeroHP.setText(heroHealth());
                     myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
                 }
+                //if player or enemy is dead we disable input on first four buttons
                 if(GameMaster.getInstance().getPlayer().getIsDead() || GameMaster.getInstance().getEnemy().getIsDead()){
                     theButtons[0].setDisabled(true);
                     theButtons[1].setDisabled(true);
@@ -280,6 +336,11 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
     }
+
+    /**
+     * This method specifies what the special action button will do on press.
+     * @param theButtons takes the array of buttons to change the special action button listener.
+     */
     private void specialActionButtonListener(final TextButton[] theButtons){
         if(theButtons.length != BUTTON_NUM){
             throw new IllegalStateException("Trying to initialize specialActionButton for wrong count of buttons (has to be updated)");
@@ -288,6 +349,7 @@ public final class CombatScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 final Label logLabel = (Label) myCombatLog.getActor();
+                //warrior and thief apply damage to enemy while priestess heals self.
                 if(GameMaster.getInstance().getPlayer() instanceof Warrior){
                     logLabel.setText(updateLog(String.valueOf(logLabel.getText()), ((Warrior) GameMaster.getInstance().getPlayer()).specialAction(GameMaster.getInstance().getEnemy())));
                 }
@@ -323,6 +385,11 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
     }
+
+    /**
+     * This method specifies what the flee button will do on press.
+     * @param theButtons takes the array of buttons to change the flee button listener.
+     */
     private void fleeButtonListener(final TextButton[] theButtons){
         if(theButtons.length != BUTTON_NUM){
             throw new IllegalStateException("Trying to initialize skipTurnButton for wrong count of buttons (has to be updated)");
@@ -344,6 +411,10 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
     }
+    /**
+     * This method specifies what the inventory button will do on press.
+     * @param theButtons takes the array of buttons to change the inventory button listener.
+     */
     private void inventoryButtonListener(final TextButton[] theButtons){
         if(theButtons.length != BUTTON_NUM){
             throw new IllegalStateException("Trying to initialize inventoryButton for wrong count of buttons (has to be updated)");
@@ -359,6 +430,10 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
     }
+    /**
+     * This method specifies what the exit button will do on press.
+     * @param theButtons takes the array of buttons to change the exit button listener.
+     */
     private void exitForfeitButtonListener(final TextButton[] theButtons){
         if(theButtons.length != BUTTON_NUM){
             throw new IllegalStateException("Trying to initialize exitForfeitButton for wrong count of buttons (has to be updated)");
@@ -375,6 +450,16 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
     }
+
+    /**
+     * Helper method to set up text labels
+     * @param theText string text
+     * @param theColor color to use for the font
+     * @param theFont bitmap font to use on the label
+     * @param theX int x pos
+     * @param theY int y pos
+     * @return label to put on screen.
+     */
     private Label initLabel(final String theText, final Color theColor, final BitmapFont theFont, final int theX, final int theY){
         final Label.LabelStyle style = new Label.LabelStyle();
         style.font = theFont;
@@ -385,6 +470,12 @@ public final class CombatScreen extends ScreenAdapter {
         label.setColor(theColor);
         return label;
     }
+
+    /**
+     * Helper method that will initialize the scrollpane that uses label to log combat activity.
+     * @param theFont bitmap font to use in the log
+     * @return scrollpane scrollable label of combat activity log.
+     */
     private ScrollPane initCombatLog(final BitmapFont theFont){
         final Label.LabelStyle style = new Label.LabelStyle();
         style.font = theFont;

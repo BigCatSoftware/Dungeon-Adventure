@@ -128,7 +128,6 @@ public class DungeonInputProcessor extends InputAdapter {
         float y = touchPos.y;
 
         if (isInBounds(x, y, BACK_BUTTON_X, BACK_BUTTON_Y, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)) {
-            myBackgroundMusic.stop();
             myGame.setScreen(new MainMenuScreen(myGame));
         } else if (isInBounds(x, y, WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
             GameMaster.getInstance().setPlayer(new Warrior(NameGenerator.getWarriorName(), 1, 1));
