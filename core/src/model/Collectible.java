@@ -6,7 +6,11 @@ package model;
  * triggering some effect or state change within the game.
  *
  * @author Tiger Schueler
+<<<<<<< HEAD
  * @version 26JUL24
+=======
+ * @version 1.1
+>>>>>>> nazarii_branch
  */
 public interface Collectible {
 

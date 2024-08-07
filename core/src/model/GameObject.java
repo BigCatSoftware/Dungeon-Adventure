@@ -44,6 +44,4 @@ public class GameObject {
         theBatch.draw(myTexture, myPosition.getMyX() * TILE_SIZE,
                 myPosition.getMyY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
-
-
 }
