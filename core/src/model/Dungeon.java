@@ -253,8 +253,14 @@ public class Dungeon {
                     mapBuilder.append('#');
                 } else if (MAP[i][j] == Tile.FLOOR){
                     mapBuilder.append('.');
-                } else {
+                } else if (MAP[i][j] == Tile.DOOR){
                     mapBuilder.append('D');
+                } else if (MAP[i][j] == Tile.KEY){
+                    mapBuilder.append('K');
+                } else if (MAP[i][j] == Tile.EXIT){
+                    mapBuilder.append('E');
+                } else if (MAP[i][j] == Tile.OPEN_DOOR){
+                    mapBuilder.append('O');
                 }
                 mapBuilder.append(" ");
             }

@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
     private final Image myPlayerImage;
     private final Texture myWallTexture;
     private final Texture myDoorTexture;
+    private final Texture myOpenDoorTexture;
     private final Texture myFloorTexture;
     private final Texture myKeyTexture;
     private final Texture myExitTexture;
@@ -79,6 +80,7 @@ public class GameScreen implements Screen {
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
         myWallTexture = new Texture("wall.png");
         myDoorTexture = new Texture("door.png");
+        myOpenDoorTexture = new Texture("open_door.png");
         myFloorTexture = new Texture("floor.png");
         myKeyTexture = new Texture("key.png");
         myExitTexture = new Texture("exit.png");

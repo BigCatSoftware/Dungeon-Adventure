@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameMaster;
+import model.Tile;
 import view.CombatScreen;
 import view.GameScreen;
 import view.SettingsScreen;
@@ -76,10 +77,26 @@ public class PlayerInputProcessor extends InputAdapter {
                 break;
             case Input.Keys.ESCAPE:
                 myPreviousScreen.showMenu();
+                break;
+            case Input.Keys.E:
+                openDoors(gm);
+                myGame.render();
             default:
                 return false; // Indicates that the key event was not handled
         }
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
+    }
+
+    private void openDoors(final GameMaster theGame) {
+        for (int i = theGame.getPlayerY() - 1; i <= theGame.getPlayerY() + 1; i++) {
+            for (int j = theGame.getPlayerX() - 1; j <= theGame.getPlayerX() + 1; j++) {
+                if (theGame.getMap()[i][j] == Tile.DOOR) {
+                    theGame.getMap()[i][j] = Tile.OPEN_DOOR;
+                } else if (theGame.getMap()[i][j] == Tile.OPEN_DOOR) {
+                    theGame.getMap()[i][i] = Tile.DOOR;
+                }
+            }
+        }
     }
 }
