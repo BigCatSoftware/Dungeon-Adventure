@@ -211,6 +211,37 @@ public class Dungeon {
         }
     }
 
+    private void placeKeys() {
+        final int maxKeys = 4;
+        int counter = 0;
+        while(counter < maxKeys) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.KEY;
+                counter++;
+            }
+        }
+    }
+
+    private void placeExit() {
+        int exitCounter = 0;
+        while (exitCounter < 2) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.EXIT;
+                exitCounter++;
+            }
+        }
+    }
+
     /**
      * Prints the dungeon map to the console.
      */
@@ -254,6 +285,8 @@ public class Dungeon {
         createRooms(ROOT);
         createDoors();
         createRoomAdjacency();
+        placeKeys();
+        placeExit();
         if (myTotalRooms < 15) {
             myTotalRooms = 0;
             generateDungeon();

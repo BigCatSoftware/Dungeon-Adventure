@@ -52,6 +52,8 @@ public class GameScreen implements Screen {
     private final Texture myWallTexture;
     private final Texture myDoorTexture;
     private final Texture myFloorTexture;
+    private final Texture myKeyTexture;
+    private final Texture myExitTexture;
     private final Texture myGremlinTexture;
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
@@ -78,6 +80,8 @@ public class GameScreen implements Screen {
         myWallTexture = new Texture("wall.png");
         myDoorTexture = new Texture("door.png");
         myFloorTexture = new Texture("floor.png");
+        myKeyTexture = new Texture("key.png");
+        myExitTexture = new Texture("exit.png");
         myGremlinTexture = new Texture("Pixel Gremlin.png");
         mySkeletonTexture = new Texture("Pixel Skeleton.png");
         myOgreTexture = new Texture("Pixel Ogre.png");
@@ -152,6 +156,10 @@ public class GameScreen implements Screen {
                     texture = myFloorTexture;
                 } else if (map[i][j] == Tile.DOOR) {
                     texture = myDoorTexture;
+                } else if (map[i][j] == Tile.KEY) {
+                    texture = myKeyTexture;
+                } else if (map[i][j] == Tile.EXIT) {
+                    texture = myExitTexture;
                 }
                 if (texture != null) {
                     myGame.batch.draw(texture, i*TILE_SIZE, j*TILE_SIZE, TILE_SIZE, TILE_SIZE);

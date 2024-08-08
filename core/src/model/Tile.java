@@ -8,7 +8,7 @@ package model;
  */
 public enum Tile {
     /**
-     * Wall tile, represented by the '# symbol.
+     * Wall tile, represented by the '#' symbol.
      */
     WALL('#', false),
 
@@ -20,7 +20,23 @@ public enum Tile {
     /**
      * Door tile, represented by the 'D' symbol.
      */
-    DOOR('D',false);
+    DOOR('D',false),
+
+    /**
+     * Open Door tile, represented by the 'O' symbol.
+     */
+    OPEN_DOOR('O',true),
+
+    /**
+     * Key tile, represented by the 'K' symbol.
+     */
+    KEY('K', true),
+
+    /**
+     * Exit tile, represented by the 'E' symbol.
+     */
+    EXIT('E', true);
+    ;
 
     private final char mySymbol;
     private final boolean myWalkable;
