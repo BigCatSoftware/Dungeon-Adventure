@@ -113,6 +113,7 @@ public class DungeonScreen implements Screen {
         LOAD_BUTTON_X = DungeonAdventure.WIDTH / 2 - LOAD_BUTTON_WIDTH / 2;
         SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
 
+        myBackgroundMusic.stop();
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("DungeonSound.mp3"));
 
     }

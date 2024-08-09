@@ -155,7 +155,7 @@ public class MainMenuScreen implements Screen {
      * @param theButtonHeight the height of the button
      * @return true if the mouse is hovering over the button, false otherwise
      */
-    private boolean isHovered(int theButtonX, int theButtonY, int theButtonWidth, int theButtonHeight) {
+    private boolean isHovered(final int theButtonX, final int theButtonY, final int theButtonWidth, final int theButtonHeight) {
         return Gdx.input.getX() < theButtonX + theButtonWidth && Gdx.input.getX() > theButtonX &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() < theButtonY + theButtonHeight &&
                 DungeonAdventure.HEIGHT - Gdx.input.getY() > theButtonY;

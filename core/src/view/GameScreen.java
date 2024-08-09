@@ -1,5 +1,6 @@
 package view;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
  */
 public class GameScreen implements Screen {
     private static final int TILE_SIZE = 16;
+    private final OrthographicCamera myCamera;
     private static final int BUTTON_WIDTH = 154;
     private static final int BUTTON_HEIGHT = 54;
     private static final int BUTTON_Y_OFFSET = 10;
@@ -58,6 +60,10 @@ public class GameScreen implements Screen {
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
+    private final int SETTINGS_BUTTON_WIDTH = 64;
+    private final int SETTINGS_BUTTON_HEIGHT = 64;
+    private final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
+    private final int SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
     //private final DungeonRenderer myDungeonRenderer;
 
     /**
@@ -67,6 +73,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(final DungeonAdventure theGame) {
         myGame = theGame;
+        myBackgroundMusic.stop();
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
         myBackgroundMusic.play();
         myBackgroundMusic.setLooping(true);
@@ -97,6 +104,8 @@ public class GameScreen implements Screen {
         initGameMenuButtons();
         myGameTable.addActor(myGameMenuTable);
         myGameTable.addActor(myPlayerImage);
+        myCamera = new OrthographicCamera();
+        myCamera.setToOrtho(false, DungeonAdventure.WIDTH, DungeonAdventure.HEIGHT);
         //myDungeonRenderer = new DungeonRenderer();
     }
     private Image initPlayerTexture(){
@@ -122,7 +131,8 @@ public class GameScreen implements Screen {
      */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
+        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this,
+                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT, myCamera));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
     }
 
     /**
@@ -140,10 +150,37 @@ public class GameScreen implements Screen {
         myGame.batch.begin();
         initMap();
         initEntities();
+        settingsButtonDraw();
         myGame.batch.end();
         myStage.act(Gdx.graphics.getDeltaTime());
         myStage.draw();
         //myGame.batch.end();
+    }
+    /**
+     * Draws the settings button.
+     * The button changes appearance based on whether it is hovered over or not.
+     */
+    private void settingsButtonDraw() {
+        int x = SETTINGS_BUTTON_X;
+        if (isHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
+            myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+        } else {
+            myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
+        }
+    }
+    /**
+     * Checks if the mouse is hovering over a specified button.
+     *
+     * @param theButtonX the x-coordinate of the button
+     * @param theButtonY the y-coordinate of the button
+     * @param theButtonWidth the width of the button
+     * @param theButtonHeight the height of the button
+     * @return true if the mouse is hovering over the button, false otherwise
+     */
+    private boolean isHovered(final int theButtonX, final int theButtonY, final int theButtonWidth, final int theButtonHeight) {
+        return Gdx.input.getX() < theButtonX + theButtonWidth && Gdx.input.getX() > theButtonX &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() < theButtonY + theButtonHeight &&
+                DungeonAdventure.HEIGHT - Gdx.input.getY() > theButtonY;
     }
     private void initMap(){
         Tile[][] map = GameMaster.getInstance().getMap();
@@ -245,7 +282,8 @@ public class GameScreen implements Screen {
     public void showMenu(){
         if(myMenuShown){
             myGameMenuTable.setVisible(false);
-            Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+            Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this,
+                    SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT, myCamera));
             myMenuShown = false;
         }
         else{
