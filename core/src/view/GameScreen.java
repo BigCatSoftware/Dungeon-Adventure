@@ -55,6 +55,8 @@ public class GameScreen implements Screen {
     private final Texture myFloorTexture;
     private final Texture myKeyTexture;
     private final Texture myExitTexture;
+    private final Texture myHealthPotionTexture;
+    private final Texture myPoisonPotionTexture;
     private final Texture myGremlinTexture;
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
@@ -84,6 +86,8 @@ public class GameScreen implements Screen {
         myFloorTexture = new Texture("floor.png");
         myKeyTexture = new Texture("key.png");
         myExitTexture = new Texture("exit.png");
+        myHealthPotionTexture = new Texture("health_potion.png");
+        myPoisonPotionTexture = new Texture("poison_potion.png");
         myGremlinTexture = new Texture("Pixel Gremlin.png");
         mySkeletonTexture = new Texture("Pixel Skeleton.png");
         myOgreTexture = new Texture("Pixel Ogre.png");
@@ -152,19 +156,34 @@ public class GameScreen implements Screen {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;
-                if (map[i][j] == Tile.WALL) {
-                    texture = myWallTexture;
-                } else if (map[i][j] == Tile.FLOOR) {
-                    texture = myFloorTexture;
-                } else if (map[i][j] == Tile.DOOR) {
-                    texture = myDoorTexture;
-                } else if (map[i][j] == Tile.KEY) {
-                    texture = myKeyTexture;
-                } else if (map[i][j] == Tile.EXIT) {
-                    texture = myExitTexture;
+                switch(map[i][j]){
+                    case WALL:
+                        texture = myWallTexture;
+                        break;
+                    case FLOOR:
+                        texture = myFloorTexture;
+                        break;
+                    case DOOR:
+                        texture = myDoorTexture;
+                        break;
+                    case OPEN_DOOR:
+                        texture = myOpenDoorTexture;
+                        break;
+                    case KEY:
+                        texture = myKeyTexture;
+                        break;
+                    case EXIT:
+                        texture = myExitTexture;
+                        break;
+                    case HEALTH_POTION:
+                        texture = myHealthPotionTexture;
+                        break;
+                    case POISON_POTION:
+                        texture = myPoisonPotionTexture;
+                        break;
                 }
                 if (texture != null) {
-                    myGame.batch.draw(texture, i*TILE_SIZE, j*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
                 else{
                     throw new IllegalStateException("map image is set to null!");

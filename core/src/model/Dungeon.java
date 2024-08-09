@@ -242,6 +242,36 @@ public class Dungeon {
         }
     }
 
+    private void placeHealthPotions() {
+        int healthPotionCounter = 0;
+        while (healthPotionCounter < 5) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.HEALTH_POTION;
+                healthPotionCounter++;
+            }
+        }
+    }
+
+    private void placePoisonPotions() {
+        int poisonPotionCounter = 0;
+        while (poisonPotionCounter < 3) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.POISON_POTION;
+                poisonPotionCounter++;
+            }
+        }
+    }
+
     /**
      * Prints the dungeon map to the console.
      */
@@ -261,6 +291,10 @@ public class Dungeon {
                     mapBuilder.append('E');
                 } else if (MAP[i][j] == Tile.OPEN_DOOR){
                     mapBuilder.append('O');
+                } else if (MAP[i][i] == Tile.HEALTH_POTION){
+                    mapBuilder.append('H');
+                } else if (MAP[i][j] == Tile.POISON_POTION){
+                    mapBuilder.append('P');
                 }
                 mapBuilder.append(" ");
             }
@@ -293,6 +327,8 @@ public class Dungeon {
         createRoomAdjacency();
         placeKeys();
         placeExit();
+        placePoisonPotions();
+        placeHealthPotions();
         if (myTotalRooms < 15) {
             myTotalRooms = 0;
             generateDungeon();
