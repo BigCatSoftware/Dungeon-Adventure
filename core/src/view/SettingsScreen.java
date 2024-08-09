@@ -116,7 +116,6 @@ public class SettingsScreen extends ScreenAdapter {
         myBatch.setProjectionMatrix(myCamera.combined);
 
         myBatch.begin();
-        mySETTINGS.updateMusic();
 
         drawBackButton();
         drawSound();

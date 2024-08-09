@@ -59,6 +59,8 @@ public final class CombatScreen extends ScreenAdapter {
     private final static int LOG_Y = 80;
     private final static int LOG_WIDTH = 770;
     private final static int LOG_HEIGHT = 290;
+    private final static int INVENTORY_WIDTH = 800;
+    private final static int INVENTORY_HEIGHT = 198;
     private final DungeonAdventure myGame;
     private final Screen myPreviousScreen;
     private final Image myCombatBack;
@@ -67,7 +69,12 @@ public final class CombatScreen extends ScreenAdapter {
     private final BitmapFont myFont;
     private final Label myHeroHP;
     private final Label myEnemyHP;
+    private final TextButton[] myButtons;
     private final ScrollPane myCombatLog;
+    private final Table myInventory;
+    private final Label myHealthPotionLabel;
+    private final Label myKeyLabel;
+
     /**
      * Initialize the class.
      * @param theGame this is the game instance that will change the screen to a previous screen.
@@ -81,16 +88,20 @@ public final class CombatScreen extends ScreenAdapter {
         myStage = new Stage();
         myTable = new Table();
         myFont = new BitmapFont(Gdx.files.internal("fonts/alagard.fnt"), Gdx.files.internal("fonts/alagard.png"), false);
-
+        myInventory = new Table();
+        myInventory.setVisible(false);
+        myInventory.setBackground(new TextureRegionDrawable(new Texture("InventoryBack.png")));
+        myInventory.setBounds(0,0, INVENTORY_WIDTH, INVENTORY_HEIGHT);
         myTable.setFillParent(true);
         myStage.addActor(myTable);
-
+        myHealthPotionLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
+        myKeyLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
         //add widgets to table here
         myTable.addActor(myCombatBack);
         myTable.addActor(initPlayerIcon());
         myTable.addActor(initEnemyIcon());
-        TextButton[] buttons = initCombatButtons(myFont);
-        for(TextButton b : buttons){
+        myButtons = initCombatButtons(myFont);
+        for(TextButton b : myButtons){
             myTable.addActor(b);
         }
         //add names
@@ -104,6 +115,15 @@ public final class CombatScreen extends ScreenAdapter {
         //add combat log
         myCombatLog = initCombatLog(myFont);
         myTable.addActor(myCombatLog);
+
+        //add inventory
+        myInventory.addActor(initHealthIcon());
+        myInventory.addActor(initKeyIcon());
+        updateInventory();
+        initInventButtons();
+        myInventory.addActor(myHealthPotionLabel);
+        myInventory.addActor(myKeyLabel);
+        myTable.addActor(myInventory);
     }
     @Override
     public void render(float delta){
@@ -301,7 +321,19 @@ public final class CombatScreen extends ScreenAdapter {
         button.getLabel().setFontScale(0.6f, 1.2f);
         return button;
     }
-
+    private void disableButtonsIfDeath(){
+        if(myButtons.length != BUTTON_NUM){
+            throw new IllegalStateException("Initializing different number of buttons than" +
+                " expecting to. Expected: " + BUTTON_NUM);
+        }
+        if(GameMaster.getInstance().getPlayer().getIsDead() ||
+            GameMaster.getInstance().getEnemy().getIsDead()){
+            myButtons[0].setDisabled(true);
+            myButtons[1].setDisabled(true);
+            myButtons[2].setDisabled(true);
+            myButtons[3].setDisabled(true);
+        }
+    }
     /**
      * This method specifies what the attack button will do on press.
      * @param theButtons takes the array of buttons to change the attack button listener.
@@ -317,26 +349,20 @@ public final class CombatScreen extends ScreenAdapter {
                 Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 //update log
                 final Label logLabel = (Label) myCombatLog.getActor();
-                logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().getPlayer().attack(GameMaster.getInstance().getEnemy())));
+                logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().playerPerformAttack()));
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
                 //enemy attack log
                 if(!GameMaster.getInstance().getEnemy().getIsDead()){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().getEnemy().attack(GameMaster.getInstance()
-                        .getPlayer())));
+                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().enemyPerformAttack()));
                     myCombatLog.setScrollPercentY(1f);
                     //update player hp
                     myHeroHP.setText(heroHealth());
                     myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
                 }
                 //if player or enemy is dead we disable input on first four buttons
-                if(GameMaster.getInstance().getPlayer().getIsDead() || GameMaster.getInstance().getEnemy().getIsDead()){
-                    theButtons[0].setDisabled(true);
-                    theButtons[1].setDisabled(true);
-                    theButtons[2].setDisabled(true);
-                    theButtons[3].setDisabled(true);
-                }
+                disableButtonsIfDeath();
             }
         });
     }
@@ -355,20 +381,8 @@ public final class CombatScreen extends ScreenAdapter {
                 Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
                 final Label logLabel = (Label) myCombatLog.getActor();
                 //warrior and thief apply damage to enemy while priestess heals self.
-                if(GameMaster.getInstance().getPlayer() instanceof Warrior){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), ((Warrior) GameMaster.getInstance().getPlayer()).specialAction(GameMaster.getInstance().getEnemy())));
-                }
-                else if(GameMaster.getInstance().getPlayer() instanceof Priestess){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), ((Priestess) GameMaster.getInstance().getPlayer()).specialAction()));
-                }
-                else if(GameMaster.getInstance().getPlayer() instanceof Thief){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), ((Thief) GameMaster.getInstance().getPlayer()).specialAction(GameMaster.getInstance().getEnemy())));
-                }
-                else{
-                    throw new IllegalStateException("Combat Manager player is not an instance " +
-                        "of concrete implementation of Hero abstract class."
-                        + GameMaster.getInstance().getPlayer().getClass().getSimpleName());
-                }
+                logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance()
+                    .specialActionPerform()));
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
@@ -381,12 +395,7 @@ public final class CombatScreen extends ScreenAdapter {
                     myHeroHP.setText(heroHealth());
                     myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
                 }
-                if(GameMaster.getInstance().getPlayer().getIsDead() || GameMaster.getInstance().getEnemy().getIsDead()){
-                    theButtons[0].setDisabled(true);
-                    theButtons[1].setDisabled(true);
-                    theButtons[2].setDisabled(true);
-                    theButtons[3].setDisabled(true);
-                }
+                disableButtonsIfDeath();
             }
         });
     }
@@ -412,8 +421,13 @@ public final class CombatScreen extends ScreenAdapter {
                 }
                 else{
                     logLabel.setText(updateLog(
-                        String.valueOf(logLabel.getText()), "Failed to flee."));
+                        String.valueOf(logLabel.getText()), "Failed to flee.\n"
+                            + GameMaster.getInstance().enemyPerformAttack()));
                 }
+                disableButtonsIfDeath();
+                //update player health
+                myHeroHP.setText(heroHealth());
+                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
                 myCombatLog.setScrollPercentY(1f);
             }
         });
@@ -430,10 +444,10 @@ public final class CombatScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
-                final Label logLabel = (Label) myCombatLog.getActor();
-                logLabel.setText(updateLog(
-                    String.valueOf(logLabel.getText()), "<Opened inventory and used health potion!>"));
-
+//                final Label logLabel = (Label) myCombatLog.getActor();
+//                logLabel.setText(updateLog(
+//                    String.valueOf(logLabel.getText()), "<Opened inventory and used health potion!>"));
+                myInventory.setVisible(true);
                 myCombatLog.setScrollPercentY(1f);
             }
         });
@@ -508,5 +522,75 @@ public final class CombatScreen extends ScreenAdapter {
             }
         });
         return log;
+    }
+    private Image initHealthIcon(){
+        Image healthImage = new Image(new TextureRegionDrawable(new Texture("HealthPotionIcon.png")));
+        healthImage.setPosition(INVENTORY_WIDTH/3 - healthImage.getWidth()/2, INVENTORY_HEIGHT/2);
+        myHealthPotionLabel.setPosition(INVENTORY_WIDTH/3 - myHealthPotionLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        myInventory.addActor(healthImage);
+        myInventory.addActor(myHealthPotionLabel);
+        return healthImage;
+    }
+    private Image initKeyIcon(){
+        Image keyImage = new Image(new TextureRegionDrawable(new Texture("KeyIcon.png")));
+        keyImage.setPosition((INVENTORY_WIDTH/3) * 2 - keyImage.getWidth()/2, INVENTORY_HEIGHT/2);
+        myKeyLabel.setPosition((INVENTORY_WIDTH/3) * 2 - myKeyLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        myInventory.addActor(keyImage);
+        myInventory.addActor(myKeyLabel);
+        return keyImage;
+    }
+    private void initInventButtons(){
+        final TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = myFont;
+        style.up = new TextureRegionDrawable(new Texture("CombatButton.Up.png"));
+        style.down = new TextureRegionDrawable(new Texture("CombatButton.Down.png"));
+        style.disabled = new TextureRegionDrawable(new Texture("CombatButton.Disabled.png"));
+        initInventUseButton(style);
+        initInventBackButton(style);
+    }
+    private void initInventUseButton(final TextButton.TextButtonStyle theStyle){
+        final TextButton button = new TextButton("USE", theStyle);
+        button.setBounds(INVENTORY_WIDTH/3 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                myInventory.setVisible(false);
+                //TODO: use functionality to remove the health potion and add health.
+                final Label label = (Label)myCombatLog.getActor();
+                label.setText(updateLog(String.valueOf(label.getText()),
+                    GameMaster.getInstance().heroUsesHealthPotion() +
+                        System.lineSeparator() + GameMaster.getInstance().enemyPerformAttack()));
+                disableButtonsIfDeath();
+                //update player health
+                myHeroHP.setText(heroHealth());
+                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+            }
+        });
+        myInventory.addActor(button);
+    }
+    private void initInventBackButton(final TextButton.TextButtonStyle theStyle){
+        final TextButton button = new TextButton("BACK", theStyle);
+        button.setBounds(DungeonAdventure.WIDTH-button.getWidth(), 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                myInventory.setVisible(false);
+                final Label label = (Label)myCombatLog.getActor();
+                label.setText(updateLog(String.valueOf(label.getText()),
+                    "While searching your belongings the monster attacks. \n"
+                        + GameMaster.getInstance().enemyPerformAttack()));
+                disableButtonsIfDeath();
+                //update hero health
+                myHeroHP.setText(heroHealth());
+                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+            }
+        });
+        myInventory.addActor(button);
+    }
+    public void updateInventory(){
+        myHealthPotionLabel.setText(GameMaster.getInstance().getHeroHealthPotions());
+        myKeyLabel.setText(GameMaster.getInstance().getHeroKeys());
     }
 }

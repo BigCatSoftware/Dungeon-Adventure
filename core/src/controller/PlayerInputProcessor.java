@@ -47,64 +47,64 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()+1].isWalkable()){
                     gm.getPlayer().moveCharacterUp();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
+                if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
-                    gm.getPlayer().adjustHealth(40);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearHealthPotion()) {
+                    gm.heroPicksHealthPotion();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
-                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
-                    gm.getPlayer().adjustHealth(-20);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearPoisonPotion()) {
+                    gm.heroTrapDamage(20);
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
                     gm.getPlayer().moveCharacterDown();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
+                if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
-                    gm.getPlayer().adjustHealth(40);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearHealthPotion()) {
+                    gm.heroPicksHealthPotion();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
-                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
-                    gm.getPlayer().adjustHealth(-20);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearPoisonPotion()) {
+                    gm.heroTrapDamage(20);
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.LEFT:
                 if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterLeft();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
+                if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
-                    gm.getPlayer().adjustHealth(40);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearHealthPotion()) {
+                    gm.heroPicksHealthPotion();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
-                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
-                    gm.getPlayer().adjustHealth(-20);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearPoisonPotion()) {
+                    gm.heroTrapDamage(20);
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
                     gm.getPlayer().moveCharacterRight();
                 }
-                if(GameMaster.getInstance().isHeroNearEnemy()){
+                if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
-                    gm.getPlayer().adjustHealth(40);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearHealthPotion()) {
+                    gm.heroPicksHealthPotion();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
-                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
-                    gm.getPlayer().adjustHealth(-20);
-                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                if (gm.isHeroNearPoisonPotion()) {
+                    gm.heroTrapDamage(20);
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.ESCAPE:
@@ -121,12 +121,13 @@ public class PlayerInputProcessor extends InputAdapter {
     }
 
     private void openDoors() {
-        for (int i = GameMaster.getInstance().getPlayerX() - 1; i <= GameMaster.getInstance().getPlayerX() + 1; i++) {
-            for (int j = GameMaster.getInstance().getPlayerY() - 1; j <= GameMaster.getInstance().getPlayerY() + 1; j++) {
-                if (GameMaster.getInstance().getMap()[i][j] == Tile.DOOR) {
-                    GameMaster.getInstance().getMap()[i][j] = Tile.OPEN_DOOR;
-                } else if (GameMaster.getInstance().getMap()[i][j] == Tile.OPEN_DOOR) {
-                    GameMaster.getInstance().getMap()[i][j] = Tile.DOOR;
+        final GameMaster gm = GameMaster.getInstance();
+        for (int i = gm.getPlayerX() - 1; i <= gm.getPlayerX() + 1; i++) {
+            for (int j = gm.getPlayerY() - 1; j <= gm.getPlayerY() + 1; j++) {
+                if (gm.getMap()[i][j] == Tile.DOOR) {
+                    gm.getMap()[i][j] = Tile.OPEN_DOOR;
+                } else if (gm.getMap()[i][j] == Tile.OPEN_DOOR) {
+                    gm.getMap()[i][j] = Tile.DOOR;
                 }
             }
         }

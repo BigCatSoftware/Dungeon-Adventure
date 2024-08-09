@@ -8,12 +8,19 @@ import java.util.Random;
  * @version July 19, 2024.
  */
 abstract public class Hero extends DungeonCharacter {
-
+    private final static int HEALING_POTION_HEAL_AMOUNT = 40;
     /**
      * Represents int chance to block attack and is used in combat.
      */
     private final int myBlockChance;
-
+    /**
+     * Represents int keys inside hero inventory.
+     */
+    private int myKeysInv;
+    /**
+     * Represents int health potions inside hero inventory.
+     */
+    private int myHealthInv;
 
     /**
      * Hero constructor instantiates block chance.
@@ -33,6 +40,8 @@ abstract public class Hero extends DungeonCharacter {
         super(theName, theHealth, theMinDamage, theMaxDamage, theHitChance, theSpeed, theX, theY);
         init(theBlockChance);
         myBlockChance = theBlockChance;
+        myKeysInv = 0;
+        myHealthInv = 0;
     }
     void init(final int theBlockChance){
         if(myBlockChance < 0 || myBlockChance > 100){
@@ -45,6 +54,7 @@ abstract public class Hero extends DungeonCharacter {
      * @return int amount to heal.
      */
     abstract int heal();
+
     /**
      * Upon combat when hero received damage there is a chance to block it, otherwise the
      * damage is applied to their health.
@@ -75,6 +85,45 @@ abstract public class Hero extends DungeonCharacter {
         return  rand.nextInt(RANDOM_FROM_HUNDRED + 1) <= myBlockChance;
     }
 
+    /**
+     * This method will add a key to hero's inventory.
+     */
+    public void addKey(){
+        if(myKeysInv < 4){
+            myKeysInv++;
+        }
+    }
+
+    /**
+     * This method will add health potion to hero's inventory.
+     */
+    public void addHealthPotion(){
+        if(myHealthInv < 999){
+            myHealthInv++;
+        }
+    }
+    public String useHealthPotion(){
+        String result = "There are no potions to use.";
+        if(myHealthInv > 0){
+            result = "[" + getMyName() + "] Used a Health Potion: " + addHealth(HEALING_POTION_HEAL_AMOUNT);
+        }
+        return result;
+    }
+    /**
+     * This method will return the number of keys currently in hero's inventory.
+     * @return int number of keys in hero's inventory
+     */
+    public int getHeroKeys(){
+        return myKeysInv;
+    }
+
+    /**
+     * This method will return the number of health potions currently in hero's inventory.
+     * @return int number of health potions in hero's inventory.
+     */
+    public int getHeroHealthPotions(){
+        return myHealthInv;
+    }
     /**
      * Adds to Dungeon Character toString() hero's block chance.
      * @return string representation of data for this character.

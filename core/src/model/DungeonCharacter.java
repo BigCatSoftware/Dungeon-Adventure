@@ -121,17 +121,13 @@ abstract public class DungeonCharacter implements CharacterActions {
          }
     }
 
-    /**
-     * Update player health with int. Used when player runs into potion tile.
-     */
-    public void adjustHealth(final int theAddend) {
-        if (myCurrentHealth + theAddend > myMaxHealth) {
-            myCurrentHealth = myMaxHealth;
-        } else if (myCurrentHealth + theAddend < 0) {
-            myCurrentHealth = 0;
-        } else {
-            myCurrentHealth += theAddend;
+    public void harmFromTrap(final int theDamage){
+        if(theDamage < 0){
+            throw new IllegalArgumentException("harmFromTrap, incoming damage parameter can't" +
+                " be negative.");
         }
+        myCurrentHealth -= theDamage;
+        checkIsDead();
     }
 
     /**
@@ -154,33 +150,31 @@ abstract public class DungeonCharacter implements CharacterActions {
         return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
             + theIncomingDamage + " damage. ";
     }
-    //TODO: Review Healable interface.
     /**
      * Method used to return value to heal for this character
      * @return int health to heal
      */
     abstract int heal();
-
     /**
-     * Checks if passed value is correct and adds health to current health.
+     * Checks if passed value from characters heal ability is correct and adds health to
+     * current health.
      */
-    String addHealth(){
+    String addHealth(int healthToAdd){
         StringBuilder builder = new StringBuilder();
         int healthBeforeHeal = myCurrentHealth;
-        int amountToHeal = heal();
-        if(amountToHeal < 0){
+        if(healthToAdd < 0){
             throw new IllegalArgumentException("Can't add negative health to this character.");
         }
         if(myCurrentHealth > 0 && myCurrentHealth != myMaxHealth){
-            if(myCurrentHealth + amountToHeal > myMaxHealth){
+            if(myCurrentHealth + healthToAdd > myMaxHealth){
                 myCurrentHealth = myMaxHealth;
             }
             else{
-                myCurrentHealth += amountToHeal;
+                myCurrentHealth += healthToAdd;
             }
 
         }
-        builder.append(" [").append(myName).append("] healed for ").append(amountToHeal).
+        builder.append(" [").append(myName).append("] healed for ").append(healthToAdd).
             append(" <").append(healthBeforeHeal).append(" -> ").append(myCurrentHealth).
             append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
         return builder.toString();

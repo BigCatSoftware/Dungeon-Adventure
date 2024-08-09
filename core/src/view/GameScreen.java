@@ -26,6 +26,7 @@ import model.Thief;
 import model.Tile;
 import model.Warrior;
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 import java.util.ArrayList;
 
@@ -71,8 +72,7 @@ public class GameScreen implements Screen {
     public GameScreen(final DungeonAdventure theGame) {
         myGame = theGame;
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
-        myBackgroundMusic.play();
-        myBackgroundMusic.setLooping(true);
+        mySETTINGS.updateMusic();
         myViewPort = new ScreenViewport();
         myStage = new Stage(myViewPort, myGame.batch);
         myGameTable = new Table();

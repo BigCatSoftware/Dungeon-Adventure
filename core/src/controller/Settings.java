@@ -57,6 +57,7 @@ public class Settings {
      */
     public void toggleSound() {
         myIsSoundOn = !myIsSoundOn;
+        updateMusic();
     }
 
     /**
@@ -82,6 +83,7 @@ public class Settings {
         if (myVolumeLevel < 10) {
             myVolumeLevel++;
         }
+        updateMusic();
     }
 
     /**
@@ -91,6 +93,7 @@ public class Settings {
         if (myVolumeLevel > 0) {
             myVolumeLevel--;
         }
+        updateMusic();
     }
 
     /**
