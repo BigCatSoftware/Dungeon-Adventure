@@ -107,6 +107,14 @@ public final class GameMaster {
         return map[playerY][playerX] == Tile.HEALTH_POTION;
     }
 
+    public boolean isHeroNearPoisonPotion() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerY][playerX] == Tile.POISON_POTION;
+    }
+
     private void populate(){
         Random rand = new Random();
         myEnemies.add(EntityLoader.randomEnemy(1,2));

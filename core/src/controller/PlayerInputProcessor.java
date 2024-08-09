@@ -50,6 +50,14 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(GameMaster.getInstance().isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
+                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
+                    gm.getPlayer().adjustHealth(40);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
+                    gm.getPlayer().adjustHealth(-20);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
@@ -57,6 +65,14 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if(GameMaster.getInstance().isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
+                }
+                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
+                    gm.getPlayer().adjustHealth(40);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
+                    gm.getPlayer().adjustHealth(-20);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.LEFT:
@@ -66,6 +82,14 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(GameMaster.getInstance().isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
+                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
+                    gm.getPlayer().adjustHealth(40);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
+                    gm.getPlayer().adjustHealth(-20);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
@@ -73,9 +97,14 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if(GameMaster.getInstance().isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
-                } else if (GameMaster.getInstance().isHeroNearHealthPotion()) {
-                    int playerHealth = gm.getPlayer().getCurrentHealth();
-                    playerHealth += 20;
+                }
+                if (GameMaster.getInstance().isHeroNearHealthPotion()) {
+                    gm.getPlayer().adjustHealth(40);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (GameMaster.getInstance().isHeroNearPoisonPotion()) {
+                    gm.getPlayer().adjustHealth(-20);
+                    GameMaster.getInstance().getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
             case Input.Keys.ESCAPE:

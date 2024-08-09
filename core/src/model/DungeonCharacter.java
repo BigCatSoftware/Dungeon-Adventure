@@ -122,6 +122,19 @@ abstract public class DungeonCharacter implements CharacterActions {
     }
 
     /**
+     * Update player health with int. Used when player runs into potion tile.
+     */
+    public void adjustHealth(final int theAddend) {
+        if (myCurrentHealth + theAddend > myMaxHealth) {
+            myCurrentHealth = myMaxHealth;
+        } else if (myCurrentHealth + theAddend < 0) {
+            myCurrentHealth = 0;
+        } else {
+            myCurrentHealth += theAddend;
+        }
+    }
+
+    /**
      * Applies damage to health of character.
      * @param theIncomingDamage int value of damage to apply to this character.
      * @return String message description of state.
