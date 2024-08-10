@@ -1,6 +1,8 @@
 package view;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,6 +29,7 @@ import model.Thief;
 import model.Tile;
 import model.Warrior;
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 import java.util.ArrayList;
 
@@ -37,7 +40,6 @@ import java.util.ArrayList;
  */
 public class GameScreen implements Screen {
     private static final int TILE_SIZE = 16;
-    private final OrthographicCamera myCamera;
     private static final int BUTTON_WIDTH = 154;
     private static final int BUTTON_HEIGHT = 54;
     private static final int BUTTON_Y_OFFSET = 10;
@@ -53,17 +55,17 @@ public class GameScreen implements Screen {
     private final Image myPlayerImage;
     private final Texture myWallTexture;
     private final Texture myDoorTexture;
+    private final Texture myOpenDoorTexture;
     private final Texture myFloorTexture;
     private final Texture myKeyTexture;
     private final Texture myExitTexture;
+    private final Texture myHealthPotionTexture;
+    private final Texture myPoisonPotionTexture;
     private final Texture myGremlinTexture;
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
-    private final int SETTINGS_BUTTON_WIDTH = 64;
-    private final int SETTINGS_BUTTON_HEIGHT = 64;
-    private final int SETTINGS_BUTTON_Y = DungeonAdventure.HEIGHT - SETTINGS_BUTTON_HEIGHT;
-    private final int SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
+    private boolean myMessageShown = false;
     //private final DungeonRenderer myDungeonRenderer;
 
     /**
@@ -73,10 +75,8 @@ public class GameScreen implements Screen {
      */
     public GameScreen(final DungeonAdventure theGame) {
         myGame = theGame;
-        myBackgroundMusic.stop();
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
-        myBackgroundMusic.play();
-        myBackgroundMusic.setLooping(true);
+        mySETTINGS.updateMusic();
         myViewPort = new ScreenViewport();
         myStage = new Stage(myViewPort, myGame.batch);
         myGameTable = new Table();
@@ -86,9 +86,12 @@ public class GameScreen implements Screen {
         mySettingsButtonInactive = new Texture("SettingsInactive.png");
         myWallTexture = new Texture("wall.png");
         myDoorTexture = new Texture("door.png");
+        myOpenDoorTexture = new Texture("open_door.png");
         myFloorTexture = new Texture("floor.png");
         myKeyTexture = new Texture("key.png");
         myExitTexture = new Texture("exit.png");
+        myHealthPotionTexture = new Texture("health_potion.png");
+        myPoisonPotionTexture = new Texture("poison_potion.png");
         myGremlinTexture = new Texture("Pixel Gremlin.png");
         mySkeletonTexture = new Texture("Pixel Skeleton.png");
         myOgreTexture = new Texture("Pixel Ogre.png");
@@ -104,8 +107,6 @@ public class GameScreen implements Screen {
         initGameMenuButtons();
         myGameTable.addActor(myGameMenuTable);
         myGameTable.addActor(myPlayerImage);
-        myCamera = new OrthographicCamera();
-        myCamera.setToOrtho(false, DungeonAdventure.WIDTH, DungeonAdventure.HEIGHT);
         //myDungeonRenderer = new DungeonRenderer();
     }
     private Image initPlayerTexture(){
@@ -131,8 +132,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this,
-                SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT, myCamera));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
+        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
     }
 
     /**
@@ -150,56 +150,44 @@ public class GameScreen implements Screen {
         myGame.batch.begin();
         initMap();
         initEntities();
-        settingsButtonDraw();
         myGame.batch.end();
         myStage.act(Gdx.graphics.getDeltaTime());
         myStage.draw();
         //myGame.batch.end();
-    }
-    /**
-     * Draws the settings button.
-     * The button changes appearance based on whether it is hovered over or not.
-     */
-    private void settingsButtonDraw() {
-        int x = SETTINGS_BUTTON_X;
-        if (isHovered(x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
-            myGame.batch.draw(mySettingsButtonActive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
-        } else {
-            myGame.batch.draw(mySettingsButtonInactive, x, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
-        }
-    }
-    /**
-     * Checks if the mouse is hovering over a specified button.
-     *
-     * @param theButtonX the x-coordinate of the button
-     * @param theButtonY the y-coordinate of the button
-     * @param theButtonWidth the width of the button
-     * @param theButtonHeight the height of the button
-     * @return true if the mouse is hovering over the button, false otherwise
-     */
-    private boolean isHovered(final int theButtonX, final int theButtonY, final int theButtonWidth, final int theButtonHeight) {
-        return Gdx.input.getX() < theButtonX + theButtonWidth && Gdx.input.getX() > theButtonX &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() < theButtonY + theButtonHeight &&
-                DungeonAdventure.HEIGHT - Gdx.input.getY() > theButtonY;
     }
     private void initMap(){
         Tile[][] map = GameMaster.getInstance().getMap();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;
-                if (map[i][j] == Tile.WALL) {
-                    texture = myWallTexture;
-                } else if (map[i][j] == Tile.FLOOR) {
-                    texture = myFloorTexture;
-                } else if (map[i][j] == Tile.DOOR) {
-                    texture = myDoorTexture;
-                } else if (map[i][j] == Tile.KEY) {
-                    texture = myKeyTexture;
-                } else if (map[i][j] == Tile.EXIT) {
-                    texture = myExitTexture;
+                switch(map[i][j]){
+                    case WALL:
+                        texture = myWallTexture;
+                        break;
+                    case FLOOR:
+                        texture = myFloorTexture;
+                        break;
+                    case DOOR:
+                        texture = myDoorTexture;
+                        break;
+                    case OPEN_DOOR:
+                        texture = myOpenDoorTexture;
+                        break;
+                    case KEY:
+                        texture = myKeyTexture;
+                        break;
+                    case EXIT:
+                        texture = myExitTexture;
+                        break;
+                    case HEALTH_POTION:
+                        texture = myHealthPotionTexture;
+                        break;
+                    case POISON_POTION:
+                        texture = myPoisonPotionTexture;
+                        break;
                 }
                 if (texture != null) {
-                    myGame.batch.draw(texture, i*TILE_SIZE, j*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
                 else{
                     throw new IllegalStateException("map image is set to null!");
@@ -243,7 +231,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 showMenu();
             }
         });
@@ -255,7 +243,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 myGame.setScreen(new SettingsScreen(myGame, GameScreen.this));
                 myGameMenuTable.setVisible(false);
                 myMenuShown = false;
@@ -270,7 +258,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 dispose();
                 myGame.setScreen(new MainMenuScreen(myGame));
                 //TODO: auto save and go to menu
@@ -282,8 +270,7 @@ public class GameScreen implements Screen {
     public void showMenu(){
         if(myMenuShown){
             myGameMenuTable.setVisible(false);
-            Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this,
-                    SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT, myCamera));
+            Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
             myMenuShown = false;
         }
         else{
@@ -291,6 +278,43 @@ public class GameScreen implements Screen {
             Gdx.input.setInputProcessor(myStage);
             myMenuShown = true;
         }
+    }
+    public void showTrapMessage(final String theMessage){
+        final Table table = MessageScreen.getMessageTable();
+        final InputMultiplexer inMux = new InputMultiplexer();
+        inMux.addProcessor(myStage);
+        inMux.addProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keyCode){
+                if(keyCode == Input.Keys.ENTER){
+                    if(GameMaster.getInstance().getPlayer().getIsDead()){
+                        dispose();
+                        myGame.setScreen(new GameOverScreen(myGame));
+                    }
+                    else{
+                        myGameTable.removeActor(table);
+                        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                    }
+                }
+                return true;
+            }
+        });
+        MessageScreen.setLabelText(theMessage);
+        MessageScreen.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(GameMaster.getInstance().getPlayer().getIsDead()){
+                    dispose();
+                    myGame.setScreen(new GameOverScreen(myGame));
+                }
+                else{
+                    myGameTable.removeActor(table);
+                    Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                }
+            }
+        });
+        myGameTable.addActor(MessageScreen.getMessageTable());
+        Gdx.input.setInputProcessor(inMux);
     }
     /**
      * Called when the screen is resized.

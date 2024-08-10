@@ -7,11 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
-import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
-import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
-
-import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
-import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
  * Represents the screen where players choose their character and other options
@@ -113,9 +108,6 @@ public class DungeonScreen implements Screen {
         LOAD_BUTTON_X = DungeonAdventure.WIDTH / 2 - LOAD_BUTTON_WIDTH / 2;
         SETTINGS_BUTTON_X = DungeonAdventure.WIDTH - SETTINGS_BUTTON_WIDTH;
 
-        myBackgroundMusic.stop();
-        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("DungeonSound.mp3"));
-
     }
 
     /**
@@ -128,7 +120,6 @@ public class DungeonScreen implements Screen {
                 WARRIOR_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT,
                 THIEF_BUTTON_X, PRIESTESS_BUTTON_X, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT,
                 SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)); // Set input processor
-        mySETTINGS.updateMusic();
     }
 
     /**
@@ -141,8 +132,6 @@ public class DungeonScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         myGame.batch.setProjectionMatrix(myCamera.combined);
         myGame.batch.begin();
-
-        mySETTINGS.updateMusic();
 
         int x = DungeonAdventure.WIDTH / 2 - DUNGEON_TITLE_WIDTH / 2;
         myGame.batch.draw(myDungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);

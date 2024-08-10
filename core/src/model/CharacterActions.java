@@ -10,6 +10,7 @@ interface CharacterActions {
     void moveCharacterDown();
     void moveCharacterLeft();
     void moveCharacterRight();
+//    void adjustHealth();
     String receiveDamage(final int theIncomingDamage);
     String attack(final DungeonCharacter theOtherCharacter);
     String getMyName();

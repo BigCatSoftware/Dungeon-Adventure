@@ -9,7 +9,7 @@ import java.util.Random;
  * @version July 23, 2024.
  */
 
-public final class Priestess extends Hero {
+public final class Priestess extends Hero implements Healable{
     //CHARACTER PARAMETER CONSTANTS.
     /**
      * Priestess health constant.
@@ -61,14 +61,14 @@ public final class Priestess extends Hero {
      * @return string message of action.
      */
     public String specialAction(){
-        return addHealth();
+        return addHealth(heal());
     }
 
     /**
      * Method used to return value to heal for this character
      * @return int amount to heal
      */
-    int heal(){
+    public int heal(){
         Random rand = new Random();
         return rand.nextInt(PRIESTESS_SKILL_MIN_HEAL, PRIESTESS_SKILL_MAX_HEAL+1);
     }

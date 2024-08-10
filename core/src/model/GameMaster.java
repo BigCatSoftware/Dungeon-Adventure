@@ -98,6 +98,54 @@ public final class GameMaster {
         }
         return isEnemy;
     }
+
+    public boolean isHeroNearHealthPotion() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.HEALTH_POTION;
+    }
+    public void heroPicksHealthPotion(){
+        myPlayer.addHealthPotion();
+    }
+    public String heroUsesHealthPotion(){
+        return myPlayer.useHealthPotion();
+    }
+    public int getHeroHealthPotions(){
+        return myPlayer.getHeroHealthPotions();
+    }
+    public void heroPicksKey(){
+        myPlayer.addKey();
+    }
+    public int getHeroKeys(){
+        return myPlayer.getHeroKeys();
+    }
+    public boolean isHeroNearPoisonPotion() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.POISON_POTION;
+    }
+    public String heroTrapDamage(final int theDamage){
+        return myPlayer.harmFromTrap(theDamage);
+    }
+    public String getHeroDeathLog(){
+        String message = "[" + myPlayer.getMyName() + "] gave up all hope...";
+        if(myPlayer.getIsDead()){
+            if(myPlayer.getDiedToEnemy()){
+                message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
+                    " had died while fighting [" + myCurrentEnemy.getMyName() + "] - "
+                    + myCurrentEnemy.getClass().getSimpleName();
+            }
+            else if(myPlayer.getDiedToTrap()){
+                message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
+                    " had died while exploring the dungeon to <Poison>.";
+            }
+        }
+        return message;
+    }
     private void populate(){
         Random rand = new Random();
         myEnemies.add(EntityLoader.randomEnemy(1,2));
@@ -132,5 +180,48 @@ public final class GameMaster {
      */
     public Tile[][] getMap(){
         return myMap;
+    }
+
+    public String playerPerformAttack(){
+        if(myCurrentEnemy == null){
+            throw new IllegalStateException("GameMaster issued player attack enemy but the enemy is null");
+        }
+        if(myPlayer == null){
+            throw new IllegalStateException("GameMaster issued player attack enemy but the player is null");
+        }
+        return myPlayer.attack(myCurrentEnemy);
+    }
+    public String enemyPerformAttack(){
+        if(myCurrentEnemy == null){
+            throw new IllegalStateException("GameMaster issued enemy <attack> player but the enemy is null");
+        }
+        if(myPlayer == null){
+            throw new IllegalStateException("GameMaster issued enemy <attack> player but the player is null");
+        }
+        return myCurrentEnemy.attack(myPlayer);
+    }
+    public String specialActionPerform(){
+        if(myCurrentEnemy == null){
+            throw new IllegalStateException("GameMaster issued player <special action> but the enemy is null");
+        }
+        if(myPlayer == null){
+            throw new IllegalStateException("GameMaster issued player <special action> but the player is null");
+        }
+        final String result;
+        if(myPlayer instanceof Warrior){
+            result = ((Warrior) myPlayer).specialAction(myCurrentEnemy);
+        }
+        else if(myPlayer instanceof Priestess){
+            result = ((Priestess) myPlayer).specialAction();
+        }
+        else if(myPlayer instanceof Thief){
+            result = ((Thief) myPlayer).specialAction(myCurrentEnemy);
+        }
+        else {
+            throw new IllegalStateException("GameMaster player is not an instance " +
+                "of concrete implementation of Hero abstract class."
+                + myPlayer.getClass().getSimpleName());
+        }
+        return result;
     }
 }

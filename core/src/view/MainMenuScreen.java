@@ -65,7 +65,7 @@ public class MainMenuScreen implements Screen {
         myDungeonAdventureTitle = new Texture("DungeonAdventureTitle.png");
 
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("WindChimes.ogg"));
-
+        mySETTINGS.updateMusic();
 
         EXIT_BUTTON_X = DungeonAdventure.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
         PLAY_BUTTON_X = DungeonAdventure.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
@@ -98,8 +98,6 @@ public class MainMenuScreen implements Screen {
 
         int x = DungeonAdventure.WIDTH / 2 - DUNGEON_TITLE_WIDTH / 2;
         myGame.batch.draw(myDungeonAdventureTitle, x, TITLE_Y, DUNGEON_TITLE_WIDTH, DUNGEON_TITLE_HEIGHT);
-
-        mySETTINGS.updateMusic();
 
         exitButtonDraw();
         playButtonDraw();
@@ -211,7 +209,6 @@ public class MainMenuScreen implements Screen {
         mySettingsButtonActive.dispose();
         mySettingsButtonInactive.dispose();
         myDungeonAdventureTitle.dispose();
-        myBackgroundMusic.dispose();
     }
 }
 

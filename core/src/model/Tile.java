@@ -35,8 +35,17 @@ public enum Tile {
     /**
      * Exit tile, represented by the 'E' symbol.
      */
-    EXIT('E', true);
-    ;
+    EXIT('E', true),
+
+    /**
+     * Health Potion tile, represented by 'H' symbol.
+     */
+    HEALTH_POTION('H', true),
+
+    /**
+     * Poison Potion tile, represented by 'P' symbol.
+     */
+    POISON_POTION('P', true);
 
     private final char mySymbol;
     private final boolean myWalkable;

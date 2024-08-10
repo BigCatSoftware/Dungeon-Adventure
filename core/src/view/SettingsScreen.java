@@ -86,7 +86,6 @@ public SettingsScreen(final DungeonAdventure theGame, final Screen previousScree
     myPlusButton = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) PLUSMINUS_BUTTON_WIDTH / 2) + 160, 350, PLUSMINUS_BUTTON_WIDTH, PLUSMINUS_BUTTON_HEIGHT);
     myVolumeBar = new Rectangle((float) DungeonAdventure.WIDTH / 2 - ((float) VOLUME_WIDTH / 2) + 128, 350, VOLUME_WIDTH, VOLUME_HEIGHT);
 }
-
 /**
  * Called when the screen is shown.
  * Sets the input processor to handle settings inputs.

@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 23, 2024.
  */
-abstract public class Enemy extends DungeonCharacter {
+abstract public class Enemy extends DungeonCharacter implements Healable{
     /**
      * Represents int chance to heal and is used in combat
      */
@@ -72,7 +72,7 @@ abstract public class Enemy extends DungeonCharacter {
             message = super.receiveDamage(incomingDamage);
             if(!getIsDead()){
                 int healthBeforeHeal = getCurrentHealth();
-                addHealth();
+                addHealth(heal());
                 message += "-> and healed for " + (getCurrentHealth() - healthBeforeHeal)+
                     " HP: " + getCurrentHealth() + "/" + getMaxHealth();
             }
@@ -88,7 +88,7 @@ abstract public class Enemy extends DungeonCharacter {
      * capability.
      * @return int heal amount
      */
-    int heal(){
+    public int heal(){
         Random rand = new Random();
         return rand.nextInt(myMinHeal, myMaxHeal+1);
     }
