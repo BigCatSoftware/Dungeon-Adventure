@@ -31,9 +31,10 @@ import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 import java.util.ArrayList;
 
 /**
- * Represents the main game screen where the dungeon is rendered and the player interacts with the game.
- * @author alvarovaldez-duran
- * @version 1.0
+ * Represents the main game screen where the dungeon is rendered and the
+ * player interacts with the game.
+ * @author alvarovaldez-duran, Tiger Schueler
+ * @version 10AUG24
  */
 public class GameScreen implements Screen {
     private static final int TILE_SIZE = 16;
@@ -58,6 +59,8 @@ public class GameScreen implements Screen {
     private final Texture myExitTexture;
     private final Texture myHealthPotionTexture;
     private final Texture myPoisonPotionTexture;
+    private final Texture myBombTexture;
+    private final Texture myPitTrapTexture;
     private final Texture myGremlinTexture;
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
@@ -88,6 +91,8 @@ public class GameScreen implements Screen {
         myExitTexture = new Texture("exit.png");
         myHealthPotionTexture = new Texture("health_potion.png");
         myPoisonPotionTexture = new Texture("poison_potion.png");
+        myBombTexture = new Texture("bomb.png");
+        myPitTrapTexture = new Texture("pittrap.png");
         myGremlinTexture = new Texture("Pixel Gremlin.png");
         mySkeletonTexture = new Texture("Pixel Skeleton.png");
         myOgreTexture = new Texture("Pixel Ogre.png");
@@ -105,6 +110,13 @@ public class GameScreen implements Screen {
         myGameTable.addActor(myPlayerImage);
         //myDungeonRenderer = new DungeonRenderer();
     }
+
+    /**
+     * Initializes the texture for the player character based on the player's class.
+     *
+     * @return The initialized player character image.
+     * @throws IllegalArgumentException if the player's class cannot be determined.
+     */
     private Image initPlayerTexture(){
         Texture playerTexture = null;
         if(GameMaster.getInstance().getPlayer() instanceof Warrior){
@@ -151,6 +163,11 @@ public class GameScreen implements Screen {
         myStage.draw();
         //myGame.batch.end();
     }
+
+    /**
+     * Initializes and draws the dungeon map.
+     * Throws an IllegalStateException if a map image is set to null.
+     */
     private void initMap(){
         Tile[][] map = GameMaster.getInstance().getMap();
         for (int i = 0; i < map.length; i++) {
@@ -181,6 +198,12 @@ public class GameScreen implements Screen {
                     case POISON_POTION:
                         texture = myPoisonPotionTexture;
                         break;
+                    case BOMB:
+                        texture = myBombTexture;
+                        break;
+                    case PIT_TRAP:
+                        texture = myPitTrapTexture;
+                        break;
                 }
                 if (texture != null) {
                     myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -191,6 +214,11 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    /**
+     * Initializes and draws the entities (enemies) on the dungeon map.
+     * Throws an IllegalStateException if an unknown enemy type is encountered.
+     */
     private void initEntities(){
         final ArrayList<Enemy> list = GameMaster.getInstance().getAllEnemies();
         for(Enemy e : list){
@@ -208,9 +236,18 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    /**
+     * Sets the position of the player image on the screen.
+     * Updates the player's position based on the player's coordinates.
+     */
     public void setPlayerImagePosition(){
         myPlayerImage.setPosition(GameMaster.getInstance().getPlayerX()*TILE_SIZE, GameMaster.getInstance().getPlayerY()*TILE_SIZE);
     }
+
+    /**
+     * Initializes the buttons for the game menu.
+     */
     private void initGameMenuButtons(){
         final TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = myFont;
@@ -221,6 +258,12 @@ public class GameScreen implements Screen {
         initSettingsButton(style);
         initMenuButton(style);
     }
+
+    /**
+     * Initializes the "Resume" button in the game menu.
+     *
+     * @param theStyle The style to apply to the button.
+     */
     private void initResumeButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("RESUME", theStyle);
         button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY()*2 - (2 * BUTTON_HEIGHT)-(BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -233,6 +276,12 @@ public class GameScreen implements Screen {
         });
         myGameMenuTable.addActor(button);
     }
+
+    /**
+     * Initializes the "Settings" button in the game menu.
+     *
+     * @param theStyle The style to apply to the button.
+     */
     private void initSettingsButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("SETTINGS", theStyle);
         button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY()*2 - (3 * BUTTON_HEIGHT)-(2* BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -247,6 +296,12 @@ public class GameScreen implements Screen {
         });
         myGameMenuTable.addActor(button);
     }
+
+    /**
+     * Initializes the "Exit to Menu" button in the game menu.
+     *
+     * @param theStyle The style to apply to the button.
+     */
     private void initMenuButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("EXIT TO MENU", theStyle);
         button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY()*2 - (4 * BUTTON_HEIGHT) - (3 * BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -263,6 +318,11 @@ public class GameScreen implements Screen {
         });
         myGameMenuTable.addActor(button);
     }
+
+    /**
+     * Shows or hides the game menu.
+     * Toggles the visibility of the game menu and updates the input processor accordingly.
+     */
     public void showMenu(){
         if(myMenuShown){
             myGameMenuTable.setVisible(false);
@@ -275,6 +335,7 @@ public class GameScreen implements Screen {
             myMenuShown = true;
         }
     }
+
     /**
      * Called when the screen is resized.
      *

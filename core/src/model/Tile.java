@@ -45,7 +45,17 @@ public enum Tile {
     /**
      * Poison Potion tile, represented by 'P' symbol.
      */
-    POISON_POTION('P', true);
+    POISON_POTION('P', true),
+
+    /**
+     * Pit Trap tile, represented by 'T' symbol.
+     */
+    PIT_TRAP('P', true),
+
+    /**
+     * Bomb tile, represented by the 'B' symbol.
+     */
+    BOMB('B', true);
 
     private final char mySymbol;
     private final boolean myWalkable;
