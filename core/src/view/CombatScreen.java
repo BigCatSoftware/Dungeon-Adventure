@@ -528,6 +528,7 @@ public final class CombatScreen extends ScreenAdapter {
         });
         return log;
     }
+  
     private Image initHealthIcon(){
         Image healthImage = new Image(new TextureRegionDrawable(new Texture("HealthPotionIcon.png")));
         healthImage.setPosition(INVENTORY_WIDTH/3 - healthImage.getWidth()/2, INVENTORY_HEIGHT/2);

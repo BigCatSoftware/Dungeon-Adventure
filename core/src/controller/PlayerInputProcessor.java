@@ -5,13 +5,10 @@ import model.GameMaster;
 import model.Tile;
 import view.CombatScreen;
 import view.GameScreen;
-import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.dungeonadventure.game.DungeonAdventure;
-
-import static com.dungeonadventure.game.DungeonAdventure.*;
+import view.SettingsScreen;
 
 /**
  * Handles user input for player actions and settings navigation in the game.
@@ -125,7 +122,6 @@ public class PlayerInputProcessor extends InputAdapter {
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
     }
-
     private void openDoors() {
         final GameMaster gm = GameMaster.getInstance();
         for (int i = gm.getPlayerX() - 1; i <= gm.getPlayerX() + 1; i++) {
@@ -139,5 +135,6 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
             }
         }
+
     }
 }
