@@ -1,5 +1,6 @@
 package controller;
 
+import com.badlogic.gdx.Gdx;
 import model.GameMaster;
 import model.Tile;
 import view.CombatScreen;
@@ -52,10 +53,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
@@ -68,10 +70,12 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
@@ -84,10 +88,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
@@ -100,10 +105,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
@@ -126,8 +132,10 @@ public class PlayerInputProcessor extends InputAdapter {
             for (int j = gm.getPlayerY() - 1; j <= gm.getPlayerY() + 1; j++) {
                 if (gm.getMap()[i][j] == Tile.DOOR) {
                     gm.getMap()[i][j] = Tile.OPEN_DOOR;
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Door Creak.ogg")));
                 } else if (gm.getMap()[i][j] == Tile.OPEN_DOOR) {
                     gm.getMap()[i][j] = Tile.DOOR;
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Door Creak2.ogg")));
                 }
             }
         }

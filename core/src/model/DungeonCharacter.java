@@ -1,6 +1,10 @@
 package model;
 
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
+
 import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
 import model.Position;
 /**
  * Abstract dungeon character class defines variety of entities that will inhabit the dungeon.
@@ -53,6 +57,14 @@ abstract public class DungeonCharacter implements CharacterActions {
      */
     private final Position myPosition;
     /**
+     * Type of death when player dies to enemy.
+     */
+    private boolean myDiedToEntity;
+    /**
+     * Type of death when player dies to trap.
+     */
+    private boolean myDiedToTrap;
+    /**
      * Initializes values upon creation of new Dungeon Character.
      */
      DungeonCharacter(final String theName, final int theHealth, final int theMinDamage,
@@ -68,6 +80,8 @@ abstract public class DungeonCharacter implements CharacterActions {
          mySpeed = theSpeed;
          myPosition = new Position(theX, theY);
          myIsDead = false;
+         myDiedToEntity = false;
+         myDiedToTrap = false;
      }
      private void init(final int theHealth, final int theMinDamage, final int theMaxDamage,
                final int theHitChance, final int theSpeed){
@@ -121,13 +135,34 @@ abstract public class DungeonCharacter implements CharacterActions {
          }
     }
 
-    public void harmFromTrap(final int theDamage){
+    /**
+     * Takes damage from trap and applies it to character.
+     * @param theDamage damage to apply
+     * @return string message
+     */
+    public String harmFromTrap(final int theDamage){
+        String result;
         if(theDamage < 0){
             throw new IllegalArgumentException("harmFromTrap, incoming damage parameter can't" +
                 " be negative.");
         }
-        myCurrentHealth -= theDamage;
-        checkIsDead();
+        if(theDamage == 0){
+            result = "[" + getMyName() + "] stepped on a trap but avoided damage";
+        }
+        else{
+            final int healthBeforeTrap = myCurrentHealth;
+            myCurrentHealth -= theDamage;
+            mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Hit.ogg")));
+            checkIsDead();
+            result = "[" + getMyName() + "] stepped on a trap and received " + theDamage + " damage " +
+                " <" + healthBeforeTrap + " -> " + myCurrentHealth + "> HP:" + myCurrentHealth
+                + "/" + myMaxHealth;
+            if(getIsDead()){
+                result += "\n[" + getMyName() + "] dies to trap damage. ";
+                myDiedToTrap = true;
+            }
+        }
+        return result;
     }
 
     /**
@@ -141,14 +176,33 @@ abstract public class DungeonCharacter implements CharacterActions {
             throw new IllegalArgumentException("receiveDamage, incoming damage parameter can't" +
                 "be negative.");
         }
+        String result;
         myCurrentHealth -= theIncomingDamage;
+        mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Hit.ogg")));
         checkIsDead();
-        if(myIsDead){
-            return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
+        if(getIsDead()){
+            result = "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
                 + theIncomingDamage + " damage and perished from their wounds.";
+            myDiedToEntity = true;
         }
-        return "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
+        result = "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
             + theIncomingDamage + " damage. ";
+        return result;
+    }
+    /**
+     * Returns cause and type of death.
+     * @return boolean if character died to enemy.
+     */
+    public boolean getDiedToEnemy(){
+        return myDiedToEntity;
+    }
+
+    /**
+     * Returns cause and type of death.
+     * @return boolean if character died to trap.
+     */
+    public boolean getDiedToTrap(){
+        return myDiedToTrap;
     }
     /**
      * Method used to return value to heal for this character
@@ -186,6 +240,7 @@ abstract public class DungeonCharacter implements CharacterActions {
         if(myCurrentHealth <= 0){
             myCurrentHealth = 0;
             myIsDead = true;
+            mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Fall.ogg")));
         }
     }
 
@@ -209,6 +264,7 @@ abstract public class DungeonCharacter implements CharacterActions {
         }
         else{
             actionDescBuild.append("[").append(getMyName()).append("] had missed.");
+            mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Miss.ogg")));
         }
         return actionDescBuild.toString();
     }

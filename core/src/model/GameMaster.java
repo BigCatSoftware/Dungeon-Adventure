@@ -128,8 +128,23 @@ public final class GameMaster {
         final int playerX = gm.getPlayerX();
         return map[playerX][playerY] == Tile.POISON_POTION;
     }
-    public void heroTrapDamage(final int theDamage){
-        myPlayer.harmFromTrap(theDamage);
+    public String heroTrapDamage(final int theDamage){
+        return myPlayer.harmFromTrap(theDamage);
+    }
+    public String getHeroDeathLog(){
+        String message = "[" + myPlayer.getMyName() + "] gave up all hope...";
+        if(myPlayer.getIsDead()){
+            if(myPlayer.getDiedToEnemy()){
+                message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
+                    " had died while fighting [" + myCurrentEnemy.getMyName() + "] - "
+                    + myCurrentEnemy.getClass().getSimpleName();
+            }
+            else if(myPlayer.getDiedToTrap()){
+                message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
+                    " had died while exploring the dungeon to <Poison>.";
+            }
+        }
+        return message;
     }
     private void populate(){
         Random rand = new Random();

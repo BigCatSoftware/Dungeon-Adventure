@@ -1,5 +1,8 @@
 package view;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -62,6 +65,7 @@ public class GameScreen implements Screen {
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
+    private boolean myMessageShown = false;
     //private final DungeonRenderer myDungeonRenderer;
 
     /**
@@ -227,7 +231,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 showMenu();
             }
         });
@@ -239,7 +243,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 myGame.setScreen(new SettingsScreen(myGame, GameScreen.this));
                 myGameMenuTable.setVisible(false);
                 myMenuShown = false;
@@ -254,7 +258,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")).play();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 dispose();
                 myGame.setScreen(new MainMenuScreen(myGame));
                 //TODO: auto save and go to menu
@@ -274,6 +278,43 @@ public class GameScreen implements Screen {
             Gdx.input.setInputProcessor(myStage);
             myMenuShown = true;
         }
+    }
+    public void showTrapMessage(final String theMessage){
+        final Table table = MessageScreen.getMessageTable();
+        final InputMultiplexer inMux = new InputMultiplexer();
+        inMux.addProcessor(myStage);
+        inMux.addProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keyCode){
+                if(keyCode == Input.Keys.ENTER){
+                    if(GameMaster.getInstance().getPlayer().getIsDead()){
+                        dispose();
+                        myGame.setScreen(new GameOverScreen(myGame));
+                    }
+                    else{
+                        myGameTable.removeActor(table);
+                        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                    }
+                }
+                return true;
+            }
+        });
+        MessageScreen.setLabelText(theMessage);
+        MessageScreen.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(GameMaster.getInstance().getPlayer().getIsDead()){
+                    dispose();
+                    myGame.setScreen(new GameOverScreen(myGame));
+                }
+                else{
+                    myGameTable.removeActor(table);
+                    Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                }
+            }
+        });
+        myGameTable.addActor(MessageScreen.getMessageTable());
+        Gdx.input.setInputProcessor(inMux);
     }
     /**
      * Called when the screen is resized.
