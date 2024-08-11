@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 23, 2024.
  */
-abstract public class Enemy extends DungeonCharacter implements Healable{
+public class Enemy extends DungeonCharacter implements Healable{
     /**
      * Represents int chance to heal and is used in combat
      */
@@ -58,6 +58,12 @@ abstract public class Enemy extends DungeonCharacter implements Healable{
         if(theHealChance < 0 || theHealChance > 100 || theMinHeal <= 0 || theMaxHeal <= 0){
             throw new IllegalArgumentException("Can't initialize illegal values");
         }
+    }
+    public int getMyMinHeal() {
+        return myMinHeal;
+    }
+    public int getMyMaxHeal() {
+        return myMaxHeal;
     }
     /**
      * Upon combat when enemy received damage there is a chance to heal, otherwise the

@@ -10,6 +10,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.dungeonadventure.game.DungeonAdventure;
 import view.SettingsScreen;
 
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
+
 /**
  * Handles user input for player actions and settings navigation in the game.
  * @author alvarovaldez-duran

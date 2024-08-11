@@ -55,7 +55,7 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * Wrapper for x y location and character movement.
      */
-    private final Position myPosition;
+    private Position myPosition;
     /**
      * Type of death when player dies to enemy.
      */
@@ -343,13 +343,15 @@ abstract public class DungeonCharacter implements CharacterActions {
     public boolean getIsDead() {
         return myIsDead;
     }
-
     /**
      * Returns character's position.
      * @return Position object unique to this character.
      */
     public Position getPosition(){
         return myPosition;
+    }
+    public void setMyPosition(final Position thePosition) {
+        myPosition = thePosition;
     }
     /**
      * Converts data about character to string.

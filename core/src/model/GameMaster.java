@@ -1,9 +1,12 @@
 package model;
 
+import com.dungeonadventure.database.DatabaseManager;
+import com.dungeonadventure.database.GameData;
+
 import static model.DungeonCharacter.NEW_LINE;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,6 +35,8 @@ public final class GameMaster {
     private Enemy myCurrentEnemy;
     //methods
     private boolean myHeroSet;
+    private final DatabaseManager dbManager; // DatabaseManager instance
+
     /**
      * Create GameMaster that will drive the main game logic.
      */
@@ -42,6 +47,7 @@ public final class GameMaster {
         myPlayer = null;
         myHeroSet = false;
         myEnemies = new ArrayList<>();
+        dbManager = new DatabaseManager();
         populate();
         System.out.println(getEnemyPositionsToString());
     }
@@ -223,5 +229,38 @@ public final class GameMaster {
                 + myPlayer.getClass().getSimpleName());
         }
         return result;
+    }
+
+    public void saveGame() {
+        int playerX = myPlayer.getPosition().getMyX();
+        int playerY = myPlayer.getPosition().getMyY();
+        //String inventory = myPlayer.getInventoryAsString(); // Implement this method
+        List<Enemy> enemiesData = new ArrayList<>();
+
+        for (Enemy enemy : myEnemies) {
+            enemiesData.add(new Enemy(enemy.getMyName(), enemy.getCurrentHealth(), enemy.getMinDamage(),
+                    enemy.getMaxDamage(), enemy.getMyHealChance(), enemy.getHitChance(),
+                    enemy.getSpeed(), enemy.getMyMinHeal(), enemy.getMyMaxHeal(), enemy.getPosition().getMyX(),
+                    enemy.getPosition().getMyY()));
+        }
+
+        dbManager.saveGame(playerX, playerY, enemiesData);
+    }
+
+    public void loadGame() {
+        GameData gameData = dbManager.loadGame();
+        if (gameData != null) {
+            Position inPosition = new Position(gameData.getPlayerX(), gameData.getPlayerY());
+            myPlayer.setMyPosition(inPosition);
+            //myPlayer.loadInventoryFromString(gameData.getInventory()); // Implement this method
+            myEnemies.clear(); // Clear current enemies before loading
+            for (Enemy enemyData : gameData.getEnemies()) {
+                Enemy enemy = new Enemy(enemyData.getMyName(), enemyData.getCurrentHealth(), enemyData.getMinDamage(),
+                        enemyData.getMaxDamage(), enemyData.getMyHealChance(), enemyData.getHitChance(),
+                        enemyData.getSpeed(), enemyData.getMyMinHeal(), enemyData.getMyMaxHeal(), enemyData.getPosition().getMyX(),
+                        enemyData.getPosition().getMyY());
+                myEnemies.add(enemy);
+            }
+        }
     }
 }

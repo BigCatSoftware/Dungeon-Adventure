@@ -4,6 +4,7 @@ import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 import com.badlogic.gdx.Gdx;
 
+import java.io.Serializable;
 import java.util.Random;
 /**
  * Class that defines Hero type of character that is different in its ability to be playable
@@ -11,7 +12,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 19, 2024.
  */
-abstract public class Hero extends DungeonCharacter {
+abstract public class Hero extends DungeonCharacter implements Serializable {
     private final static int HEALING_POTION_HEAL_AMOUNT = 40;
     /**
      * Represents int chance to block attack and is used in combat.

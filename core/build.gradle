@@ -1,9 +1,31 @@
+apply plugin: "java-library"
+
+// Set the Java source compatibility
 sourceCompatibility = 1.8
+
 dependencies {
+    // LibGDX core library
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+    // JUnit for testing
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
+    // SQLite JDBC driver (updated version)
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.46.0.1'
+
 }
+
+// Set encoding for source files
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+// Specify the source directory for main sources
+sourceSets.main.java.srcDirs = ["src/"]
 
+// Set the Eclipse project name
 eclipse.project.name = appName + "-core"
+
+// Enable JUnit 5 platform for tests
+test {
+    useJUnitPlatform()
+}
+
