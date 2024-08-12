@@ -119,9 +119,13 @@ public class PlayerInputProcessor extends InputAdapter {
             case Input.Keys.E:
                 openDoors();
                 break;
+            case Input.Keys.F10:
+                gm.toggleCheats();
+                break;
             default:
                 return false; // Indicates that the key event was not handled
         }
+        gm.updateMapFOW();
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
     }

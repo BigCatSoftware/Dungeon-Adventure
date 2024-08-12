@@ -14,6 +14,8 @@ public class Dungeon {
 
     private final int MAP_SIZE = 50;
     private final Tile[][] MAP;
+    private final boolean[][] myMapFOW;
+    private final boolean[][] myMapExploredFOW;
     private static final int MIN_ROOM_SIZE = 10;
     private final Node ROOT;
     //    private final List<Node> rooms;
@@ -23,6 +25,8 @@ public class Dungeon {
 
     public Dungeon() {
         MAP = new Tile[MAP_SIZE][MAP_SIZE];
+        myMapFOW = new boolean[MAP_SIZE][MAP_SIZE];
+        myMapExploredFOW = new boolean[MAP_SIZE][MAP_SIZE];
         ROOT = new Node(1, 1, MAP_SIZE - 1, MAP_SIZE - 1);
 //        rooms = new ArrayList<>();
         myRoomList = new ArrayList<>();
@@ -271,7 +275,41 @@ public class Dungeon {
             }
         }
     }
-
+    void cheatMapVis(final boolean theIsCheat){
+        for(int i = 0; i < myMapFOW.length; i++){
+            for(int j = 0; j < myMapFOW[i].length; j++){
+                myMapFOW[i][j] = theIsCheat;
+            }
+        }
+    }
+    void updateFOW(final int theX, final int theY, final int theLOS, final boolean theIsCheats){
+        if(!theIsCheats){
+            final int sight = theLOS + 1;
+            for(int i = theX - sight; i <= theX + sight; i++){
+                for(int j = theY - sight; j <= theY + sight; j++){
+                    if(i == theX - sight || i == theX + sight || j == theY - sight || j == theY + sight){
+                        if(i >= 0 && i < MAP_SIZE && j >= 0 && j < MAP_SIZE){
+                            if(myMapFOW[i][j]){
+                                myMapFOW[i][j] = false;
+                                myMapExploredFOW[i][j] = true;
+                            }
+                        }
+                    }
+                    else{
+                        if(i >= 0 && i < MAP_SIZE && j >= 0 && j < MAP_SIZE){
+                            myMapFOW[i][j] = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    boolean[][] getMapFOW(){
+        return myMapFOW;
+    }
+    boolean[][] getMapExploredFOW(){
+        return myMapExploredFOW;
+    }
     /**
      * Prints the dungeon map to the console.
      */

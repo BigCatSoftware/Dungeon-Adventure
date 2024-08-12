@@ -26,11 +26,8 @@ import com.dungeonadventure.game.DungeonAdventure;
 import model.DungeonCharacter;
 import model.Enemy;
 import model.GameMaster;
-import model.Gremlin;
 import model.Hero;
-import model.Ogre;
 import model.Priestess;
-import model.Skeleton;
 import model.Thief;
 import model.Warrior;
 
@@ -249,15 +246,15 @@ public final class CombatScreen extends ScreenAdapter {
     private Image initEnemyIcon(){
         final Texture texture;
         final Image image;
-        if(GameMaster.getInstance().getEnemy() instanceof Gremlin){
+        if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.GREMLIN){
             texture = new Texture("GremlinCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/GremlinApproaching.ogg")));
         }
-        else if(GameMaster.getInstance().getEnemy() instanceof Skeleton){
+        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.SKELETON){
             texture = new Texture("SkeletonCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/SkeletonApproaching.ogg")));
         }
-        else if(GameMaster.getInstance().getEnemy() instanceof Ogre){
+        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.OGRE){
             texture = new Texture("OgreCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/OgreApproaching.ogg")));
         }

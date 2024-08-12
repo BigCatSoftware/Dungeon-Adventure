@@ -1,6 +1,7 @@
 package com.dungeonadventure.game;
 
 import com.badlogic.gdx.audio.Music;
+import com.dungeonadventure.database.SQLiteConnections;
 import controller.Settings;
 import view.MainMenuScreen;
 import com.badlogic.gdx.Game;
@@ -64,6 +65,7 @@ public class DungeonAdventure extends Game {
 		//databaseHelper = new DatabaseHelper();
 
 		mySETTINGS = new Settings();
+		SQLiteConnections.establishConnection();
 		this.setScreen(new MainMenuScreen(this));
 	}
 

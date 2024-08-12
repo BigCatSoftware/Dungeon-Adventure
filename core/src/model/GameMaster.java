@@ -32,6 +32,7 @@ public final class GameMaster {
     private Enemy myCurrentEnemy;
     //methods
     private boolean myHeroSet;
+    private boolean myIsCheats;
     /**
      * Create GameMaster that will drive the main game logic.
      */
@@ -44,6 +45,7 @@ public final class GameMaster {
         myEnemies = new ArrayList<>();
         populate();
         System.out.println(getEnemyPositionsToString());
+        myIsCheats = false;
     }
     public static synchronized GameMaster getInstance(){
         return myInstance;
@@ -86,6 +88,9 @@ public final class GameMaster {
                     toString()).append(NEW_LINE);
         }
         return sb.toString();
+    }
+    public Enemy.Type getEnemyType(final Enemy theEnemy){
+        return theEnemy.getType();
     }
     public boolean isHeroNearEnemy(){
         boolean isEnemy = false;
@@ -137,7 +142,7 @@ public final class GameMaster {
             if(myPlayer.getDiedToEnemy()){
                 message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
                     " had died while fighting [" + myCurrentEnemy.getMyName() + "] - "
-                    + myCurrentEnemy.getClass().getSimpleName();
+                    + myCurrentEnemy.getType().toString();
             }
             else if(myPlayer.getDiedToTrap()){
                 message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
@@ -172,6 +177,25 @@ public final class GameMaster {
         myEnemies = new ArrayList<>();
         populate();
         System.out.println(getEnemyPositionsToString());
+    }
+    public void updateMapFOW(){
+        myDungeon.updateFOW(getPlayerX(), getPlayerY(), 3, myIsCheats);
+    }
+    public boolean[][] getMapFOW(){
+        return myDungeon.getMapFOW();
+    }
+    public boolean[][] getMapExploredFOW(){
+        return myDungeon.getMapExploredFOW();
+    }
+    public void toggleCheats(){
+        if(myIsCheats){
+            myIsCheats = false;
+            myDungeon.cheatMapVis(false);
+        }
+        else{
+            myIsCheats = true;
+            myDungeon.cheatMapVis(true);
+        }
     }
     /**
      * Returns Tile[][] grid of cells that define the game grid and store tile, position,
