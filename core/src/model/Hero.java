@@ -132,7 +132,7 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     public String useBomb() {
         String result = "There are no bombs to use.";
         if (myBombInv > 0) {
-            result = "[" + getMyName() + "] Used a Bomb.";
+            result = "[" + getMyName() + "] Used a Bomb." + bombDamage();
             myBombInv--;
         }
         return result;

@@ -235,6 +235,29 @@ abstract public class DungeonCharacter implements CharacterActions {
             append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
         return builder.toString();
     }
+
+    /**
+     * Checks if passed value from characters heal ability is correct and adds health to
+     * current health.
+     */
+    String bombDamage(){
+        final int bombDamage = 40;
+        StringBuilder builder = new StringBuilder();
+        int healthBeforeDamage = myCurrentHealth;
+        if(healthBeforeDamage > 0){
+            if(myCurrentHealth - bombDamage > 0){
+                myCurrentHealth -= bombDamage;
+            }
+            else{
+                myCurrentHealth = 0;
+            }
+
+        }
+        builder.append(" [").append(myName).append("] got hit with bomb shrapnel for ").append(bombDamage).
+                append(" <").append(healthBeforeDamage).append(" -> ").append(myCurrentHealth).
+                append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
+        return builder.toString();
+    }
     /**
      * Checks current health. If health is less or equal zero the character is dead.
      */
