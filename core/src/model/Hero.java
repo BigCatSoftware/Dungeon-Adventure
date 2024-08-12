@@ -129,6 +129,14 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         }
         return result;
     }
+    public String useBomb() {
+        String result = "There are no bombs to use.";
+        if (myBombInv > 0) {
+            result = "[" + getMyName() + "] Used a Bomb.";
+            myBombInv--;
+        }
+        return result;
+    }
     /**
      * This method will return the number of keys currently in hero's inventory.
      * @return int number of keys in hero's inventory
@@ -160,3 +168,4 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         return stringBuilder.toString();
     }
 }
+

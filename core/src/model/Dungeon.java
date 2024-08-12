@@ -376,7 +376,6 @@ public class Dungeon implements Serializable {
      * Regenerates the dungeon if the total number of rooms is less than 15.
      */
     private void generateDungeon() {
-//        rooms.clear();
         myRoomList.clear();
         initializeRoot();
         initializeMap();

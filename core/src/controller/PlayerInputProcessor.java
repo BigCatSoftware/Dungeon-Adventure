@@ -10,6 +10,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.dungeonadventure.game.DungeonAdventure;
 import view.SettingsScreen;
 
+import java.util.Random;
+
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -56,7 +58,9 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    final Random rand = new Random();
+                    final int damage = rand.nextInt(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(damage));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -66,6 +70,9 @@ public class PlayerInputProcessor extends InputAdapter {
                 if (gm.isHeroNearBomb()) {
                     gm.heroPicksBomb();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearPitTrap()) {
+                    fallenInTrap(gm);
                 }
 //                if (gm.isHeroNearExit() && gm.getHeroKeys() == 4) {
 //
@@ -84,8 +91,9 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    final Random rand = new Random();
+                    final int damage = rand.nextInt(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(damage));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -95,6 +103,9 @@ public class PlayerInputProcessor extends InputAdapter {
                 if (gm.isHeroNearBomb()) {
                     gm.heroPicksBomb();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearPitTrap()) {
+                    fallenInTrap(gm);
                 }
                 break;
             case Input.Keys.LEFT:
@@ -110,7 +121,9 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    final Random rand = new Random();
+                    final int damage = rand.nextInt(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(damage));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -120,6 +133,9 @@ public class PlayerInputProcessor extends InputAdapter {
                 if (gm.isHeroNearBomb()) {
                     gm.heroPicksBomb();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearPitTrap()) {
+                    fallenInTrap(gm);
                 }
                 break;
             case Input.Keys.RIGHT:
@@ -135,7 +151,9 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    final Random rand = new Random();
+                    final int damage = rand.nextInt(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(damage));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -145,6 +163,9 @@ public class PlayerInputProcessor extends InputAdapter {
                 if (gm.isHeroNearBomb()) {
                     gm.heroPicksBomb();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearPitTrap()) {
+                    fallenInTrap(gm);
                 }
                 break;
             case Input.Keys.ESCAPE:
@@ -159,6 +180,20 @@ public class PlayerInputProcessor extends InputAdapter {
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
     }
+
+    private void fallenInTrap(final GameMaster theGm) {
+        final GameMaster gm = theGm;
+        final Random rand = new Random();
+        final boolean hasFallen = rand.nextBoolean();
+        final int damage = rand.nextInt(20);
+        if (hasFallen) {
+            myPreviousScreen.showTrapMessage("Hero has fallen in a pit trap!!!\n" + gm.heroTrapDamage(damage));
+        } else {
+            myPreviousScreen.showTrapMessage("Hero has fallen in a pit trap, but caught the ledge before falling!\n");
+        }
+        gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+    }
+
     private void openDoors() {
         final GameMaster gm = GameMaster.getInstance();
         for (int i = gm.getPlayerX() - 1; i <= gm.getPlayerX() + 1; i++) {

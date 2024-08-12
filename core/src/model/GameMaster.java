@@ -240,6 +240,15 @@ public final class GameMaster {
     }
 
     /**
+     * Uses a bomb from the hero's inventory.
+     *
+     * @return a string describing the result of using the bomb.
+     */
+    public String heroUsesBomb() {
+        return myPlayer.useBomb();
+    }
+
+    /**
      * Returns the number of health potions the hero has.
      *
      * @return the number of health potions.
@@ -284,6 +293,20 @@ public final class GameMaster {
         final int playerX = gm.getPlayerX();
         return map[playerX][playerY] == Tile.POISON_POTION;
     }
+
+    /**
+     * Checks if the hero is near a pit trap.
+     *
+     * @return true if the hero is near a pit trap, false otherwise.
+     */
+    public boolean isHeroNearPitTrap() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.PIT_TRAP;
+    }
+
     public String heroTrapDamage(final int theDamage){
         return myPlayer.harmFromTrap(theDamage);
     }
