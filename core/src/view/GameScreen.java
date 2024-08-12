@@ -238,13 +238,13 @@ public class GameScreen implements Screen {
         final ArrayList<Enemy> list = GameMaster.getInstance().getAllEnemies();
         for(Enemy e : list){
             if(GameMaster.getInstance().getMapFOW()[e.getPosition().getMyX()][e.getPosition().getMyY()]){
-                if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.GREMLIN){
+                if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Gremlin){
                     myGame.batch.draw(myGremlinTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
-                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.SKELETON){
+                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Skeleton){
                     myGame.batch.draw(mySkeletonTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
-                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.OGRE){
+                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Ogre){
                     myGame.batch.draw(myOgreTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
                 else{

@@ -11,9 +11,9 @@ import java.util.Random;
  */
 public class Enemy extends DungeonCharacter implements Healable{
     public enum Type{
-        OGRE,
-        SKELETON,
-        GREMLIN
+        Ogre,
+        Skeleton,
+        Gremlin
     }
 
     /**
@@ -66,7 +66,7 @@ public class Enemy extends DungeonCharacter implements Healable{
      * @param theMinHeal int min heal for this character
      * @param theMaxHeal int max heal for this character
      */
-    void init(final String theType, final int theHealChance, final int theMinHeal, final int theMaxHeal){
+    private void init(final String theType, final int theHealChance, final int theMinHeal, final int theMaxHeal){
         if(theType == null){
             throw new IllegalArgumentException("Can't have an enemy of type null");
         }
@@ -78,18 +78,24 @@ public class Enemy extends DungeonCharacter implements Healable{
         final Type type;
         switch(theType){
             case "Ogre":
-                type = Type.OGRE;
+                type = Type.Ogre;
                 break;
             case "Skeleton":
-                type = Type.SKELETON;
+                type = Type.Skeleton;
                 break;
             case "Gremlin":
-                type = Type.GREMLIN;
+                type = Type.Gremlin;
                 break;
             default:
                 throw new IllegalArgumentException("Can't find enemy type that corresponds to string parameter of type: " + theType);
         }
         return type;
+    }
+    public int getMyMinHeal() {
+        return myMinHeal;
+    }
+    public int getMyMaxHeal() {
+        return myMaxHeal;
     }
     /**
      * Upon combat when enemy received damage there is a chance to heal, otherwise the

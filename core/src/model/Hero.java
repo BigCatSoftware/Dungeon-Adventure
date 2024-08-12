@@ -13,7 +13,18 @@ import java.util.Random;
  * @version July 19, 2024.
  */
 abstract public class Hero extends DungeonCharacter implements Serializable {
+    /**
+     * Health from potion modifier.
+     */
     private final static int HEALING_POTION_HEAL_AMOUNT = 40;
+    /**
+     * Bomb min damage modifier.
+     */
+    private final static int BOMB_MIN_DAMAGE = 70;
+    /**
+     * Bomb max damage modifier.
+     */
+    private final static int BOMB_MAX_DAMAGE = 200;
     /**
      * Represents int chance to block attack and is used in combat.
      */
@@ -110,7 +121,9 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      * This method will add a key to hero's inventory.
      */
     public void addBomb() {
-        myBombInv++;
+        if(myBombInv < 999){
+            myBombInv++;
+        }
     }
 
     /**
@@ -129,10 +142,10 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         }
         return result;
     }
-    public String useBomb() {
+    public String useBomb(final Enemy theEnemy) {
         String result = "There are no bombs to use.";
         if (myBombInv > 0) {
-            result = "[" + getMyName() + "] Used a Bomb." + bombDamage();
+            result = "[" + getMyName() + "] Used a Bomb." + bombDamage(theEnemy, BOMB_MIN_DAMAGE, BOMB_MAX_DAMAGE);
             myBombInv--;
         }
         return result;

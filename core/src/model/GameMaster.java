@@ -29,7 +29,7 @@ public final class GameMaster {
     /**
      * A grid of cells representing the dungeon map.
      */
-    private Tile[][] myMap; //TODO: change to Room array to send to Entity and Item loader to populate.
+    private Tile[][] myMap;
     /**
      * Hero to track on game grid and update the data based on events or changes in this object.
      */
@@ -40,6 +40,7 @@ public final class GameMaster {
     private Enemy myCurrentEnemy;
     //methods
     private boolean myHeroSet;
+    private boolean myIsCheats;
     private final DatabaseManager dbManager; // DatabaseManager instance
     /**
      * Private constructor for the GameMaster singleton.
@@ -129,7 +130,36 @@ public final class GameMaster {
     public ArrayList<Enemy> getAllEnemies(){
         return myEnemies;
     }
+    public void enemyMove(){
+        //move character randomly.
+        for(Enemy e : myEnemies){
+            boolean[] direction = new boolean[4]; //up, right, down, left.
+            direction[0] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()+1].isWalkable();
+            direction[1] = myMap[e.getPosition().getMyX()+1][e.getPosition().getMyY()].isWalkable();
+            direction[2] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()-1].isWalkable();
+            direction[3] = myMap[e.getPosition().getMyX()-1][e.getPosition().getMyY()].isWalkable();
 
+            Random rand = new Random();
+            int choice;
+            do{
+                choice = rand.nextInt(4);
+            }while(!direction[choice]);
+            switch(choice){
+                case 0:
+                    e.moveCharacterUp();
+                    break;
+                case 1:
+                    e.moveCharacterRight();
+                    break;
+                case 2:
+                    e.moveCharacterDown();
+                    break;
+                case 3:
+                    e.moveCharacterLeft();
+                    break;
+            }
+        }
+    }
     /**
      * Returns a string representing the positions of all enemies in the dungeon.
      *
@@ -158,59 +188,6 @@ public final class GameMaster {
         }
         return isEnemy;
     }
-
-    /**
-     * Checks if the hero is near a health potion.
-     *
-     * @return true if the hero is near a health potion, false otherwise.
-     */
-    public boolean isHeroNearHealthPotion() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.HEALTH_POTION;
-    }
-
-    /**
-     * Checks if the hero is near a key.
-     *
-     * @return true if the hero is near a key, false otherwise.
-     */
-    public boolean isHeroNearKey() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.KEY;
-    }
-
-    /**
-     * Checks if the hero is near a bomb.
-     *
-     * @return true if the hero is near a bomb, false otherwise.
-     */
-    public boolean isHeroNearBomb() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.BOMB;
-    }
-
-    /**
-     * Checks if the hero is near the exit.
-     *
-     * @return true if the hero is near the exit, false otherwise.
-     */
-    public boolean isHeroNearExit() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.EXIT;
-    }
-
     /**
      * Adds a health potion to the hero's inventory.
      */
@@ -233,7 +210,7 @@ public final class GameMaster {
      * @return a string describing the result of using the bomb.
      */
     public String heroUsesBomb() {
-        return myPlayer.useBomb();
+        return myPlayer.useBomb(myCurrentEnemy);
     }
 
     /**
@@ -269,34 +246,8 @@ public final class GameMaster {
         return myPlayer.getHeroBombs();
     }
 
-    /**
-     * Checks if the hero is near a poison potion.
-     *
-     * @return true if the hero is near a poison potion, false otherwise.
-     */
-    public boolean isHeroNearPoisonPotion() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.POISON_POTION;
-    }
-
-    /**
-     * Checks if the hero is near a pit trap.
-     *
-     * @return true if the hero is near a pit trap, false otherwise.
-     */
-    public boolean isHeroNearPitTrap() {
-        final GameMaster gm = GameMaster.getInstance();
-        final Tile[][] map = gm.getMap();
-        final int playerY = gm.getPlayerY();
-        final int playerX = gm.getPlayerX();
-        return map[playerX][playerY] == Tile.PIT_TRAP;
-    }
-
-    public String heroTrapDamage(final int theDamage){
-        return myPlayer.harmFromTrap(theDamage);
+    public String heroTrapDamage(final Tile theTile){
+        return myPlayer.harmFromTrap(theTile);
     }
     public String getHeroDeathLog(){
         String message = "[" + myPlayer.getMyName() + "] gave up all hope...";
@@ -308,7 +259,7 @@ public final class GameMaster {
             }
             else if(myPlayer.getDiedToTrap()){
                 message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
-                    " had died while exploring the dungeon to <Poison>.";
+                    " had died in trap while exploring the dungeon.";
             }
         }
         return message;
@@ -351,6 +302,7 @@ public final class GameMaster {
         myPlayer = null;
         myHeroSet = false;
         myEnemies = new ArrayList<>();
+        myIsCheats = false;
         populate();
         System.out.println(getEnemyPositionsToString());
     }
@@ -380,6 +332,17 @@ public final class GameMaster {
      */
     public Tile[][] getMap(){
         return myMap;
+    }
+
+    /**
+     * Compare the speed of two characters. Returns positive if first is faster than second.
+     * Preferable use: first is faster than second.
+     * @param theFirst DungeonCharacter that is compared first.
+     * @param theSecond DungeonCharacter that is compared second.
+     * @return Turns for this character compared to other character.
+     */
+    public int compareSpeed(final DungeonCharacter theFirst, final DungeonCharacter theSecond){
+        return theFirst.compareSpeed(theSecond);
     }
 
     /**
@@ -452,7 +415,7 @@ public final class GameMaster {
         List<Enemy> enemiesData = new ArrayList<>();
 
         for (Enemy enemy : myEnemies) {
-            enemiesData.add(new Enemy(enemy.getMyName(), enemy.getCurrentHealth(), enemy.getMinDamage(),
+            enemiesData.add(new Enemy(enemy.getType().toString(), enemy.getMyName(), enemy.getCurrentHealth(), enemy.getMinDamage(),
                     enemy.getMaxDamage(), enemy.getMyHealChance(), enemy.getHitChance(),
                     enemy.getSpeed(), enemy.getMyMinHeal(), enemy.getMyMaxHeal(), enemy.getPosition().getMyX(),
                     enemy.getPosition().getMyY()));
@@ -469,7 +432,7 @@ public final class GameMaster {
             //myPlayer.loadInventoryFromString(gameData.getInventory()); // Implement this method
             myEnemies.clear(); // Clear current enemies before loading
             for (Enemy enemyData : gameData.getEnemies()) {
-                Enemy enemy = new Enemy(enemyData.getMyName(), enemyData.getCurrentHealth(), enemyData.getMinDamage(),
+                Enemy enemy = new Enemy(enemyData.getType().toString(), enemyData.getMyName(), enemyData.getCurrentHealth(), enemyData.getMinDamage(),
                         enemyData.getMaxDamage(), enemyData.getMyHealChance(), enemyData.getHitChance(),
                         enemyData.getSpeed(), enemyData.getMyMinHeal(), enemyData.getMyMaxHeal(), enemyData.getPosition().getMyX(),
                         enemyData.getPosition().getMyY());

@@ -1,5 +1,4 @@
 //import model.DungeonCharacter;
-//import model.Item;
 //import model.Position;
 //import model.Warrior;
 //
@@ -12,13 +11,11 @@
 //
 //    private DungeonCharacter myDungeonCharacter;
 //    private Position myItemPosition;
-//    private Item myPoisonItem;
 //
 //    @BeforeEach
 //    public void setUp() {
 //        myDungeonCharacter = new Warrior("Aragon", 0, 0);
 //        myItemPosition = new Position(1, 1);
-//        myPoisonItem = new Item(myItemPosition);
 //    }
 //
 //    @Test

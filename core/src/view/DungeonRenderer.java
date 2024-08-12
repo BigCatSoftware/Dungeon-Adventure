@@ -35,7 +35,7 @@ public class DungeonRenderer {
      * @param theBatch The SpriteBatch used for drawing textures.
      */
     public void render(final SpriteBatch theBatch) {
-        Tile[][] map = GameMaster.getInstance().getMap(); //Tile[][] to Cell[][]
+        Tile[][] map = GameMaster.getInstance().getMap();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 Texture texture = null;

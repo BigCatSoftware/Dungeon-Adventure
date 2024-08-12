@@ -74,7 +74,9 @@ public final class CombatScreen extends ScreenAdapter {
     private final Label myHealthPotionLabel;
     private final Label myKeyLabel;
     private final Label myBombLabel;
-
+    private int myTurnsCounter;
+    private int myTurnsCurrentCounter;
+    private final Label myTurnsLabel;
     /**
      * Initialize the class.
      * @param theGame this is the game instance that will change the screen to a previous screen.
@@ -94,9 +96,14 @@ public final class CombatScreen extends ScreenAdapter {
         myInventory.setBounds(0,0, INVENTORY_WIDTH, INVENTORY_HEIGHT);
         myTable.setFillParent(true);
         myStage.addActor(myTable);
-        myHealthPotionLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
-        myKeyLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
-        myBombLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
+        myHealthPotionLabel = initLabel("0", Color.WHITE, myFont,0.65f, 0, 0);
+        myKeyLabel = initLabel("0", Color.WHITE, myFont,0.65f, 0, 0);
+        myBombLabel = initLabel("0", Color.WHITE, myFont,0.65f, 0, 0);
+        myTurnsCounter = GameMaster.getInstance().compareSpeed(GameMaster.getInstance()
+            .getPlayer(), GameMaster.getInstance().getEnemy());
+        myTurnsCurrentCounter = myTurnsCounter;
+        myTurnsLabel = initLabel(String.valueOf(myTurnsCurrentCounter), Color.GOLD, myFont,1.5f, INVENTORY_WIDTH/2, HEALTH_Y);
+        myTurnsLabel.setAlignment(Align.left);
         //add widgets to table here
         myTable.addActor(myCombatBack);
         myTable.addActor(initPlayerIcon());
@@ -106,17 +113,17 @@ public final class CombatScreen extends ScreenAdapter {
             myTable.addActor(b);
         }
         //add names
-        myTable.addActor(initLabel(GameMaster.getInstance().getPlayer().getMyName(), Color.GOLD, myFont, HERO_LABEL_X, NAME_Y));
-        myTable.addActor(initLabel(GameMaster.getInstance().getEnemy().getMyName(), Color.GOLDENROD, myFont, ENEMY_LABEL_X, NAME_Y));
+        myTable.addActor(initLabel(GameMaster.getInstance().getPlayer().getMyName(), Color.GOLD, myFont,0.65f, HERO_LABEL_X, NAME_Y));
+        myTable.addActor(initLabel(GameMaster.getInstance().getEnemy().getMyName(), Color.GOLDENROD, myFont,0.65f, ENEMY_LABEL_X, NAME_Y));
         //add healths
-        myHeroHP = initLabel(heroHealth(),updateHPColor(GameMaster.getInstance().getPlayer()), myFont,HERO_LABEL_X, HEALTH_Y);
-        myEnemyHP = initLabel(enemyHealth(),updateHPColor(GameMaster.getInstance().getEnemy()), myFont, ENEMY_LABEL_X, HEALTH_Y);
+        myHeroHP = initLabel(heroHealth(),updateHPColor(GameMaster.getInstance().getPlayer()), myFont,0.65f,HERO_LABEL_X, HEALTH_Y);
+        myEnemyHP = initLabel(enemyHealth(),updateHPColor(GameMaster.getInstance().getEnemy()), myFont,0.65f, ENEMY_LABEL_X, HEALTH_Y);
         myTable.addActor(myHeroHP);
         myTable.addActor(myEnemyHP);
         //add combat log
         myCombatLog = initCombatLog(myFont);
         myTable.addActor(myCombatLog);
-
+        myTable.addActor(myTurnsLabel);
         //add inventory
         myInventory.addActor(initHealthIcon());
         myInventory.addActor(initKeyIcon());
@@ -250,15 +257,15 @@ public final class CombatScreen extends ScreenAdapter {
     private Image initEnemyIcon(){
         final Texture texture;
         final Image image;
-        if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.GREMLIN){
+        if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.Gremlin){
             texture = new Texture("GremlinCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/GremlinApproaching.ogg")));
         }
-        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.SKELETON){
+        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.Skeleton){
             texture = new Texture("SkeletonCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/SkeletonApproaching.ogg")));
         }
-        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.OGRE){
+        else if(GameMaster.getInstance().getEnemyType(GameMaster.getInstance().getEnemy()) == Enemy.Type.Ogre){
             texture = new Texture("OgreCombatIcon.png");
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/OgreApproaching.ogg")));
         }
@@ -302,7 +309,25 @@ public final class CombatScreen extends ScreenAdapter {
         exitForfeitButtonListener(buttons);
         return buttons;
     }
-
+    private void playerTurnAction(){
+        if(myTurnsCurrentCounter == 1){
+            final Label logLabel = (Label) myCombatLog.getActor();
+            if(!GameMaster.getInstance().getEnemy().getIsDead()){
+                logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().enemyPerformAttack()));
+                myCombatLog.setScrollPercentY(1f);
+                //update player hp
+                myHeroHP.setText(heroHealth());
+                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+                myTurnsCurrentCounter = myTurnsCounter;
+            }
+        }
+        else{
+            myTurnsCurrentCounter--;
+        }
+        //if player or enemy is dead we disable input on first four buttons
+        myTurnsLabel.setText(String.valueOf(myTurnsCurrentCounter));
+        disableWidgetsIfDeath();
+    }
     /**
      * Helper method that will make a button using parameters.
      * @param theText string text on the button
@@ -324,7 +349,7 @@ public final class CombatScreen extends ScreenAdapter {
         button.getLabel().setFontScale(0.6f, 1.2f);
         return button;
     }
-    private void disableButtonsIfDeath(){
+    private void disableWidgetsIfDeath(){
         if(myButtons.length != BUTTON_NUM){
             throw new IllegalStateException("Initializing different number of buttons than" +
                 " expecting to. Expected: " + BUTTON_NUM);
@@ -335,6 +360,7 @@ public final class CombatScreen extends ScreenAdapter {
             myButtons[1].setDisabled(true);
             myButtons[2].setDisabled(true);
             myButtons[3].setDisabled(true);
+            myTurnsLabel.setVisible(false);
         }
     }
     /**
@@ -356,16 +382,8 @@ public final class CombatScreen extends ScreenAdapter {
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
-                //enemy attack log
-                if(!GameMaster.getInstance().getEnemy().getIsDead()){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().enemyPerformAttack()));
-                    myCombatLog.setScrollPercentY(1f);
-                    //update player hp
-                    myHeroHP.setText(heroHealth());
-                    myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
-                }
-                //if player or enemy is dead we disable input on first four buttons
-                disableButtonsIfDeath();
+
+                playerTurnAction();
             }
         });
     }
@@ -389,16 +407,7 @@ public final class CombatScreen extends ScreenAdapter {
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
-                //enemy attack log
-                if(!GameMaster.getInstance().getEnemy().getIsDead()){
-                    logLabel.setText(updateLog(String.valueOf(logLabel.getText()), GameMaster.getInstance().getEnemy().attack(GameMaster.getInstance()
-                        .getPlayer())));
-                    myCombatLog.setScrollPercentY(1f);
-                    //update player hp
-                    myHeroHP.setText(heroHealth());
-                    myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
-                }
-                disableButtonsIfDeath();
+                playerTurnAction();
             }
         });
     }
@@ -424,15 +433,8 @@ public final class CombatScreen extends ScreenAdapter {
 
                 }
                 else{
-                    logLabel.setText(updateLog(
-                        String.valueOf(logLabel.getText()), "Failed to flee.\n"
-                            + GameMaster.getInstance().enemyPerformAttack()));
+                    playerTurnAction();
                 }
-                disableButtonsIfDeath();
-                //update player health
-                myHeroHP.setText(heroHealth());
-                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
-                myCombatLog.setScrollPercentY(1f);
             }
         });
     }
@@ -486,15 +488,16 @@ public final class CombatScreen extends ScreenAdapter {
      * @param theText string text
      * @param theColor color to use for the font
      * @param theFont bitmap font to use on the label
+     * @param theFontScale scale for the font for the label.
      * @param theX int x pos
      * @param theY int y pos
      * @return label to put on screen.
      */
-    private Label initLabel(final String theText, final Color theColor, final BitmapFont theFont, final int theX, final int theY){
+    private Label initLabel(final String theText, final Color theColor, final BitmapFont theFont, final float theFontScale, final int theX, final int theY){
         final Label.LabelStyle style = new Label.LabelStyle();
         style.font = theFont;
         final Label label = new Label(theText, style);
-        label.setFontScale(0.65f);
+        label.setFontScale(theFontScale);
         label.setAlignment(Align.center);
         label.setBounds(theX, theY, LABEL_WIDTH, LABEL_HEIGHT);
         label.setColor(theColor);
@@ -533,7 +536,8 @@ public final class CombatScreen extends ScreenAdapter {
     private Image initHealthIcon(){
         Image healthImage = new Image(new TextureRegionDrawable(new Texture("HealthPotionIcon.png")));
         healthImage.setPosition(INVENTORY_WIDTH/4 - healthImage.getWidth()/2, INVENTORY_HEIGHT/2);
-        myHealthPotionLabel.setPosition(INVENTORY_WIDTH/4 - myHealthPotionLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        myHealthPotionLabel.setPosition(healthImage.getX(), healthImage.getY());
+        myHealthPotionLabel.setAlignment(Align.bottomLeft);
         myInventory.addActor(healthImage);
         myInventory.addActor(myHealthPotionLabel);
         return healthImage;
@@ -541,15 +545,17 @@ public final class CombatScreen extends ScreenAdapter {
     private Image initKeyIcon(){
         Image keyImage = new Image(new TextureRegionDrawable(new Texture("KeyIcon.png")));
         keyImage.setPosition((INVENTORY_WIDTH/4) * 3 - keyImage.getWidth()/2, INVENTORY_HEIGHT/2);
-        myKeyLabel.setPosition((INVENTORY_WIDTH/4) * 3 - myKeyLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        myKeyLabel.setPosition(keyImage.getX(), keyImage.getY());
+        myKeyLabel.setAlignment(Align.bottomLeft);
         myInventory.addActor(keyImage);
         myInventory.addActor(myKeyLabel);
         return keyImage;
     }
     private Image initBombIcon() {
         final Image bombImage = new Image(new TextureRegionDrawable(new Texture("BombIcon.png")));
-        bombImage.setPosition((INVENTORY_WIDTH/4) * 2 - bombImage.getWidth()/2, INVENTORY_HEIGHT/2);
-        myBombLabel.setPosition((INVENTORY_WIDTH / 4) * 2 - myBombLabel.getWidth() / 2, INVENTORY_HEIGHT / 2);
+        bombImage.setBounds((INVENTORY_WIDTH/4) * 2 - bombImage.getWidth()/2, INVENTORY_HEIGHT/2, bombImage.getWidth(), bombImage.getHeight());
+        myBombLabel.setPosition(bombImage.getX(), bombImage.getY());
+        myBombLabel.setAlignment(Align.bottomLeft);
         myInventory.addActor(bombImage);
         myInventory.addActor(myBombLabel);
         return bombImage;
@@ -560,28 +566,26 @@ public final class CombatScreen extends ScreenAdapter {
         style.up = new TextureRegionDrawable(new Texture("CombatButton.Up.png"));
         style.down = new TextureRegionDrawable(new Texture("CombatButton.Down.png"));
         style.disabled = new TextureRegionDrawable(new Texture("CombatButton.Disabled.png"));
-        initInventUseButton(style);
+        initInventUseHealthButton(style);
         initInventUseBombButton(style);
         initInventBackButton(style);
     }
-    private void initInventUseButton(final TextButton.TextButtonStyle theStyle){
+    private void initInventUseHealthButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("USE", theStyle);
         button.setBounds(INVENTORY_WIDTH/4 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
-                myInventory.setVisible(false);
-                //TODO: use functionality to remove the health potion and add health.
                 final Label label = (Label)myCombatLog.getActor();
-                label.setText(updateLog(String.valueOf(label.getText()),
-                    GameMaster.getInstance().heroUsesHealthPotion() +
-                        System.lineSeparator() + GameMaster.getInstance().enemyPerformAttack()));
-                updateInventory();
-                disableButtonsIfDeath();
-                //update player health
+                label.setText(updateLog(String.valueOf(label.getText()), GameMaster.getInstance().getPlayer().useHealthPotion()));
+
                 myHeroHP.setText(heroHealth());
                 myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+                myInventory.setVisible(false);
+                //TODO: use functionality to remove the health potion and add health.
+                playerTurnAction();
+                updateInventory();
             }
         });
         myInventory.addActor(button);
@@ -595,16 +599,16 @@ public final class CombatScreen extends ScreenAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 myInventory.setVisible(false);
-                //TODO: use functionality to remove the health potion and add health.
+
                 final Label label = (Label)myCombatLog.getActor();
                 label.setText(updateLog(String.valueOf(label.getText()),
-                        GameMaster.getInstance().heroUsesBomb() +
-                                System.lineSeparator() + GameMaster.getInstance().enemyPerformAttack()));
+                        GameMaster.getInstance().heroUsesBomb()));
                 updateInventory();
-                disableButtonsIfDeath();
-                //update player health
-                myHeroHP.setText(heroHealth());
-                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+                //update enemy hp
+                myEnemyHP.setText(enemyHealth());
+                myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
+
+                playerTurnAction();
             }
         });
         myInventory.addActor(button);
@@ -618,21 +622,14 @@ public final class CombatScreen extends ScreenAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 myInventory.setVisible(false);
-                final Label label = (Label)myCombatLog.getActor();
-                label.setText(updateLog(String.valueOf(label.getText()),
-                    "While searching your belongings the monster attacks. \n"
-                        + GameMaster.getInstance().enemyPerformAttack()));
-                disableButtonsIfDeath();
-                //update hero health
-                myHeroHP.setText(heroHealth());
-                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+                playerTurnAction();
             }
         });
         myInventory.addActor(button);
     }
-    public void updateInventory(){
+    private void updateInventory(){
         myHealthPotionLabel.setText(GameMaster.getInstance().getHeroHealthPotions());
+        myBombLabel.setText(GameMaster.getInstance().getHeroBombs());
         myKeyLabel.setText(GameMaster.getInstance().getHeroKeys());
-        //TODO: update inventory to add bombs
     }
 }
