@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -10,7 +11,7 @@ import java.util.*;
  * @author Tiger Schueler
  * @version 10AUG24
  */
-public class Dungeon {
+public class Dungeon implements Serializable {
 
     private final int MAP_SIZE = 50;
     private final Tile[][] MAP;

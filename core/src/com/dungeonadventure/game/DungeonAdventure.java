@@ -1,7 +1,7 @@
 package com.dungeonadventure.game;
 
 import com.badlogic.gdx.audio.Music;
-import controller.Settings;
+import model.Settings;
 import view.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

@@ -1,5 +1,10 @@
 package model;
 
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
+
+import com.badlogic.gdx.Gdx;
+
+import java.io.Serializable;
 import java.util.Random;
 /**
  * Class that defines Hero type of character that is different in its ability to be playable
@@ -7,7 +12,7 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 19, 2024.
  */
-abstract public class Hero extends DungeonCharacter {
+abstract public class Hero extends DungeonCharacter implements Serializable {
     private final static int HEALING_POTION_HEAL_AMOUNT = 40;
     /**
      * Represents int chance to block attack and is used in combat.
@@ -64,6 +69,7 @@ abstract public class Hero extends DungeonCharacter {
     @Override
     public String receiveDamage(final int incomingDamage){
         if(checkForBlock()){
+            mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Block.ogg")));
             return getMyName() + " blocked the attack.";
         }
         return super.receiveDamage(incomingDamage);
@@ -106,6 +112,7 @@ abstract public class Hero extends DungeonCharacter {
         String result = "There are no potions to use.";
         if(myHealthInv > 0){
             result = "[" + getMyName() + "] Used a Health Potion: " + addHealth(HEALING_POTION_HEAL_AMOUNT);
+            myHealthInv--;
         }
         return result;
     }

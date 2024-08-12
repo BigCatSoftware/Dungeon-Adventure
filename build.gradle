@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        
+
 
     }
 }
@@ -53,13 +53,12 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java-library"
 
-
     dependencies {
-        api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "org.junit.jupiter:junit-jupiter-api:5.8.1"
-        
+        api "com.badlogicgames.gdx:gdx:$gdxVersion" // LibGDX core library
+        api "org.junit.jupiter:junit-jupiter-api:5.8.1" // JUnit for testing
+        implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.46.0.1'    }
+    test {
+        useJUnitPlatform() // Enable JUnit 5 platform for tests
     }
-    test{
-        useJUnitPlatform();
-    }
+
 }

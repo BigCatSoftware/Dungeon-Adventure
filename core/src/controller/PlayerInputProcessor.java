@@ -1,16 +1,16 @@
 package controller;
 
+import com.badlogic.gdx.Gdx;
 import model.GameMaster;
 import model.Tile;
 import view.CombatScreen;
 import view.GameScreen;
-import view.SettingsScreen;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.dungeonadventure.game.DungeonAdventure;
+import view.SettingsScreen;
 
-import static com.dungeonadventure.game.DungeonAdventure.*;
+import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
  * Handles user input for player actions and settings navigation in the game.
@@ -52,10 +52,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -75,10 +76,12 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -95,10 +98,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -115,10 +119,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearHealthPotion()) {
                     gm.heroPicksHealthPotion();
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearPoisonPotion()) {
-                    gm.heroTrapDamage(20);
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 if (gm.isHeroNearKey()) {
@@ -138,17 +143,19 @@ public class PlayerInputProcessor extends InputAdapter {
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
     }
-
     private void openDoors() {
         final GameMaster gm = GameMaster.getInstance();
         for (int i = gm.getPlayerX() - 1; i <= gm.getPlayerX() + 1; i++) {
             for (int j = gm.getPlayerY() - 1; j <= gm.getPlayerY() + 1; j++) {
                 if (gm.getMap()[i][j] == Tile.DOOR) {
                     gm.getMap()[i][j] = Tile.OPEN_DOOR;
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Door Creak.ogg")));
                 } else if (gm.getMap()[i][j] == Tile.OPEN_DOOR) {
                     gm.getMap()[i][j] = Tile.DOOR;
+                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Door Creak2.ogg")));
                 }
             }
         }
+
     }
 }
