@@ -73,6 +73,7 @@ public final class CombatScreen extends ScreenAdapter {
     private final Table myInventory;
     private final Label myHealthPotionLabel;
     private final Label myKeyLabel;
+    private final Label myBombLabel;
 
     /**
      * Initialize the class.
@@ -95,6 +96,7 @@ public final class CombatScreen extends ScreenAdapter {
         myStage.addActor(myTable);
         myHealthPotionLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
         myKeyLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
+        myBombLabel = initLabel("0", Color.WHITE, myFont, 0, 0);
         //add widgets to table here
         myTable.addActor(myCombatBack);
         myTable.addActor(initPlayerIcon());
@@ -118,10 +120,12 @@ public final class CombatScreen extends ScreenAdapter {
         //add inventory
         myInventory.addActor(initHealthIcon());
         myInventory.addActor(initKeyIcon());
+        myInventory.addActor(initBombIcon());
         updateInventory();
         initInventButtons();
         myInventory.addActor(myHealthPotionLabel);
         myInventory.addActor(myKeyLabel);
+        myInventory.addActor(myBombLabel);
         myTable.addActor(myInventory);
     }
     @Override
@@ -525,21 +529,30 @@ public final class CombatScreen extends ScreenAdapter {
         });
         return log;
     }
+  
     private Image initHealthIcon(){
         Image healthImage = new Image(new TextureRegionDrawable(new Texture("HealthPotionIcon.png")));
-        healthImage.setPosition(INVENTORY_WIDTH/3 - healthImage.getWidth()/2, INVENTORY_HEIGHT/2);
-        myHealthPotionLabel.setPosition(INVENTORY_WIDTH/3 - myHealthPotionLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        healthImage.setPosition(INVENTORY_WIDTH/4 - healthImage.getWidth()/2, INVENTORY_HEIGHT/2);
+        myHealthPotionLabel.setPosition(INVENTORY_WIDTH/4 - myHealthPotionLabel.getWidth()/2, INVENTORY_HEIGHT/2);
         myInventory.addActor(healthImage);
         myInventory.addActor(myHealthPotionLabel);
         return healthImage;
     }
     private Image initKeyIcon(){
         Image keyImage = new Image(new TextureRegionDrawable(new Texture("KeyIcon.png")));
-        keyImage.setPosition((INVENTORY_WIDTH/3) * 2 - keyImage.getWidth()/2, INVENTORY_HEIGHT/2);
-        myKeyLabel.setPosition((INVENTORY_WIDTH/3) * 2 - myKeyLabel.getWidth()/2, INVENTORY_HEIGHT/2);
+        keyImage.setPosition((INVENTORY_WIDTH/4) * 3 - keyImage.getWidth()/2, INVENTORY_HEIGHT/2);
+        myKeyLabel.setPosition((INVENTORY_WIDTH/4) * 3 - myKeyLabel.getWidth()/2, INVENTORY_HEIGHT/2);
         myInventory.addActor(keyImage);
         myInventory.addActor(myKeyLabel);
         return keyImage;
+    }
+    private Image initBombIcon() {
+        final Image bombImage = new Image(new TextureRegionDrawable(new Texture("BombIcon.png")));
+        bombImage.setPosition((INVENTORY_WIDTH/4) * 2 - bombImage.getWidth()/2, INVENTORY_HEIGHT/2);
+        myBombLabel.setPosition((INVENTORY_WIDTH / 4) * 2 - myBombLabel.getWidth() / 2, INVENTORY_HEIGHT / 2);
+        myInventory.addActor(bombImage);
+        myInventory.addActor(myBombLabel);
+        return bombImage;
     }
     private void initInventButtons(){
         final TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
@@ -548,11 +561,12 @@ public final class CombatScreen extends ScreenAdapter {
         style.down = new TextureRegionDrawable(new Texture("CombatButton.Down.png"));
         style.disabled = new TextureRegionDrawable(new Texture("CombatButton.Disabled.png"));
         initInventUseButton(style);
+        initInventUseBombButton(style);
         initInventBackButton(style);
     }
     private void initInventUseButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("USE", theStyle);
-        button.setBounds(INVENTORY_WIDTH/3 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.setBounds(INVENTORY_WIDTH/4 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -572,6 +586,30 @@ public final class CombatScreen extends ScreenAdapter {
         });
         myInventory.addActor(button);
     }
+
+    private void initInventUseBombButton(final TextButton.TextButtonStyle theStyle){
+        final TextButton button = new TextButton("USE", theStyle);
+        button.setBounds((INVENTORY_WIDTH/4) * 2 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
+                myInventory.setVisible(false);
+                //TODO: use functionality to remove the health potion and add health.
+                final Label label = (Label)myCombatLog.getActor();
+                label.setText(updateLog(String.valueOf(label.getText()),
+                        GameMaster.getInstance().heroUsesBomb() +
+                                System.lineSeparator() + GameMaster.getInstance().enemyPerformAttack()));
+                updateInventory();
+                disableButtonsIfDeath();
+                //update player health
+                myHeroHP.setText(heroHealth());
+                myHeroHP.setColor(updateHPColor(GameMaster.getInstance().getPlayer()));
+            }
+        });
+        myInventory.addActor(button);
+    }
+
     private void initInventBackButton(final TextButton.TextButtonStyle theStyle){
         final TextButton button = new TextButton("BACK", theStyle);
         button.setBounds(DungeonAdventure.WIDTH-button.getWidth(), 0, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -595,5 +633,6 @@ public final class CombatScreen extends ScreenAdapter {
     public void updateInventory(){
         myHealthPotionLabel.setText(GameMaster.getInstance().getHeroHealthPotions());
         myKeyLabel.setText(GameMaster.getInstance().getHeroKeys());
+        //TODO: update inventory to add bombs
     }
 }

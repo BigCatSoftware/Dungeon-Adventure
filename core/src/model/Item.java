@@ -3,6 +3,8 @@ package model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.io.Serializable;
+
 
 /**
  * Class representing an item in the game.
@@ -12,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author Tiger Schueler
  * @version 27JUL24
  */
-public class Item extends GameObject implements Usable, Collectible {
+public class Item extends GameObject implements Usable, Collectible, Serializable {
 
     private final static int TILE_SIZE = 16;
 

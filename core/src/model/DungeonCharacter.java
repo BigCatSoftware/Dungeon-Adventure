@@ -6,6 +6,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import model.Position;
+import org.sqlite.SQLiteDataSource;
+
 /**
  * Abstract dungeon character class defines variety of entities that will inhabit the dungeon.
  * @author Nazarii Revitskyi
@@ -55,7 +57,7 @@ abstract public class DungeonCharacter implements CharacterActions {
     /**
      * Wrapper for x y location and character movement.
      */
-    private final Position myPosition;
+    private Position myPosition;
     /**
      * Type of death when player dies to enemy.
      */
@@ -233,6 +235,29 @@ abstract public class DungeonCharacter implements CharacterActions {
             append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
         return builder.toString();
     }
+
+    /**
+     * Checks if passed value from characters heal ability is correct and adds health to
+     * current health.
+     */
+    String bombDamage(){
+        final int bombDamage = 40;
+        StringBuilder builder = new StringBuilder();
+        int healthBeforeDamage = myCurrentHealth;
+        if(healthBeforeDamage > 0){
+            if(myCurrentHealth - bombDamage > 0){
+                myCurrentHealth -= bombDamage;
+            }
+            else{
+                myCurrentHealth = 0;
+            }
+
+        }
+        builder.append(" [").append(myName).append("] got hit with bomb shrapnel for ").append(bombDamage).
+                append(" <").append(healthBeforeDamage).append(" -> ").append(myCurrentHealth).
+                append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
+        return builder.toString();
+    }
     /**
      * Checks current health. If health is less or equal zero the character is dead.
      */
@@ -343,13 +368,15 @@ abstract public class DungeonCharacter implements CharacterActions {
     public boolean getIsDead() {
         return myIsDead;
     }
-
     /**
      * Returns character's position.
      * @return Position object unique to this character.
      */
     public Position getPosition(){
         return myPosition;
+    }
+    public void setMyPosition(final Position thePosition) {
+        myPosition = thePosition;
     }
     /**
      * Converts data about character to string.
