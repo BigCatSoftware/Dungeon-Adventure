@@ -9,7 +9,7 @@ import java.util.*;
  * The dungeon consists of rooms and corridors connected by doors.
  *
  * @author Tiger Schueler
- * @version 28JUL24
+ * @version 10AUG24
  */
 public class Dungeon implements Serializable {
 
@@ -212,6 +212,10 @@ public class Dungeon implements Serializable {
         }
     }
 
+    /**
+     * Places keys randomly on the dungeon floor.
+     * A maximum of 4 keys are placed.
+     */
     private void placeKeys() {
         final int maxKeys = 4;
         int counter = 0;
@@ -228,6 +232,10 @@ public class Dungeon implements Serializable {
         }
     }
 
+    /**
+     * Places an exit randomly on the dungeon floor.
+     * Two exits are placed.
+     */
     private void placeExit() {
         int exitCounter = 0;
         while (exitCounter < 2) {
@@ -243,6 +251,10 @@ public class Dungeon implements Serializable {
         }
     }
 
+    /**
+     * Places health potions randomly on the dungeon floor.
+     * Five health potions are placed.
+     */
     private void placeHealthPotions() {
         int healthPotionCounter = 0;
         while (healthPotionCounter < 5) {
@@ -258,6 +270,10 @@ public class Dungeon implements Serializable {
         }
     }
 
+    /**
+     * Places poison potions randomly on the dungeon floor.
+     * Three poison potions are placed.
+     */
     private void placePoisonPotions() {
         int poisonPotionCounter = 0;
         while (poisonPotionCounter < 3) {
@@ -269,6 +285,44 @@ public class Dungeon implements Serializable {
             if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
                 MAP[randomNumberTwo][randomNumberOne] = Tile.POISON_POTION;
                 poisonPotionCounter++;
+            }
+        }
+    }
+
+    /**
+     * Places bombs randomly on the dungeon floor.
+     * Ten bombs are placed.
+     */
+    private void placeBombs() {
+        int bombCounter = 0;
+        while (bombCounter < 10) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.BOMB;
+                bombCounter++;
+            }
+        }
+    }
+
+    /**
+     * Places pit traps randomly on the dungeon floor.
+     * Ten pit traps are placed.
+     */
+    private void placePitTraps() {
+        int trapCounter = 0;
+        while (trapCounter < 10) {
+            Random rand = new Random();
+            final int min = 1;
+            final int max = 48;
+            final int randomNumberOne = rand.nextInt(max - min + 1) + min;
+            final int randomNumberTwo = rand.nextInt(max - min + 1) + min;
+            if (MAP[randomNumberTwo][randomNumberOne] == Tile.FLOOR) {
+                MAP[randomNumberTwo][randomNumberOne] = Tile.PIT_TRAP;
+                trapCounter++;
             }
         }
     }
@@ -296,6 +350,10 @@ public class Dungeon implements Serializable {
                     mapBuilder.append('H');
                 } else if (MAP[i][j] == Tile.POISON_POTION){
                     mapBuilder.append('P');
+                } else if (MAP[i][i] == Tile.BOMB) {
+                    mapBuilder.append('B');
+                } else if (MAP[i][j] == Tile.PIT_TRAP) {
+                    mapBuilder.append('T');
                 }
                 mapBuilder.append(" ");
             }
@@ -330,6 +388,8 @@ public class Dungeon implements Serializable {
         placeExit();
         placePoisonPotions();
         placeHealthPotions();
+        placeBombs();
+        placePitTraps();
         if (myTotalRooms < 15) {
             myTotalRooms = 0;
             generateDungeon();
@@ -339,7 +399,6 @@ public class Dungeon implements Serializable {
             for (Room room : myRoomList) {
                 System.out.println();
                 System.out.println(room);
-//                System.out.println(i);
                 System.out.print("Adjacent Rooms");
                 System.out.println(room.getAdjacentRooms());
                 i++;

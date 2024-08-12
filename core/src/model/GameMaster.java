@@ -12,33 +12,48 @@ import java.util.Random;
 /**
  * Class that tracks the activity, receives requests and sends necessary responses.
  * Tracks progress from start to end of the adventure.
- * @author Nazarii Revitskyi
- * @version July 28, 2024.
+ * This class is implemented as a singleton.
+ *
+ * @author Nazarii Revitskyi, Tiger Schueler
+ * @version 10AUG24
  */
 public final class GameMaster {
     //Class fields.
     private static final GameMaster myInstance = new GameMaster();
+
     /**
      * This is a dungeon generator that will produce a map to store.
      */
     private Dungeon myDungeon;
+
     /**
-     * This is a grid of cells that will be used to check game status.
+     * A grid of cells representing the dungeon map.
      */
     private Tile[][] myMap; //TODO: change to Room array to send to Entity and Item loader to populate.
     /**
      * Hero to track on game grid and update the data based on events or changes in this object.
      */
     private Hero myPlayer;
+
     //TODO: change enemy to arraylist of enemies.
+    /**
+     * List of enemies present in the dungeon.
+     */
     private ArrayList<Enemy> myEnemies;
-    private Enemy myCurrentEnemy;
-    //methods
-    private boolean myHeroSet;
-    private final DatabaseManager dbManager; // DatabaseManager instance
 
     /**
-     * Create GameMaster that will drive the main game logic.
+     * The enemy that the player is currently engaged with.
+     */
+    private Enemy myCurrentEnemy;
+
+    /**
+     * Flag indicating whether the hero has been set.
+     */
+    private boolean myHeroSet;
+    private final DatabaseManager dbManager; // DatabaseManager instance
+    /**
+     * Private constructor for the GameMaster singleton.
+     * Initializes the dungeon, map, and populates the dungeon with enemies.
      */
     private GameMaster(){
         myDungeon = new Dungeon();
@@ -51,13 +66,21 @@ public final class GameMaster {
         populate();
         System.out.println(getEnemyPositionsToString());
     }
+
+    /**
+     * Returns the singleton instance of GameMaster.
+     *
+     * @return the singleton instance of GameMaster.
+     */
     public static synchronized GameMaster getInstance(){
         return myInstance;
     }
 
     /**
-     * Returns a player instance that was made for this game session after user created it.
-     * @return hero object.
+     * Returns the player character for this game session.
+     *
+     * @return the hero character.
+     * @throws IllegalArgumentException if the player has not been set.
      */
     public Hero getPlayer(){
         if(myPlayer == null){
@@ -65,6 +88,13 @@ public final class GameMaster {
         }
         return myPlayer;
     }
+
+    /**
+     * Sets the player character for the game session.
+     *
+     * @param thePlayer the hero character to set.
+     * @throws IllegalArgumentException if the player is null or if the hero has already been set.
+     */
     public void setPlayer(final Hero thePlayer){
         if(thePlayer == null || myHeroSet){
             throw new IllegalArgumentException("Can't set player for this GameMaster instance.");
@@ -72,18 +102,48 @@ public final class GameMaster {
         myPlayer = thePlayer;
         myHeroSet = true;
     }
+
+    /**
+     * Returns the player's X-coordinate on the map.
+     *
+     * @return the player's X-coordinate.
+     */
     public int getPlayerX(){
         return myPlayer.getPosition().getMyX();
     }
+
+    /**
+     * Returns the player's Y-coordinate on the map.
+     *
+     * @return the player's Y-coordinate.
+     */
     public int getPlayerY(){
         return myPlayer.getPosition().getMyY();
     }
+
+    /**
+     * Returns the current enemy the player is engaged with.
+     *
+     * @return the current enemy.
+     */
     public Enemy getEnemy(){
         return myCurrentEnemy;
     }
+
+    /**
+     * Returns a list of all enemies in the dungeon.
+     *
+     * @return an ArrayList of all enemies.
+     */
     public ArrayList<Enemy> getAllEnemies(){
         return myEnemies;
     }
+
+    /**
+     * Returns a string representing the positions of all enemies in the dungeon.
+     *
+     * @return a string of enemy positions.
+     */
     public String getEnemyPositionsToString(){
         StringBuilder sb = new StringBuilder();
         for(Enemy e : myEnemies){
@@ -93,6 +153,12 @@ public final class GameMaster {
         }
         return sb.toString();
     }
+
+    /**
+     * Checks if the hero is near an enemy.
+     *
+     * @return true if the hero is near an enemy, false otherwise.
+     */
     public boolean isHeroNearEnemy(){
         boolean isEnemy = false;
         for(Enemy e : myEnemies){
@@ -105,6 +171,11 @@ public final class GameMaster {
         return isEnemy;
     }
 
+    /**
+     * Checks if the hero is near a health potion.
+     *
+     * @return true if the hero is near a health potion, false otherwise.
+     */
     public boolean isHeroNearHealthPotion() {
         final GameMaster gm = GameMaster.getInstance();
         final Tile[][] map = gm.getMap();
@@ -112,21 +183,79 @@ public final class GameMaster {
         final int playerX = gm.getPlayerX();
         return map[playerX][playerY] == Tile.HEALTH_POTION;
     }
+
+    /**
+     * Checks if the hero is near a key.
+     *
+     * @return true if the hero is near a key, false otherwise.
+     */
+    public boolean isHeroNearKey() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.KEY;
+    }
+
+    /**
+     * Checks if the hero is near the exit.
+     *
+     * @return true if the hero is near the exit, false otherwise.
+     */
+    public boolean isHeroNearExit() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.EXIT;
+    }
+
+    /**
+     * Adds a health potion to the hero's inventory.
+     */
     public void heroPicksHealthPotion(){
         myPlayer.addHealthPotion();
     }
+
+    /**
+     * Uses a health potion from the hero's inventory.
+     *
+     * @return a string describing the result of using the health potion.
+     */
     public String heroUsesHealthPotion(){
         return myPlayer.useHealthPotion();
     }
+
+    /**
+     * Returns the number of health potions the hero has.
+     *
+     * @return the number of health potions.
+     */
     public int getHeroHealthPotions(){
         return myPlayer.getHeroHealthPotions();
     }
+
+    /**
+     * Adds a key to the hero's inventory.
+     */
     public void heroPicksKey(){
         myPlayer.addKey();
     }
+
+    /**
+     * Returns the number of keys the hero has.
+     *
+     * @return the number of keys.
+     */
     public int getHeroKeys(){
         return myPlayer.getHeroKeys();
     }
+
+    /**
+     * Checks if the hero is near a poison potion.
+     *
+     * @return true if the hero is near a poison potion, false otherwise.
+     */
     public boolean isHeroNearPoisonPotion() {
         final GameMaster gm = GameMaster.getInstance();
         final Tile[][] map = gm.getMap();
@@ -152,6 +281,11 @@ public final class GameMaster {
         }
         return message;
     }
+
+    /**
+     * Populates the dungeon with enemies.
+     * Adds random enemies to the map at walkable positions.
+     */
     private void populate(){
         Random rand = new Random();
         myEnemies.add(EntityLoader.randomEnemy(1,2));
@@ -164,11 +298,20 @@ public final class GameMaster {
             }
         }
     }
+
+    /**
+     * Removes the current enemy from the list if it is dead.
+     */
     public void removeCurrentEnemyIfDead(){
         if(myCurrentEnemy.getIsDead()){
             myEnemies.remove(myCurrentEnemy);
         }
     }
+
+    /**
+     * Restarts the game by regenerating the dungeon, resetting the player, and repopulating
+     * the dungeon with enemies.
+     */
     public void restart(){
         myDungeon = new Dungeon();
         myDungeon.printMap();
@@ -179,6 +322,7 @@ public final class GameMaster {
         populate();
         System.out.println(getEnemyPositionsToString());
     }
+
     /**
      * Returns Tile[][] grid of cells that define the game grid and store tile, position,
      * enemy arraylist, item.
@@ -188,6 +332,12 @@ public final class GameMaster {
         return myMap;
     }
 
+    /**
+     * Performs an attack by the player on the current enemy.
+     *
+     * @return a string describing the result of the attack.
+     * @throws IllegalStateException if the current enemy or player is null.
+     */
     public String playerPerformAttack(){
         if(myCurrentEnemy == null){
             throw new IllegalStateException("GameMaster issued player attack enemy but the enemy is null");
@@ -197,6 +347,13 @@ public final class GameMaster {
         }
         return myPlayer.attack(myCurrentEnemy);
     }
+
+    /**
+     * Performs an attack by the current enemy on the player.
+     *
+     * @return a string describing the result of the attack.
+     * @throws IllegalStateException if the current enemy or player is null.
+     */
     public String enemyPerformAttack(){
         if(myCurrentEnemy == null){
             throw new IllegalStateException("GameMaster issued enemy <attack> player but the enemy is null");
@@ -206,6 +363,13 @@ public final class GameMaster {
         }
         return myCurrentEnemy.attack(myPlayer);
     }
+
+    /**
+     * Performs a special action by the player on the current enemy.
+     *
+     * @return a string describing the result of the special action.
+     * @throws IllegalStateException if the current enemy or player is null, or if the player is not a recognized hero type.
+     */
     public String specialActionPerform(){
         if(myCurrentEnemy == null){
             throw new IllegalStateException("GameMaster issued player <special action> but the enemy is null");

@@ -59,6 +59,13 @@ public class PlayerInputProcessor extends InputAdapter {
                     myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
+                if (gm.isHeroNearKey()) {
+                    gm.heroPicksKey();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+//                if (gm.isHeroNearExit() && gm.getHeroKeys() == 4) {
+//
+//                }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
@@ -75,6 +82,10 @@ public class PlayerInputProcessor extends InputAdapter {
                 if (gm.isHeroNearPoisonPotion()) {
 
                     myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearKey()) {
+                    gm.heroPicksKey();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
@@ -94,6 +105,10 @@ public class PlayerInputProcessor extends InputAdapter {
                     myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
+                if (gm.isHeroNearKey()) {
+                    gm.heroPicksKey();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
@@ -109,6 +124,10 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearPoisonPotion()) {
                     myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearKey()) {
+                    gm.heroPicksKey();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
