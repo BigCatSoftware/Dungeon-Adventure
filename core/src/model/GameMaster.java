@@ -198,6 +198,19 @@ public final class GameMaster {
     }
 
     /**
+     * Checks if the hero is near a bomb.
+     *
+     * @return true if the hero is near a bomb, false otherwise.
+     */
+    public boolean isHeroNearBomb() {
+        final GameMaster gm = GameMaster.getInstance();
+        final Tile[][] map = gm.getMap();
+        final int playerY = gm.getPlayerY();
+        final int playerX = gm.getPlayerX();
+        return map[playerX][playerY] == Tile.BOMB;
+    }
+
+    /**
      * Checks if the hero is near the exit.
      *
      * @return true if the hero is near the exit, false otherwise.
@@ -249,6 +262,14 @@ public final class GameMaster {
      */
     public int getHeroKeys(){
         return myPlayer.getHeroKeys();
+    }
+
+    public void heroPicksBomb() {
+        myPlayer.addBomb();
+    }
+
+    public int getHeroBombs() {
+        return myPlayer.getHeroBombs();
     }
 
     /**

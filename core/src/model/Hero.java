@@ -28,6 +28,11 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     private int myHealthInv;
 
     /**
+     * Represents int bombs inside hero inventory.
+     */
+    private int myBombInv;
+
+    /**
      * Hero constructor instantiates block chance.
      * @param theName string name of this character
      * @param theHealth int health of this character
@@ -47,6 +52,7 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         myBlockChance = theBlockChance;
         myKeysInv = 0;
         myHealthInv = 0;
+        myBombInv = 0;
     }
     void init(final int theBlockChance){
         if(myBlockChance < 0 || myBlockChance > 100){
@@ -101,6 +107,13 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     }
 
     /**
+     * This method will add a key to hero's inventory.
+     */
+    public void addBomb() {
+        myBombInv++;
+    }
+
+    /**
      * This method will add health potion to hero's inventory.
      */
     public void addHealthPotion(){
@@ -122,6 +135,10 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      */
     public int getHeroKeys(){
         return myKeysInv;
+    }
+
+    public int getHeroBombs() {
+        return myBombInv;
     }
 
     /**

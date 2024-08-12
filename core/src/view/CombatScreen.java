@@ -599,5 +599,6 @@ public final class CombatScreen extends ScreenAdapter {
     public void updateInventory(){
         myHealthPotionLabel.setText(GameMaster.getInstance().getHeroHealthPotions());
         myKeyLabel.setText(GameMaster.getInstance().getHeroKeys());
+        //TODO: update inventory to add bombs
     }
 }

@@ -63,6 +63,10 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.heroPicksKey();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
+                if (gm.isHeroNearBomb()) {
+                    gm.heroPicksBomb();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
 //                if (gm.isHeroNearExit() && gm.getHeroKeys() == 4) {
 //
 //                }
@@ -88,6 +92,10 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.heroPicksKey();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
+                if (gm.isHeroNearBomb()) {
+                    gm.heroPicksBomb();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
                 break;
             case Input.Keys.LEFT:
                 if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
@@ -109,6 +117,10 @@ public class PlayerInputProcessor extends InputAdapter {
                     gm.heroPicksKey();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
+                if (gm.isHeroNearBomb()) {
+                    gm.heroPicksBomb();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
@@ -128,6 +140,10 @@ public class PlayerInputProcessor extends InputAdapter {
                 }
                 if (gm.isHeroNearKey()) {
                     gm.heroPicksKey();
+                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                }
+                if (gm.isHeroNearBomb()) {
+                    gm.heroPicksBomb();
                     gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 }
                 break;
