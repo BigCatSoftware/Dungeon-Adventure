@@ -3,6 +3,7 @@ package view;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,10 +22,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeonadventure.game.DungeonAdventure;
 import model.Enemy;
 import model.GameMaster;
-import model.Gremlin;
-import model.Ogre;
 import model.Priestess;
-import model.Skeleton;
 import model.Thief;
 import model.Tile;
 import model.Warrior;
@@ -77,6 +75,7 @@ public class GameScreen implements Screen {
      * @param theGame the main game instance
      */
     public GameScreen(final DungeonAdventure theGame) {
+        GameMaster.getInstance().updateMapFOW();
         myGame = theGame;
         myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
         mySETTINGS.updateMusic();
@@ -110,8 +109,8 @@ public class GameScreen implements Screen {
         myGameMenuTable.setBackground(new TextureRegionDrawable(new Texture("GameMenuBackground.png")));
         myGameMenuTable.setVisible(false);
         initGameMenuButtons();
-        myGameTable.addActor(myGameMenuTable);
         myGameTable.addActor(myPlayerImage);
+        myGameTable.addActor(myGameMenuTable);
         //myDungeonRenderer = new DungeonRenderer();
     }
 
@@ -210,7 +209,19 @@ public class GameScreen implements Screen {
                         break;
                 }
                 if (texture != null) {
-                    myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    if(GameMaster.getInstance().getMapFOW()[i][j]){
+                        myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    }
+                    else if(GameMaster.getInstance().getMapExploredFOW()[i][j]){
+                        myGame.batch.setColor(Color.DARK_GRAY);
+                        myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        myGame.batch.setColor(Color.WHITE);
+                    }
+                    else{
+                        myGame.batch.setColor(Color.BLACK);
+                        myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        myGame.batch.setColor(Color.WHITE);
+                    }
                 }
                 else{
                     throw new IllegalStateException("map image is set to null!");
@@ -226,17 +237,19 @@ public class GameScreen implements Screen {
     private void initEntities(){
         final ArrayList<Enemy> list = GameMaster.getInstance().getAllEnemies();
         for(Enemy e : list){
-            if(e instanceof Gremlin){
-                myGame.batch.draw(myGremlinTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
-            else if(e instanceof Skeleton){
-                myGame.batch.draw(mySkeletonTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
-            else if(e instanceof Ogre){
-                myGame.batch.draw(myOgreTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
-            else{
-                throw new IllegalStateException("Unknown enemy type when drawing on map. Entity name: " + e.getClass().getSimpleName());
+            if(GameMaster.getInstance().getMapFOW()[e.getPosition().getMyX()][e.getPosition().getMyY()]){
+                if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Gremlin){
+                    myGame.batch.draw(myGremlinTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Skeleton){
+                    myGame.batch.draw(mySkeletonTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+                else if(GameMaster.getInstance().getEnemyType(e) == Enemy.Type.Ogre){
+                    myGame.batch.draw(myOgreTexture, e.getPosition().getMyX()*TILE_SIZE, e.getPosition().getMyY()*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
+                else{
+                    throw new IllegalStateException("Unknown enemy type when drawing on map. Entity name: " + e.getClass().getSimpleName());
+                }
             }
         }
     }

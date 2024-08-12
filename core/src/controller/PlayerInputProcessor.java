@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.dungeonadventure.game.DungeonAdventure;
 import view.SettingsScreen;
 
+
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -50,19 +51,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearHealthPotion()) {
-                    gm.heroPicksHealthPotion();
-                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                gm.enemyMove();
+                if(gm.isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
-                if (gm.isHeroNearKey()) {
-                    gm.heroPicksKey();
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
+                checkTileType(gm.getPlayerX(), gm.getPlayerY());
 //                if (gm.isHeroNearExit() && gm.getHeroKeys() == 4) {
 //
 //                }
@@ -70,24 +63,16 @@ public class PlayerInputProcessor extends InputAdapter {
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
                     gm.getPlayer().moveCharacterDown();
+
                 }
                 if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearHealthPotion()) {
-                    gm.heroPicksHealthPotion();
-                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                gm.enemyMove();
+                if(gm.isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearPoisonPotion()) {
-
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
-                if (gm.isHeroNearKey()) {
-                    gm.heroPicksKey();
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
+                checkTileType(gm.getPlayerX(), gm.getPlayerY());
                 break;
             case Input.Keys.LEFT:
                 if(gm.getMap()[gm.getPlayerX()-1][gm.getPlayerY()].isWalkable()){
@@ -96,19 +81,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearHealthPotion()) {
-                    gm.heroPicksHealthPotion();
-                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                gm.enemyMove();
+                if(gm.isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
-                if (gm.isHeroNearKey()) {
-                    gm.heroPicksKey();
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
+                checkTileType(gm.getPlayerX(), gm.getPlayerY());
                 break;
             case Input.Keys.RIGHT:
                 if(gm.getMap()[gm.getPlayerX()+1][gm.getPlayerY()].isWalkable()){
@@ -117,19 +94,11 @@ public class PlayerInputProcessor extends InputAdapter {
                 if(gm.isHeroNearEnemy()){
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearHealthPotion()) {
-                    gm.heroPicksHealthPotion();
-                    mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                gm.enemyMove();
+                if(gm.isHeroNearEnemy()){
+                    myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
-                if (gm.isHeroNearPoisonPotion()) {
-                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" +gm.heroTrapDamage(20));
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
-                if (gm.isHeroNearKey()) {
-                    gm.heroPicksKey();
-                    gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
-                }
+                checkTileType(gm.getPlayerX(), gm.getPlayerY());
                 break;
             case Input.Keys.ESCAPE:
                 myPreviousScreen.showMenu();
@@ -137,11 +106,42 @@ public class PlayerInputProcessor extends InputAdapter {
             case Input.Keys.E:
                 openDoors();
                 break;
+            case Input.Keys.F10:
+                gm.toggleCheats();
+                break;
             default:
                 return false; // Indicates that the key event was not handled
         }
+        gm.updateMapFOW();
         myPreviousScreen.setPlayerImagePosition();
         return true; // Indicates that the key event was handled
+    }
+    private void checkTileType(final int theX, final int theY){
+        GameMaster gm = GameMaster.getInstance();
+        switch(GameMaster.getInstance().getMap()[theX][theY]){
+            case HEALTH_POTION:
+                gm.heroPicksHealthPotion();
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Twinkle.ogg")));
+                GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
+                break;
+            case POISON_POTION:
+                myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(Tile.POISON_POTION));
+                GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
+                break;
+            case KEY:
+                gm.heroPicksKey();
+                gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                break;
+            case BOMB:
+                gm.heroPicksBomb();
+                gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
+                break;
+            case PIT_TRAP:
+                myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
+                break;
+            default:
+                break;
+        }
     }
     private void openDoors() {
         final GameMaster gm = GameMaster.getInstance();

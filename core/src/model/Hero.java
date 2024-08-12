@@ -13,7 +13,18 @@ import java.util.Random;
  * @version July 19, 2024.
  */
 abstract public class Hero extends DungeonCharacter implements Serializable {
+    /**
+     * Health from potion modifier.
+     */
     private final static int HEALING_POTION_HEAL_AMOUNT = 40;
+    /**
+     * Bomb min damage modifier.
+     */
+    private final static int BOMB_MIN_DAMAGE = 70;
+    /**
+     * Bomb max damage modifier.
+     */
+    private final static int BOMB_MAX_DAMAGE = 200;
     /**
      * Represents int chance to block attack and is used in combat.
      */
@@ -26,6 +37,11 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      * Represents int health potions inside hero inventory.
      */
     private int myHealthInv;
+
+    /**
+     * Represents int bombs inside hero inventory.
+     */
+    private int myBombInv;
 
     /**
      * Hero constructor instantiates block chance.
@@ -47,6 +63,7 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         myBlockChance = theBlockChance;
         myKeysInv = 0;
         myHealthInv = 0;
+        myBombInv = 0;
     }
     void init(final int theBlockChance){
         if(myBlockChance < 0 || myBlockChance > 100){
@@ -101,6 +118,15 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     }
 
     /**
+     * This method will add a key to hero's inventory.
+     */
+    public void addBomb() {
+        if(myBombInv < 999){
+            myBombInv++;
+        }
+    }
+
+    /**
      * This method will add health potion to hero's inventory.
      */
     public void addHealthPotion(){
@@ -116,12 +142,24 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         }
         return result;
     }
+    public String useBomb(final Enemy theEnemy) {
+        String result = "There are no bombs to use.";
+        if (myBombInv > 0) {
+            result = "[" + getMyName() + "] Used a Bomb." + bombDamage(theEnemy, BOMB_MIN_DAMAGE, BOMB_MAX_DAMAGE);
+            myBombInv--;
+        }
+        return result;
+    }
     /**
      * This method will return the number of keys currently in hero's inventory.
      * @return int number of keys in hero's inventory
      */
     public int getHeroKeys(){
         return myKeysInv;
+    }
+
+    public int getHeroBombs() {
+        return myBombInv;
     }
 
     /**
@@ -143,3 +181,4 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         return stringBuilder.toString();
     }
 }
+

@@ -10,6 +10,16 @@ import java.util.Random;
  * @version July 23, 2024.
  */
 public class Enemy extends DungeonCharacter implements Healable{
+    public enum Type{
+        Ogre,
+        Skeleton,
+        Gremlin
+    }
+
+    /**
+     * Represents the type of character.
+     */
+    private final Type myType;
     /**
      * Represents int chance to heal and is used in combat
      */
@@ -25,6 +35,7 @@ public class Enemy extends DungeonCharacter implements Healable{
 
     /**
      * Enemy constructor instantiates heal chance
+     * @param theType string of the Type of this character.
      * @param theName string name of this character
      * @param theHealth int health of this character
      * @param theMinDamage int min damage of this character
@@ -37,12 +48,13 @@ public class Enemy extends DungeonCharacter implements Healable{
      * @param theX int x position of this character
      * @param theY int y position of this character
      */
-    Enemy(final String theName, final int theHealth, final int theMinDamage,
+    public Enemy(final String theType, final String theName, final int theHealth, final int theMinDamage,
           final int theMaxDamage, final int theHealChance, final int theHitChance,
           final int theSpeed, final int theMinHeal, final int theMaxHeal, final int theX,
           final int theY){
         super(theName, theHealth, theMinDamage, theMaxDamage, theHitChance, theSpeed, theX, theY);
-        init(theHealChance, theMinHeal, theMaxHeal);
+        init(theType, theHealChance, theMinHeal, theMaxHeal);
+        myType = initType(theType);
         myHealChance = theHealChance;
         myMinHeal = theMinHeal;
         myMaxHeal = theMaxHeal;
@@ -54,10 +66,30 @@ public class Enemy extends DungeonCharacter implements Healable{
      * @param theMinHeal int min heal for this character
      * @param theMaxHeal int max heal for this character
      */
-    void init(final int theHealChance, final int theMinHeal, final int theMaxHeal){
+    private void init(final String theType, final int theHealChance, final int theMinHeal, final int theMaxHeal){
+        if(theType == null){
+            throw new IllegalArgumentException("Can't have an enemy of type null");
+        }
         if(theHealChance < 0 || theHealChance > 100 || theMinHeal <= 0 || theMaxHeal <= 0){
             throw new IllegalArgumentException("Can't initialize illegal values");
         }
+    }
+    private Type initType(final String theType){
+        final Type type;
+        switch(theType){
+            case "Ogre":
+                type = Type.Ogre;
+                break;
+            case "Skeleton":
+                type = Type.Skeleton;
+                break;
+            case "Gremlin":
+                type = Type.Gremlin;
+                break;
+            default:
+                throw new IllegalArgumentException("Can't find enemy type that corresponds to string parameter of type: " + theType);
+        }
+        return type;
     }
     public int getMyMinHeal() {
         return myMinHeal;
@@ -106,6 +138,14 @@ public class Enemy extends DungeonCharacter implements Healable{
     public int getMyHealChance(){
         return myHealChance;
 
+    }
+
+    /**
+     * Returns the type of this character.
+     * @return type of this character.
+     */
+    Type getType(){
+        return myType;
     }
     /**
      * Check if heal is successful for this character.

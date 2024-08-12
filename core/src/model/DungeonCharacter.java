@@ -15,6 +15,14 @@ import org.sqlite.SQLiteDataSource;
  */
 abstract public class DungeonCharacter implements CharacterActions {
     /**
+     * Min trap damage modifier
+     */
+    private static final int TRAP_MIN_DAMAGE = 5;
+    /**
+     * Max trap damage modifier
+     */
+    private static final int TRAP_MAX_DAMAGE = 20;
+    /**
      * String representing newline characters based on system running the program.
      */
     static final String NEW_LINE = System.lineSeparator();
@@ -139,24 +147,21 @@ abstract public class DungeonCharacter implements CharacterActions {
 
     /**
      * Takes damage from trap and applies it to character.
-     * @param theDamage damage to apply
      * @return string message
      */
-    public String harmFromTrap(final int theDamage){
+    public String harmFromTrap(final Tile theTile){
         String result;
-        if(theDamage < 0){
-            throw new IllegalArgumentException("harmFromTrap, incoming damage parameter can't" +
-                " be negative.");
-        }
-        if(theDamage == 0){
-            result = "[" + getMyName() + "] stepped on a trap but avoided damage";
+        Random rand = new Random();
+        if(rand.nextBoolean()){
+            result = "[" + getMyName() + "] stepped on a trap <" + theTile.toString() + "> but avoided damage";
         }
         else{
+            final int theDamage = rand.nextInt(TRAP_MIN_DAMAGE, TRAP_MAX_DAMAGE+1);
             final int healthBeforeTrap = myCurrentHealth;
             myCurrentHealth -= theDamage;
             mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Hit.ogg")));
             checkIsDead();
-            result = "[" + getMyName() + "] stepped on a trap and received " + theDamage + " damage " +
+            result = "[" + getMyName() + "] stepped on a trap <" + theTile.toString() + "> and received " + theDamage + " damage " +
                 " <" + healthBeforeTrap + " -> " + myCurrentHealth + "> HP:" + myCurrentHealth
                 + "/" + myMaxHealth;
             if(getIsDead()){
@@ -187,8 +192,10 @@ abstract public class DungeonCharacter implements CharacterActions {
                 + theIncomingDamage + " damage and perished from their wounds.";
             myDiedToEntity = true;
         }
-        result = "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
-            + theIncomingDamage + " damage. ";
+        else{
+            result = "HP: " + myCurrentHealth + "/" + myMaxHealth + " " + myName + " suffered "
+                + theIncomingDamage + " damage. ";
+        }
         return result;
     }
     /**
@@ -233,6 +240,27 @@ abstract public class DungeonCharacter implements CharacterActions {
         builder.append(" [").append(myName).append("] healed for ").append(healthToAdd).
             append(" <").append(healthBeforeHeal).append(" -> ").append(myCurrentHealth).
             append("> HP:").append(myCurrentHealth).append("/").append(myMaxHealth);
+        return builder.toString();
+    }
+
+
+    String bombDamage(final DungeonCharacter theCharacter, final int theMinDamage, final int theMaxDamage){
+        if(theCharacter == null){
+            throw new IllegalArgumentException("Can't use bomb on null character");
+        }
+        StringBuilder builder = new StringBuilder();
+        int damage = 0;
+        if(attackSuccessCheck()){
+            final Random rand = new Random();
+            damage = rand.nextInt(theMinDamage, theMaxDamage+1);
+            builder.append("[").append(getMyName()).append("] throws <Bomb>. It exploded for ")
+                .append(damage).append(" damage. -> ").append(
+                    theCharacter.receiveDamage(damage));
+        }
+        else{
+            builder.append("[").append(getMyName()).append("] throws <Bomb> but misses.");
+            mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Miss.ogg")));
+        }
         return builder.toString();
     }
     /**
@@ -369,5 +397,21 @@ abstract public class DungeonCharacter implements CharacterActions {
             .append("Is Dead: ").append(myIsDead).append(NEW_LINE)
             .append("Position: ").append(myPosition.toString());
         return stringBuilder.toString();
+    }
+
+    /**
+     * Compares speeds of two characters using greatestSpeed/leastSpeed.
+     * @param theOther other character
+     * @return int speed in character turns. If positive - yours greater, otherwise - theirs is greater.
+     */
+    int compareSpeed(final DungeonCharacter theOther){
+        if(theOther == null){
+            throw new IllegalArgumentException("Can't compare speed to null character");
+        }
+        if(Math.max(mySpeed,theOther.mySpeed) == mySpeed){
+            return mySpeed/theOther.mySpeed;
+        }
+        return theOther.mySpeed/mySpeed;
+
     }
 }
