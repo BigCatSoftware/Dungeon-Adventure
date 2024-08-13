@@ -30,7 +30,6 @@ import model.Tile;
 import model.Warrior;
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
-
 import java.util.ArrayList;
 
 /**
@@ -68,7 +67,7 @@ public class GameScreen implements Screen {
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
-    private boolean myMessageShown = false;
+    private final boolean myMessageShown = false;
     //private final DungeonRenderer myDungeonRenderer;
 
     /**
@@ -168,7 +167,6 @@ public class GameScreen implements Screen {
         myGame.batch.end();
         myStage.act(Gdx.graphics.getDeltaTime());
         myStage.draw();
-        //myGame.batch.end();
     }
 
     /**
@@ -279,6 +277,7 @@ public class GameScreen implements Screen {
         initSettingsButton(style);
         initMenuButton(style);
         initSaveButton(style);
+        initHelpButton(style);
     }
 
     /**
@@ -349,6 +348,18 @@ public class GameScreen implements Screen {
                 mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
                 GameData gameData = new GameData(GameMaster.getInstance().getPlayer(), GameMaster.getInstance().getAllEnemies(), GameMaster.getInstance().getDungeon());
                 GameSaverLoader.saveGame("GameSave.dat", gameData);
+            }
+        });
+        myGameMenuTable.addActor(button);
+    }
+    private void initHelpButton(final TextButton.TextButtonStyle theStyle) {
+        final TextButton button = new TextButton("HELP", theStyle);
+        button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY() * 2 - (6 * BUTTON_HEIGHT) - (5 * BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
+                myGame.setScreen(new HelpScreen(myGame,GameScreen.this));
             }
         });
         myGameMenuTable.addActor(button);
