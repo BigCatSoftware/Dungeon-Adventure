@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Random;
 /**
  * Hero subclass, the Thief is a playable character that has normal HP and less powerful attacks,
@@ -8,7 +9,8 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 23, 2024.
  */
-public class Thief extends Hero{
+public class Thief extends Hero implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Thief health constant
      */
@@ -55,7 +57,7 @@ public class Thief extends Hero{
     public Thief(final String theName, final int theX, final int theY){
         super(theName != null && !theName.isEmpty() ? theName : NameGenerator.getThiefName(),
             THIEF_HEALTH, THIEF_MIN_DAMAGE, THIEF_MAX_DAMAGE, THIEF_BLOCK_CHANCE,
-            THIEF_HIT_CHANCE, THIEF_SPEED, theX, theY);
+            THIEF_HIT_CHANCE, THIEF_SPEED, theX, theY, 0, 0);
     }
 
     /**
@@ -90,7 +92,7 @@ public class Thief extends Hero{
      * Method used to return value to heal for this character
      * @return int amount to heal
      */
-    int heal(){
+    public int heal(){
         return 0;
     }
     /**

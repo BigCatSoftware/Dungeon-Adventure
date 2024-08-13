@@ -13,6 +13,7 @@ import java.util.Random;
  * @version July 19, 2024.
  */
 abstract public class Hero extends DungeonCharacter implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Health from potion modifier.
      */
@@ -54,15 +55,17 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      * @param theSpeed int speed of this character
      * @param theX int x position of this character
      * @param theY int y position of this character
+     * @param theKeysInv int number of keys in inventory
+     * @param theHealthInv int number of potions in inventory
      */
-    Hero(final String theName, final int theHealth, final int theMinDamage,
-         final int theMaxDamage, final int theBlockChance, final int theHitChance,
-         final int theSpeed, final int theX, final int theY){
+    public Hero(final String theName, final int theHealth, final int theMinDamage,
+                final int theMaxDamage, final int theBlockChance, final int theHitChance,
+                final int theSpeed, final int theX, final int theY, final int theKeysInv, final int theHealthInv){
         super(theName, theHealth, theMinDamage, theMaxDamage, theHitChance, theSpeed, theX, theY);
         init(theBlockChance);
         myBlockChance = theBlockChance;
-        myKeysInv = 0;
-        myHealthInv = 0;
+        myKeysInv = theKeysInv;
+        myHealthInv = theHealthInv;
         myBombInv = 0;
     }
     void init(final int theBlockChance){
@@ -73,9 +76,12 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
 
     /**
      * Method used to return value to heal for this character
+     *
      * @return int amount to heal.
      */
-    abstract int heal();
+    public int heal() {
+        return 0;
+    }
 
     /**
      * Upon combat when hero received damage there is a chance to block it, otherwise the

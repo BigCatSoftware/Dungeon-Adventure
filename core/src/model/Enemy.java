@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -9,7 +10,8 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 23, 2024.
  */
-public class Enemy extends DungeonCharacter implements Healable{
+public class Enemy extends DungeonCharacter implements Healable, Serializable {
+    private static final long serialVersionUID = 1L;
     public enum Type{
         Ogre,
         Skeleton,

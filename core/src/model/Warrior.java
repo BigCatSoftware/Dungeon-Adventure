@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -10,7 +11,8 @@ import java.util.Random;
  * @author Nazarii Revitskyi
  * @version July 19, 2024.
  */
-public final class Warrior extends Hero{
+public final class Warrior extends Hero implements Serializable {
+    private static final long serialVersionUID = 1L;
     //CHARACTER PARAMETER CONSTANTS
     /**
      * Warrior health constant
@@ -58,7 +60,7 @@ public final class Warrior extends Hero{
     public Warrior(final String theName, final int theX, final int theY){
         super(theName != null && !theName.isEmpty() ? theName : NameGenerator.getWarriorName(),
             WARRIOR_HEALTH, WARRIOR_MIN_DAMAGE, WARRIOR_MAX_DAMAGE,
-            WARRIOR_BLOCK_CHANCE, WARRIOR_HIT_CHANCE, WARRIOR_SPEED, theX, theY);
+            WARRIOR_BLOCK_CHANCE, WARRIOR_HIT_CHANCE, WARRIOR_SPEED, theX, theY, 0, 0);
     }
 
     /**
@@ -90,7 +92,7 @@ public final class Warrior extends Hero{
      * Method used to return value to heal for this character
      * @return int amount to heal
      */
-    int heal(){
+    public int heal(){
         return 0;
     }
     /**

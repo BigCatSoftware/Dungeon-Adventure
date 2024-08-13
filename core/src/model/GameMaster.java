@@ -1,12 +1,10 @@
 package model;
 
-import com.dungeonadventure.database.DatabaseManager;
 import com.dungeonadventure.database.GameData;
 
 import static model.DungeonCharacter.NEW_LINE;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -41,7 +39,6 @@ public final class GameMaster {
     //methods
     private boolean myHeroSet;
     private boolean myIsCheats;
-    private final DatabaseManager dbManager; // DatabaseManager instance
     /**
      * Private constructor for the GameMaster singleton.
      * Initializes the dungeon, map, and populates the dungeon with enemies.
@@ -53,7 +50,6 @@ public final class GameMaster {
         myPlayer = null;
         myHeroSet = false;
         myEnemies = new ArrayList<>();
-        dbManager = new DatabaseManager();
         populate();
         System.out.println(getEnemyPositionsToString());
         myIsCheats = false;
@@ -169,8 +165,8 @@ public final class GameMaster {
         StringBuilder sb = new StringBuilder();
         for(Enemy e : myEnemies){
             sb.append("[").append(e.getMyName()).append("] is a ").
-                append(e.getClass().getSimpleName()).append(" and is at ").append(e.getPosition().
-                    toString()).append(NEW_LINE);
+                    append(e.getClass().getSimpleName()).append(" and is at ").append(e.getPosition().
+                            toString()).append(NEW_LINE);
         }
         return sb.toString();
     }
@@ -254,12 +250,12 @@ public final class GameMaster {
         if(myPlayer.getIsDead()){
             if(myPlayer.getDiedToEnemy()){
                 message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
-                    " had died while fighting [" + myCurrentEnemy.getMyName() + "] - "
-                    + myCurrentEnemy.getType().toString();
+                        " had died while fighting [" + myCurrentEnemy.getMyName() + "] - "
+                        + myCurrentEnemy.getType().toString();
             }
             else if(myPlayer.getDiedToTrap()){
                 message = "[" + myPlayer.getMyName() + "] - " + myPlayer.getClass().getSimpleName() +
-                    " had died in trap while exploring the dungeon.";
+                        " had died in trap while exploring the dungeon.";
             }
         }
         return message;
@@ -402,42 +398,24 @@ public final class GameMaster {
         }
         else {
             throw new IllegalStateException("GameMaster player is not an instance " +
-                "of concrete implementation of Hero abstract class."
-                + myPlayer.getClass().getSimpleName());
+                    "of concrete implementation of Hero abstract class."
+                    + myPlayer.getClass().getSimpleName());
         }
         return result;
     }
-
-    public void saveGame() {
-        int playerX = myPlayer.getPosition().getMyX();
-        int playerY = myPlayer.getPosition().getMyY();
-        //String inventory = myPlayer.getInventoryAsString(); // Implement this method
-        List<Enemy> enemiesData = new ArrayList<>();
-
-        for (Enemy enemy : myEnemies) {
-            enemiesData.add(new Enemy(enemy.getType().toString(), enemy.getMyName(), enemy.getCurrentHealth(), enemy.getMinDamage(),
-                    enemy.getMaxDamage(), enemy.getMyHealChance(), enemy.getHitChance(),
-                    enemy.getSpeed(), enemy.getMyMinHeal(), enemy.getMyMaxHeal(), enemy.getPosition().getMyX(),
-                    enemy.getPosition().getMyY()));
-        }
-
-        dbManager.saveGame(playerX, playerY, enemiesData);
+    public Dungeon getDungeon() {
+        return myDungeon;
     }
+    public void loadGame(final GameData theGameData) {
+        // Load player data
+        myPlayer = theGameData.getHero();
+        myHeroSet = true;
 
-    public void loadGame() {
-        GameData gameData = dbManager.loadGame();
-        if (gameData != null) {
-            Position inPosition = new Position(gameData.getPlayerX(), gameData.getPlayerY());
-            myPlayer.setMyPosition(inPosition);
-            //myPlayer.loadInventoryFromString(gameData.getInventory()); // Implement this method
-            myEnemies.clear(); // Clear current enemies before loading
-            for (Enemy enemyData : gameData.getEnemies()) {
-                Enemy enemy = new Enemy(enemyData.getType().toString(), enemyData.getMyName(), enemyData.getCurrentHealth(), enemyData.getMinDamage(),
-                        enemyData.getMaxDamage(), enemyData.getMyHealChance(), enemyData.getHitChance(),
-                        enemyData.getSpeed(), enemyData.getMyMinHeal(), enemyData.getMyMaxHeal(), enemyData.getPosition().getMyX(),
-                        enemyData.getPosition().getMyY());
-                myEnemies.add(enemy);
-            }
-        }
+        // Load dungeon data
+        myDungeon = theGameData.getDungeon();
+        myMap = myDungeon.getMap();
+
+        // Load enemy data
+        myEnemies = theGameData.getEnemies();
     }
 }

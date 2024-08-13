@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Random;
 /**
  * Hero subclass, the Priestess is a playable character that has normal HP and normal attacks,
@@ -9,7 +10,8 @@ import java.util.Random;
  * @version July 23, 2024.
  */
 
-public final class Priestess extends Hero implements Healable{
+public final class Priestess extends Hero implements Healable, Serializable {
+    private static final long serialVersionUID = 1L;
     //CHARACTER PARAMETER CONSTANTS.
     /**
      * Priestess health constant.
@@ -53,7 +55,7 @@ public final class Priestess extends Hero implements Healable{
     public Priestess(final String theName, final int theX, final int theY){
         super(theName != null && !theName.isEmpty() ? theName : NameGenerator.getPriestessName(),
             PRIESTESS_HEALTH, PRIESTESS_MIN_DAMAGE, PRIESTESS_MAX_DAMAGE, PRIESTESS_BLOCK_CHANCE,
-            PRIESTESS_HIT_CHANCE, PRIESTESS_SPEED, theX, theY);
+            PRIESTESS_HIT_CHANCE, PRIESTESS_SPEED, theX, theY, 0, 0);
     }
 
     /**

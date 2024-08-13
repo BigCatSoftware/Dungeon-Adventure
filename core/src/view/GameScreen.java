@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.dungeonadventure.database.GameData;
+import com.dungeonadventure.database.GameSaverLoader;
 import controller.PlayerInputProcessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -75,10 +77,7 @@ public class GameScreen implements Screen {
      * @param theGame the main game instance
      */
     public GameScreen(final DungeonAdventure theGame) {
-        GameMaster.getInstance().updateMapFOW();
         myGame = theGame;
-        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
-        mySETTINGS.updateMusic();
         myViewPort = new ScreenViewport();
         myStage = new Stage(myViewPort, myGame.batch);
         myGameTable = new Table();
@@ -99,10 +98,16 @@ public class GameScreen implements Screen {
         myGremlinTexture = new Texture("Pixel Gremlin.png");
         mySkeletonTexture = new Texture("Pixel Skeleton.png");
         myOgreTexture = new Texture("Pixel Ogre.png");
+        myPlayerImage = initPlayerTexture();
+        initAll();
+    }
+    private void initAll(){
+        GameMaster.getInstance().updateMapFOW();
+        myBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("NightAmbianceLoop.ogg"));
+        mySETTINGS.updateMusic();
         myGameTable.setFillParent(true);
         myStage.addActor(myGameTable);
         //add to table
-        myPlayerImage = initPlayerTexture();
         myPlayerImage.setPosition(GameMaster.getInstance().getPlayerX()*TILE_SIZE, GameMaster.getInstance()
                 .getPlayerY()*TILE_SIZE);
         myGameMenuTable.setBounds((float) DungeonAdventure.WIDTH / 4,((float) DungeonAdventure.HEIGHT / 4), (float) DungeonAdventure.WIDTH / 2, (float) DungeonAdventure.HEIGHT / 2);
@@ -111,7 +116,6 @@ public class GameScreen implements Screen {
         initGameMenuButtons();
         myGameTable.addActor(myPlayerImage);
         myGameTable.addActor(myGameMenuTable);
-        //myDungeonRenderer = new DungeonRenderer();
     }
 
     /**
@@ -274,6 +278,7 @@ public class GameScreen implements Screen {
         initResumeButton(style);
         initSettingsButton(style);
         initMenuButton(style);
+        initSaveButton(style);
     }
 
     /**
@@ -331,6 +336,19 @@ public class GameScreen implements Screen {
                 myGame.setScreen(new MainMenuScreen(myGame));
                 //TODO: auto save and go to menu
                 GameMaster.getInstance().restart();
+            }
+        });
+        myGameMenuTable.addActor(button);
+    }
+    private void initSaveButton(final TextButton.TextButtonStyle theStyle) {
+        final TextButton button = new TextButton("SAVE", theStyle);
+        button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY() * 2 - (5 * BUTTON_HEIGHT) - (4 * BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
+                GameData gameData = new GameData(GameMaster.getInstance().getPlayer(), GameMaster.getInstance().getAllEnemies(), GameMaster.getInstance().getDungeon());
+                GameSaverLoader.saveGame("GameSave.dat", gameData);
             }
         });
         myGameMenuTable.addActor(button);

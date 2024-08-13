@@ -2,18 +2,21 @@ package model;
 
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import model.Position;
 import org.sqlite.SQLiteDataSource;
 
+
 /**
  * Abstract dungeon character class defines variety of entities that will inhabit the dungeon.
  * @author Nazarii Revitskyi
  * @version July 17, 2024.
  */
-abstract public class DungeonCharacter implements CharacterActions {
+abstract public class DungeonCharacter implements CharacterActions, Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Min trap damage modifier
      */
@@ -379,9 +382,6 @@ abstract public class DungeonCharacter implements CharacterActions {
      */
     public Position getPosition(){
         return myPosition;
-    }
-    public void setMyPosition(final Position thePosition) {
-        myPosition = thePosition;
     }
     /**
      * Converts data about character to string.

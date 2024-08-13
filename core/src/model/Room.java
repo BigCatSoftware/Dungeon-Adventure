@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * @author Tiger Schueler
  * @version 28JUL24
  */
-public class Room {
+public class Room implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final String myName;
     private final int myX;
     private final int myY;

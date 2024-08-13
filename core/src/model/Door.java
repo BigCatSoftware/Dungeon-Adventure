@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents a door in the dungeon.
  * A door can be placed between rooms and can be locked or unlocked.
@@ -7,7 +9,8 @@ package model;
  * @author Tiger Schueler
  * @version 27JUL24
  */
-public class Door {
+public class Door implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final Position myPosition;
     private boolean isLocked;

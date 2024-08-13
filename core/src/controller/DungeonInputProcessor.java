@@ -1,5 +1,7 @@
 package controller;
 
+import com.dungeonadventure.database.GameData;
+import com.dungeonadventure.database.GameSaverLoader;
 import model.GameMaster;
 import model.NameGenerator;
 import model.Priestess;
@@ -14,6 +16,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.dungeonadventure.game.DungeonAdventure;
+
+import java.io.FileNotFoundException;
 
 import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 
@@ -136,10 +140,12 @@ public class DungeonInputProcessor extends InputAdapter {
             GameMaster.getInstance().setPlayer(new Thief(NameGenerator.getThiefName(), 1, 1));
             myGame.setScreen(new GameScreen(myGame));
         } else if (isInBounds(x, y, PRIESTESS_BUTTON_X, HERO_BUTTON_Y, HERO_BUTTON_WIDTH, HERO_BUTTON_HEIGHT)) {
-            GameMaster.getInstance().setPlayer(new Priestess(NameGenerator.getPriestessName(), 1,1));
+            GameMaster.getInstance().setPlayer(new Priestess(NameGenerator.getPriestessName(), 1, 1));
             myGame.setScreen(new GameScreen(myGame));
         } else if (isInBounds(x, y, LOAD_BUTTON_X, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT)) {
-            // Load functionality
+            GameData gameLoaded = GameSaverLoader.loadGame("GameSave.dat");
+            GameMaster.getInstance().loadGame(gameLoaded);
+            myGame.setScreen(new GameScreen(myGame));
         } else if (isInBounds(x, y, SETTINGS_BUTTON_X, SETTINGS_BUTTON_Y, SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT)) {
             myGame.setScreen(new SettingsScreen(myGame, myPreviousScreen));
         } else {
@@ -148,6 +154,7 @@ public class DungeonInputProcessor extends InputAdapter {
 
         return true; // Return true if the event is handled
     }
+
 
     /**
      * Checks if the touch is within the bounds of a button.

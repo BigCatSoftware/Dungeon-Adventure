@@ -12,7 +12,7 @@ import java.util.*;
  * @version 10AUG24
  */
 public class Dungeon implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     private final int MAP_SIZE = 50;
     private final Tile[][] MAP;
     private final boolean[][] myMapFOW;
@@ -448,7 +448,8 @@ public class Dungeon implements Serializable {
     /**
      * Class representing a node in the BSP tree.
      */
-    private static class Node {
+    private static class Node implements Serializable {
+        private static final long serialVersionUID = 1L;
         private final int myX;
         private final int myY;
         private final int myWidth;
