@@ -127,34 +127,34 @@ public final class GameMaster {
         return myEnemies;
     }
     public void enemyMove(){
-        //move character randomly.
-        for(Enemy e : myEnemies){
-            boolean[] direction = new boolean[4]; //up, right, down, left.
-            direction[0] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()+1].isWalkable();
-            direction[1] = myMap[e.getPosition().getMyX()+1][e.getPosition().getMyY()].isWalkable();
-            direction[2] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()-1].isWalkable();
-            direction[3] = myMap[e.getPosition().getMyX()-1][e.getPosition().getMyY()].isWalkable();
+            //move character randomly.
+            for(Enemy e : myEnemies){
+                boolean[] direction = new boolean[4]; //up, right, down, left.
+                direction[0] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()+1].isWalkable();
+                direction[1] = myMap[e.getPosition().getMyX()+1][e.getPosition().getMyY()].isWalkable();
+                direction[2] = myMap[e.getPosition().getMyX()][e.getPosition().getMyY()-1].isWalkable();
+                direction[3] = myMap[e.getPosition().getMyX()-1][e.getPosition().getMyY()].isWalkable();
 
-            Random rand = new Random();
-            int choice;
-            do{
-                choice = rand.nextInt(4);
-            }while(!direction[choice]);
-            switch(choice){
-                case 0:
-                    e.moveCharacterUp();
-                    break;
-                case 1:
-                    e.moveCharacterRight();
-                    break;
-                case 2:
-                    e.moveCharacterDown();
-                    break;
-                case 3:
-                    e.moveCharacterLeft();
-                    break;
+                Random rand = new Random();
+                int choice;
+                do{
+                    choice = rand.nextInt(4);
+                }while(!direction[choice]);
+                switch(choice){
+                    case 0:
+                        e.moveCharacterUp();
+                        break;
+                    case 1:
+                        e.moveCharacterRight();
+                        break;
+                    case 2:
+                        e.moveCharacterDown();
+                        break;
+                    case 3:
+                        e.moveCharacterLeft();
+                        break;
+                }
             }
-        }
     }
     /**
      * Returns a string representing the positions of all enemies in the dungeon.
@@ -286,7 +286,9 @@ public final class GameMaster {
             myEnemies.remove(myCurrentEnemy);
         }
     }
-
+    public void removeAllEnemies(){
+        myEnemies = new ArrayList<>();
+    }
     /**
      * Restarts the game by regenerating the dungeon, resetting the player, and repopulating
      * the dungeon with enemies.
@@ -319,6 +321,12 @@ public final class GameMaster {
         else{
             myIsCheats = true;
             myDungeon.cheatMapVis(true);
+            for(int i = 0; i < 20; i++){
+                myPlayer.addBomb();
+                myPlayer.addHealthPotion();
+                myPlayer.addKey();
+            }
+            System.out.println("Keys: " + myPlayer.getHeroKeys());
         }
     }
     public boolean getIsCheats(){

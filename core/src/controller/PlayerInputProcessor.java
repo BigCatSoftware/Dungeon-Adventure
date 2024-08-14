@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.dungeonadventure.game.DungeonAdventure;
 
 
+import static com.dungeonadventure.game.DungeonAdventure.myBackgroundMusic;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 /**
@@ -98,6 +99,7 @@ public class PlayerInputProcessor extends InputAdapter {
                 break;
             case Input.Keys.ESCAPE:
                 myPreviousScreen.showMenu();
+                myPreviousScreen.updateUI();
                 break;
             case Input.Keys.E:
                 openDoors();
@@ -105,6 +107,8 @@ public class PlayerInputProcessor extends InputAdapter {
             case Input.Keys.F10:
                 gm.toggleCheats();
                 break;
+            case Input.Keys.F11:
+                gm.removeAllEnemies();
             default:
                 return false; // Indicates that the key event was not handled
         }
@@ -121,9 +125,12 @@ public class PlayerInputProcessor extends InputAdapter {
                 GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
                 break;
             case POISON_POTION:
-                gm.getPlayer().setMyTrapsTriggered();
-                myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(Tile.POISON_POTION));
-                GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
+                if(myGame.getScreen() == myPreviousScreen){
+                    gm.getPlayer().setMyTrapsTriggered();
+                    myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(Tile.POISON_POTION));
+                    myPreviousScreen.updateUI();
+                    GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
+                }
                 break;
             case KEY:
                 gm.heroPicksKey();
@@ -134,16 +141,26 @@ public class PlayerInputProcessor extends InputAdapter {
                 gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 break;
             case PIT_TRAP:
-                gm.getPlayer().setMyTrapsTriggered();
-                myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
+                if(myGame.getScreen() == myPreviousScreen){
+                    gm.getPlayer().setMyTrapsTriggered();
+                    myPreviousScreen.updateUI();
+                    myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
+                }
                 break;
             case EXIT:
-                statScreen(GameMaster.getInstance().getPlayer().getMyName(),
-                        GameMaster.getInstance().getPlayer().getCurrentHealth(),
-                        GameMaster.getInstance().getPlayer().getMyEnemiesKilled(),
-                        GameMaster.getInstance().getPlayer().getMyPotionsUsed(),
-                        GameMaster.getInstance().getPlayer().getMyBombsUsed(),
-                        GameMaster.getInstance().getPlayer().getMyTrapsTriggered());
+                if(GameMaster.getInstance().getPlayer().getHeroKeys() == 4){
+                    if(myGame.getScreen() == myPreviousScreen){
+                        myBackgroundMusic.dispose();
+                        mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/Win.ogg")));
+                        statScreen(GameMaster.getInstance().getPlayer().getMyName(),
+                            GameMaster.getInstance().getPlayer().getCurrentHealth(),
+                            GameMaster.getInstance().getPlayer().getMyEnemiesKilled(),
+                            GameMaster.getInstance().getPlayer().getMyPotionsUsed(),
+                            GameMaster.getInstance().getPlayer().getMyBombsUsed(),
+                            GameMaster.getInstance().getPlayer().getMyTrapsTriggered());
+                        myPreviousScreen.updateUI();
+                    }
+                }
             default:
                 break;
         }
