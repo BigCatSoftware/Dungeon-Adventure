@@ -195,7 +195,7 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     }
 
     /**
-     * This method will add a key to hero's inventory.
+     * This method will add a bomb to hero's inventory.
      */
     public void addBomb() {
         if(myBombInv < 999){

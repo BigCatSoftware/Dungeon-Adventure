@@ -3,6 +3,9 @@ package view;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -93,7 +96,18 @@ public class GameOverScreen implements Screen {
      * This is typically used to set up input processors or start animations.
      */
     public void show() {
-        Gdx.input.setInputProcessor(myStage);
+        final InputMultiplexer mux = new InputMultiplexer();
+        mux.addProcessor(myStage);
+        mux.addProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keyCode){
+                if (keyCode == Input.Keys.ENTER) {
+                    myMenuButton.toggle();
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(mux);
     }
 
     /**
@@ -157,6 +171,7 @@ public class GameOverScreen implements Screen {
                 GameMaster.getInstance().restart();
             }
         });
+        button.setProgrammaticChangeEvents(true);
         return button;
     }
     private String[] initGameOverNames(){
