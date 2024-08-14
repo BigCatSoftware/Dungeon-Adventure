@@ -77,4 +77,7 @@ public class MessageScreen extends InputAdapter {
     public static void addListener(final ChangeListener theListener){
         myOKButton.addListener(theListener);
     }
+    public static void setTablePosition(final float theX, final float theY){
+        myTable.setPosition(theX, theY);
+    }
 }

@@ -321,6 +321,9 @@ public final class GameMaster {
             myDungeon.cheatMapVis(true);
         }
     }
+    public boolean getIsCheats(){
+        return myIsCheats;
+    }
     /**
      * Returns Tile[][] grid of cells that define the game grid and store tile, position,
      * enemy arraylist, item.
