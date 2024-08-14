@@ -3,7 +3,9 @@ package view;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,12 +42,11 @@ import java.util.ArrayList;
  * @version 10AUG24
  */
 public class GameScreen implements Screen {
-    private static final int TILE_SIZE = 16;
+    private static final int TILE_SIZE = 64;
     private static final int BUTTON_WIDTH = 154;
     private static final int BUTTON_HEIGHT = 54;
     private static final int BUTTON_Y_OFFSET = 10;
     private static final int BUTTON_X_OFFSET = 77;
-    private final Viewport myViewPort;
     private final Stage myStage;
     private final Table myGameTable;
     private final Table myGameMenuTable;
@@ -68,9 +69,6 @@ public class GameScreen implements Screen {
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
-    private boolean myMessageShown = false;
-    //private final DungeonRenderer myDungeonRenderer;
-
     /**
      * Constructs a new GameScreen.
      *
@@ -78,8 +76,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(final DungeonAdventure theGame) {
         myGame = theGame;
-        myViewPort = new ScreenViewport();
-        myStage = new Stage(myViewPort, myGame.batch);
+        myStage = new Stage(new ScreenViewport(), myGame.batch);
         myGameTable = new Table();
         myGameMenuTable = new Table();
         myFont = new BitmapFont(Gdx.files.internal("fonts/alagard.fnt"), Gdx.files.internal("fonts/alagard.png"), false);
@@ -149,7 +146,15 @@ public class GameScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame,GameScreen.this));//new PlayerInputProcessor(myPlayer, myGame, GameScreen.this));
     }
-
+    private void updateCamera(final float theX, final float theY, final float theDelta, final float theLerp){
+        myStage.getCamera().position.x += (theX + theDelta - myStage.getCamera().position.x) * theLerp * Gdx.graphics.getDeltaTime();
+        myStage.getCamera().position.y += (theY + theDelta - myStage.getCamera().position.y) * theLerp * Gdx.graphics.getDeltaTime();
+        myStage.getCamera().update();
+    }
+    private void updateUI(final float theX, final float theY){
+        myGameMenuTable.setPosition(theX-myGameMenuTable.getWidth()/2, theY-myGameMenuTable.getHeight()/2);
+        MessageScreen.getMessageTable().setPosition(theX-MessageScreen.getMessageTable().getWidth()/2, theY-MessageScreen.getMessageTable().getHeight()/2);
+    }
     /**
      * Renders the screen.
      * Clears the screen, renders the dungeon, and draws the settings button.
@@ -159,9 +164,17 @@ public class GameScreen implements Screen {
     @Override
     public void render(final float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
-        //myGame.batch.begin();
-
-        // Render the dungeon
+        if(GameMaster.getInstance().getIsCheats()){
+            ((OrthographicCamera) myStage.getCamera()).zoom = 4f;
+            myStage.getCamera().position.x = GameMaster.getInstance().getMap().length/2 * TILE_SIZE;
+            myStage.getCamera().position.y = GameMaster.getInstance().getMap()[1].length/2 * TILE_SIZE;
+        }
+        else{
+            ((OrthographicCamera) myStage.getCamera()).zoom = 1f;
+            updateCamera(GameMaster.getInstance().getPlayerX() * TILE_SIZE + TILE_SIZE/2, GameMaster.getInstance()
+                .getPlayerY() * TILE_SIZE + TILE_SIZE/2, 1f,3f);
+            updateUI(myStage.getCamera().position.x, myStage.getCamera().position.y);
+        }
         myGame.batch.begin();
         initMap();
         initEntities();
