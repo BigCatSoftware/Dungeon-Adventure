@@ -26,6 +26,7 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      * Bomb max damage modifier.
      */
     private final static int BOMB_MAX_DAMAGE = 200;
+
     /**
      * Represents int chance to block attack and is used in combat.
      */
@@ -43,6 +44,26 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
      * Represents int bombs inside hero inventory.
      */
     private int myBombInv;
+
+    /**
+     * Represents enemies killed.
+     */
+    private int myEnemiesKilled;
+
+    /**
+     * Represents health potions used.
+     */
+    private int myPotionsUsed;
+
+    /**
+     * Represents traps triggered.
+     */
+    private int myTrapsTriggered;
+
+    /**
+     * Represents bombs used.
+     */
+    private int myBombsUsed;
 
     /**
      * Hero constructor instantiates block chance.
@@ -67,11 +88,61 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
         myKeysInv = theKeysInv;
         myHealthInv = theHealthInv;
         myBombInv = 0;
+        myEnemiesKilled = 0;
+        myPotionsUsed = 0;
+        myTrapsTriggered = 0;
+        myBombsUsed = 0;
+
     }
     void init(final int theBlockChance){
         if(myBlockChance < 0 || myBlockChance > 100){
             throw new IllegalArgumentException("Chance can't go out of bounds");
         }
+    }
+
+//    public String getName() {
+//        return myName;
+//    }
+
+    public int getMyEnemiesKilled() {
+        return myEnemiesKilled;
+    }
+
+    public void setMyEnemiesKilled() {
+        myEnemiesKilled++;
+    }
+
+    public int getMyCurrentPotions() {
+        return myHealthInv;
+    }
+
+    public int getMyPotionsUsed() {
+        return myPotionsUsed;
+    }
+
+    public void setMyPotionsUsed() {
+        myPotionsUsed++;
+    }
+
+    public int getMyTrapsTriggered() {
+        return myTrapsTriggered;
+    }
+
+    public void setMyTrapsTriggered() {
+        myTrapsTriggered++;
+    }
+
+
+    public int getMyCurrentBombs() {
+        return myBombInv;
+    }
+
+    public int getMyBombsUsed() {
+        return myBombsUsed;
+    }
+
+    public void setMyBombsUsed() {
+        myBombsUsed++;
     }
 
     /**

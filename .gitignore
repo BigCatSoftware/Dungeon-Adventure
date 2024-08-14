@@ -4,9 +4,9 @@
 *.war
 *.ear
 hs_err_pid*
-/GameSave.dat
 /enemy.db
 /game_data.db
+/GameSave.dat
 
 ## Robovm
 /ios/robovm-build/

@@ -413,6 +413,48 @@ public class GameScreen implements Screen {
             myMenuShown = true;
         }
     }
+    public void showStatisticsScreen(final String theMessage) {
+        final Table table = StatisticsScreen.getMessageTable();
+        final InputMultiplexer inMux = new InputMultiplexer();
+        inMux.addProcessor(myStage);
+        inMux.addProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keyCode){
+                if(keyCode == Input.Keys.ENTER){
+                    if(GameMaster.getInstance().getPlayer().getIsDead()){
+                        dispose();
+                        myGame.setScreen(new GameOverScreen(myGame));
+                    }
+                    else{
+//                        myGameTable.removeActor(table);
+                        dispose();
+//                        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                        GameMaster.getInstance().restart();
+                    }
+
+                }
+                return true;
+            }
+        });
+        StatisticsScreen.setLabelText(theMessage);
+        StatisticsScreen.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(GameMaster.getInstance().getPlayer().getIsDead()){
+                    dispose();
+                    myGame.setScreen(new GameOverScreen(myGame));
+                }
+                else {
+                    myGame.setScreen(new MainMenuScreen(myGame));
+                    myGameTable.removeActor(table);
+//                    Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                }
+            }
+        });
+        myGameTable.addActor(StatisticsScreen.getMessageTable());
+        Gdx.input.setInputProcessor(inMux);
+    }
+
     public void showTrapMessage(final String theMessage){
         final Table table = MessageScreen.getMessageTable();
         final InputMultiplexer inMux = new InputMultiplexer();
