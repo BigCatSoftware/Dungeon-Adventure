@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dungeonadventure.database.GameData;
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
     private static final int BUTTON_HEIGHT = 54;
     private static final int BUTTON_Y_OFFSET = 10;
     private static final int BUTTON_X_OFFSET = 77;
+    private static final int PIXEL_SIZE = 5;
     private final Stage myStage;
     private final Table myGameTable;
     private final Table myGameMenuTable;
@@ -69,6 +72,7 @@ public class GameScreen implements Screen {
     private final Texture mySkeletonTexture;
     private final Texture myOgreTexture;
     private boolean myMenuShown = false;
+    private Pixmap myPixmap;
     /**
      * Constructs a new GameScreen.
      *
@@ -113,6 +117,7 @@ public class GameScreen implements Screen {
         initGameMenuButtons();
         myGameTable.addActor(myPlayerImage);
         myGameTable.addActor(myGameMenuTable);
+        myPixmap = new Pixmap(GameMaster.getInstance().getMap().length * PIXEL_SIZE,GameMaster.getInstance().getMap()[1].length * PIXEL_SIZE, Pixmap.Format.RGBA8888);
     }
 
     /**
@@ -178,6 +183,10 @@ public class GameScreen implements Screen {
         myGame.batch.begin();
         initMap();
         initEntities();
+        if(!GameMaster.getInstance().getIsCheats()){
+            Texture miniMap = new Texture(myPixmap);
+            myGame.batch.draw(miniMap, myStage.getCamera().position.x + DungeonAdventure.WIDTH/2 - miniMap.getWidth(), myStage.getCamera().position.y + DungeonAdventure.HEIGHT/2 - miniMap.getHeight());
+        }
         myGame.batch.end();
         myStage.act(Gdx.graphics.getDeltaTime());
         myStage.draw();
@@ -196,48 +205,64 @@ public class GameScreen implements Screen {
                 switch(map[i][j]){
                     case WALL:
                         texture = myWallTexture;
+                        myPixmap.setColor(new Color(136f/255, 109f/255, 93f/255, 1));
                         break;
                     case FLOOR:
                         texture = myFloorTexture;
+                        myPixmap.setColor(144f/255, 139f/255, 132f/255, 1);
                         break;
                     case DOOR:
                         texture = myDoorTexture;
+                        myPixmap.setColor(102f/255, 57f/255, 49f/255, 1);
                         break;
                     case OPEN_DOOR:
                         texture = myOpenDoorTexture;
+                        myPixmap.setColor(144f/255, 139f/255, 132f/255, 1);
                         break;
                     case KEY:
                         texture = myKeyTexture;
+                        myPixmap.setColor(251f/255, 242f/255, 54f/255, 1);
                         break;
                     case EXIT:
                         texture = myExitTexture;
+                        myPixmap.setColor(99f/255, 155f/255, 255f/255, 1);
                         break;
                     case HEALTH_POTION:
                         texture = myHealthPotionTexture;
+                        myPixmap.setColor(172f/255, 50f/255, 50f/255, 1);
                         break;
                     case POISON_POTION:
                         texture = myPoisonPotionTexture;
+                        myPixmap.setColor(118f/255, 66f/255, 138f/255, 1);
                         break;
                     case BOMB:
                         texture = myBombTexture;
+                        myPixmap.setColor(34f/255, 32f/255, 52f/255, 1);
                         break;
                     case PIT_TRAP:
                         texture = myPitTrapTexture;
+                        myPixmap.setColor(0, 0, 0, 1);
                         break;
                 }
                 if (texture != null) {
                     if(GameMaster.getInstance().getMapFOW()[i][j]){
                         myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                     }
                     else if(GameMaster.getInstance().getMapExploredFOW()[i][j]){
                         myGame.batch.setColor(Color.DARK_GRAY);
                         myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                         myGame.batch.setColor(Color.WHITE);
+                        myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                        myPixmap.setColor(63f/255, 63f/255, 63f/255, 100f/255);
+                        myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                     }
                     else{
                         myGame.batch.setColor(Color.BLACK);
                         myGame.batch.draw(texture, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                         myGame.batch.setColor(Color.WHITE);
+                        myPixmap.setColor(0,0,0,1);
+                        myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                     }
                 }
                 else{
@@ -267,7 +292,12 @@ public class GameScreen implements Screen {
                 else{
                     throw new IllegalStateException("Unknown enemy type when drawing on map. Entity name: " + e.getClass().getSimpleName());
                 }
+                myPixmap.setColor(1,0,0,1);
+                myPixmap.fillRectangle(e.getPosition().getMyX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length - e.getPosition().getMyY()) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
             }
+            myPixmap.setColor(1,1,1,1);
+            myPixmap.fillRectangle(GameMaster.getInstance().getPlayerX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length - GameMaster.getInstance()
+                .getPlayerY()) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
         }
     }
 
