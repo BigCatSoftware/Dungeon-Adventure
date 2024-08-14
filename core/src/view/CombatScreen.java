@@ -586,6 +586,7 @@ public final class CombatScreen extends ScreenAdapter {
                 //TODO: use functionality to remove the health potion and add health.
                 playerTurnAction();
                 updateInventory();
+                GameMaster.getInstance().getPlayer().setMyPotionsUsed();
             }
         });
         myInventory.addActor(button);
@@ -607,8 +608,8 @@ public final class CombatScreen extends ScreenAdapter {
                 //update enemy hp
                 myEnemyHP.setText(enemyHealth());
                 myEnemyHP.setColor(updateHPColor(GameMaster.getInstance().getEnemy()));
-
                 playerTurnAction();
+                GameMaster.getInstance().getPlayer().setMyBombsUsed();
             }
         });
         myInventory.addActor(button);

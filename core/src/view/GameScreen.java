@@ -383,9 +383,12 @@ public class GameScreen implements Screen {
                         myGame.setScreen(new GameOverScreen(myGame));
                     }
                     else{
-                        myGameTable.removeActor(table);
-                        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+//                        myGameTable.removeActor(table);
+                        dispose();
+//                        Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+                        GameMaster.getInstance().restart();
                     }
+
                 }
                 return true;
             }
@@ -398,10 +401,10 @@ public class GameScreen implements Screen {
                     dispose();
                     myGame.setScreen(new GameOverScreen(myGame));
                 }
-                else{
+                else {
                     myGame.setScreen(new MainMenuScreen(myGame));
                     myGameTable.removeActor(table);
-                    Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
+//                    Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
                 }
             }
         });

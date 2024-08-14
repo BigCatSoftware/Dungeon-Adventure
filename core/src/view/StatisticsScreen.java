@@ -54,7 +54,7 @@ public class StatisticsScreen extends InputAdapter {
         return button;
     }
     private static ScrollPane createScrollPane(){
-        myTextLabel.setAlignment(Align.topLeft);
+        myTextLabel.setAlignment(Align.left);
         myTextLabel.setFontScale(0.6f);
         myTextLabel.setWrap(true);
         final ScrollPane log = new ScrollPane(myTextLabel);
@@ -70,7 +70,7 @@ public class StatisticsScreen extends InputAdapter {
     public static Table getMessageTable(){
         myTable.addActor(myScrollPane);
         myTable.addActor(myEXITButton);
-        myTable.setBackground(new TextureRegionDrawable(new Texture("MessageBack.png")));
+        myTable.setBackground(new TextureRegionDrawable(new Texture("GameOver1.png")));
         return myTable;
     }
     public static void addListener(final ChangeListener theListener){

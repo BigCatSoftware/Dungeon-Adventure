@@ -1,5 +1,6 @@
 package controller;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import model.GameMaster;
 import model.Tile;
@@ -54,9 +55,6 @@ public class PlayerInputProcessor extends InputAdapter {
                     myGame.setScreen(new CombatScreen(myGame, myPreviousScreen));
                 }
                 checkTileType(gm.getPlayerX(), gm.getPlayerY());
-//                if (gm.isHeroNearExit() && gm.getHeroKeys() == 4) {
-//
-//                }
                 break;
             case Input.Keys.DOWN:
                 if(gm.getMap()[gm.getPlayerX()][gm.getPlayerY()-1].isWalkable()){
@@ -123,6 +121,7 @@ public class PlayerInputProcessor extends InputAdapter {
                 GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
                 break;
             case POISON_POTION:
+                gm.getPlayer().setMyTrapsTriggered();
                 myPreviousScreen.showTrapMessage("Hero affected by poison!!!\n" + gm.heroTrapDamage(Tile.POISON_POTION));
                 GameMaster.getInstance().getMap()[theX][theY] = Tile.FLOOR;
                 break;
@@ -135,14 +134,57 @@ public class PlayerInputProcessor extends InputAdapter {
                 gm.getMap()[gm.getPlayerX()][gm.getPlayerY()] = Tile.FLOOR;
                 break;
             case PIT_TRAP:
+                gm.getPlayer().setMyTrapsTriggered();
                 myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
                 break;
             case EXIT:
-                myPreviousScreen.showStatisticsScreen("...");
+                statScreen(GameMaster.getInstance().getPlayer().getMyName(),
+                        GameMaster.getInstance().getPlayer().getCurrentHealth(),
+                        GameMaster.getInstance().getPlayer().getMyEnemiesKilled(),
+                        GameMaster.getInstance().getPlayer().getMyPotionsUsed(),
+                        GameMaster.getInstance().getPlayer().getMyBombsUsed(),
+                        GameMaster.getInstance().getPlayer().getMyTrapsTriggered());
             default:
                 break;
         }
     }
+
+    /**
+     * This method generates the stat screen message.
+     */
+    private void statScreen(final String thePlayerName, final int thePlayerHealth,
+                            final int theEnemiesKilled, final int thePotionsUsed,
+                            final int theBombsUsed, final int theTrapsTriggered) {
+        final StringBuilder statBuilder = new StringBuilder();
+        statBuilder.append(thePlayerName);
+        statBuilder.append("\n");
+        statBuilder.append("Player Health: ");
+        statBuilder.append(thePlayerHealth);
+        statBuilder.append("\n");
+        statBuilder.append("Enemies Killed: ");
+        statBuilder.append(theEnemiesKilled);
+        statBuilder.append("\n");
+        statBuilder.append("Total Potions: ");
+        statBuilder.append(thePotionsUsed +
+                GameMaster.getInstance().getPlayer().getMyCurrentPotions());
+        statBuilder.append("\n");
+        statBuilder.append("Potions Used: ");
+        statBuilder.append(thePotionsUsed);
+        statBuilder.append("\n");
+        statBuilder.append("Total Bombs Collected: ");
+        statBuilder.append(theBombsUsed +
+                GameMaster.getInstance().getPlayer().getMyCurrentBombs());
+        statBuilder.append("\n");
+        statBuilder.append("Bombs Used: ");
+        statBuilder.append(theBombsUsed);
+        statBuilder.append("\n");
+        statBuilder.append("Traps Triggered: ");
+        statBuilder.append(theTrapsTriggered);
+        statBuilder.append("\n");
+
+        myPreviousScreen.showStatisticsScreen(statBuilder.toString());
+    }
+
     private void openDoors() {
         final GameMaster gm = GameMaster.getInstance();
         for (int i = gm.getPlayerX() - 1; i <= gm.getPlayerX() + 1; i++) {
