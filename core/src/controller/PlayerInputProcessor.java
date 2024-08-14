@@ -3,12 +3,10 @@ package controller;
 import com.badlogic.gdx.Gdx;
 import model.GameMaster;
 import model.Tile;
-import view.CombatScreen;
-import view.GameScreen;
+import view.*;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.dungeonadventure.game.DungeonAdventure;
-import view.SettingsScreen;
 
 
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
@@ -140,9 +138,7 @@ public class PlayerInputProcessor extends InputAdapter {
                 myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
                 break;
             case EXIT:
-                if (GameMaster.getInstance().getHeroKeys() == 4) {
-
-                }
+                myPreviousScreen.showStatisticsScreen("...");
             default:
                 break;
         }
