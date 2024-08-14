@@ -139,6 +139,10 @@ public class PlayerInputProcessor extends InputAdapter {
             case PIT_TRAP:
                 myPreviousScreen.showTrapMessage("Hero fell in pit!!! \n" + gm.heroTrapDamage(Tile.PIT_TRAP));
                 break;
+            case EXIT:
+                if (GameMaster.getInstance().getHeroKeys() == 4) {
+
+                }
             default:
                 break;
         }
