@@ -3,6 +3,9 @@ package view;
 import static com.dungeonadventure.game.DungeonAdventure.mySETTINGS;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -158,7 +161,55 @@ public final class CombatScreen extends ScreenAdapter {
      */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(myStage);
+        final InputMultiplexer mux = new InputMultiplexer();
+        mux.addProcessor(myStage);
+        mux.addProcessor(new InputAdapter(){
+            @Override
+            public boolean keyDown(int keyCode){
+                switch(keyCode){
+                    case Input.Keys.A:
+                        if(!myButtons[0].isDisabled()) {
+                            myButtons[0].toggle();
+                        }
+                        break;
+                    case Input.Keys.S:
+                        if(!myButtons[1].isDisabled()) {
+                            myButtons[1].toggle();
+                        }
+                        break;
+                    case Input.Keys.F:
+                        if(!myButtons[2].isDisabled()) {
+                            myButtons[2].toggle();
+                        }
+                        break;
+                    case Input.Keys.E:
+                        if(!myButtons[3].isDisabled()) {
+                            myButtons[3].toggle();
+                        }
+                        break;
+                    case Input.Keys.X:
+                        myButtons[4].toggle();
+                        break;
+                    case Input.Keys.NUM_1:
+                        if(!myButtons[3].isDisabled()) {
+                            myInventory.findActor("1").fire(new ChangeListener.ChangeEvent());
+                        }
+                        break;
+                    case Input.Keys.NUM_2:
+                        if(!myButtons[3].isDisabled()) {
+                            myInventory.findActor("2").fire(new ChangeListener.ChangeEvent());
+                        }
+                        break;
+                    case Input.Keys.B:
+                        if(!myButtons[3].isDisabled()) {
+                            myInventory.findActor("3").fire(new ChangeListener.ChangeEvent());
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(mux);
     }
 
     /**
@@ -285,7 +336,7 @@ public final class CombatScreen extends ScreenAdapter {
      * @return textbutton array.
      */
     private TextButton[] initCombatButtons(final BitmapFont theFont){
-        String[] buttonText = {"ATTACK", "SPECIAL ACTION", "FLEE", "INVENTORY", "EXIT/FORFEIT"};
+        String[] buttonText = {"[A]TTACK", "[S]PECIAL ACTION", "[F]LEE", "INV[E]NTORY", "E[X]IT/FORFEIT"};
         int xPos = 5;
         int xIncr = 5;
         int yPos = 5;
@@ -347,6 +398,7 @@ public final class CombatScreen extends ScreenAdapter {
         button.setBounds(theX,theY,theWidth,theHeight);
         button.getLabel().setWrap(true);
         button.getLabel().setFontScale(0.6f, 1.2f);
+        button.setProgrammaticChangeEvents(true);
         return button;
     }
     private void disableWidgetsIfDeath(){
@@ -571,7 +623,7 @@ public final class CombatScreen extends ScreenAdapter {
         initInventBackButton(style);
     }
     private void initInventUseHealthButton(final TextButton.TextButtonStyle theStyle){
-        final TextButton button = new TextButton("USE", theStyle);
+        final TextButton button = new TextButton("USE[1]", theStyle);
         button.setBounds(INVENTORY_WIDTH/4 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
         button.addListener(new ChangeListener() {
             @Override
@@ -589,11 +641,13 @@ public final class CombatScreen extends ScreenAdapter {
                 GameMaster.getInstance().getPlayer().setMyPotionsUsed();
             }
         });
+        button.setProgrammaticChangeEvents(true);
+        button.setName("1");
         myInventory.addActor(button);
     }
 
     private void initInventUseBombButton(final TextButton.TextButtonStyle theStyle){
-        final TextButton button = new TextButton("USE", theStyle);
+        final TextButton button = new TextButton("USE[2]", theStyle);
         button.setBounds((INVENTORY_WIDTH/4) * 2 - button.getWidth()/2, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
         button.addListener(new ChangeListener() {
             @Override
@@ -612,11 +666,13 @@ public final class CombatScreen extends ScreenAdapter {
                 GameMaster.getInstance().getPlayer().setMyBombsUsed();
             }
         });
+        button.setProgrammaticChangeEvents(true);
+        button.setName("2");
         myInventory.addActor(button);
     }
 
     private void initInventBackButton(final TextButton.TextButtonStyle theStyle){
-        final TextButton button = new TextButton("BACK", theStyle);
+        final TextButton button = new TextButton("[B]ACK", theStyle);
         button.setBounds(DungeonAdventure.WIDTH-button.getWidth(), 0, BUTTON_WIDTH, BUTTON_HEIGHT);
         button.addListener(new ChangeListener() {
             @Override
@@ -626,6 +682,8 @@ public final class CombatScreen extends ScreenAdapter {
                 playerTurnAction();
             }
         });
+        button.setProgrammaticChangeEvents(true);
+        button.setName("3");
         myInventory.addActor(button);
     }
     private void updateInventory(){
