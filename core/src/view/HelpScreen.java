@@ -10,6 +10,13 @@ import com.badlogic.gdx.utils.Disposable;
 import com.dungeonadventure.game.DungeonAdventure;
 import controller.HelpInputProcessor;
 
+/**
+ * The HelpScreen class implements the Screen interface and displays
+ * helpful tips to the player. It provides information on how to play
+ * the game and allows the player to return to the previous screen.
+ * @author alvarovaldez-duran
+ * @version 1.0
+ */
 public class HelpScreen implements Screen, Disposable {
     private final SpriteBatch myBatch;
     private final BitmapFont myFont;
@@ -17,6 +24,12 @@ public class HelpScreen implements Screen, Disposable {
     private final DungeonAdventure myGame;
     private final GlyphLayout myLayout;
 
+    /**
+     * Constructs a HelpScreen instance.
+     *
+     * @param theGame The main game instance.
+     * @param thePreviousScreen The previous screen to return to.
+     */
     public HelpScreen(final DungeonAdventure theGame, final Screen thePreviousScreen) {
         myPreviousScreen = thePreviousScreen;
         myGame = theGame;

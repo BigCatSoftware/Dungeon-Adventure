@@ -354,6 +354,12 @@ public class GameScreen implements Screen {
         });
         myGameMenuTable.addActor(button);
     }
+    /**
+     * Initializes the "SAVE" button in the game menu.
+     * The button allows the player to save the current game state.
+     *
+     * @param theStyle The style to be applied to the button.
+     */
     private void initSaveButton(final TextButton.TextButtonStyle theStyle) {
         final TextButton button = new TextButton("SAVE", theStyle);
         button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY() * 2 - (5 * BUTTON_HEIGHT) - (4 * BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -367,6 +373,13 @@ public class GameScreen implements Screen {
         });
         myGameMenuTable.addActor(button);
     }
+
+    /**
+     * Initializes the "HELP" button in the game menu.
+     * The button allows the player to access the help screen.
+     *
+     * @param theStyle The style to be applied to the button.
+     */
     private void initHelpButton(final TextButton.TextButtonStyle theStyle) {
         final TextButton button = new TextButton("HELP", theStyle);
         button.setBounds(myGameMenuTable.getX() - BUTTON_X_OFFSET, myGameMenuTable.getY() * 2 - (6 * BUTTON_HEIGHT) - (5 * BUTTON_Y_OFFSET), BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -374,11 +387,12 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 mySETTINGS.playSound(Gdx.audio.newSound(Gdx.files.internal("sounds/button.ogg")));
-                myGame.setScreen(new HelpScreen(myGame,GameScreen.this));
+                myGame.setScreen(new HelpScreen(myGame, GameScreen.this));
             }
         });
         myGameMenuTable.addActor(button);
     }
+
 
     /**
      * Shows or hides the game menu.
@@ -437,20 +451,27 @@ public class GameScreen implements Screen {
         myGameTable.addActor(StatisticsScreen.getMessageTable());
         Gdx.input.setInputProcessor(inMux);
     }
-
-    public void showTrapMessage(final String theMessage){
+    /**
+     * Displays a trap message on the screen and handles player input.
+     * The method sets up an input processor to listen for key events and reacts
+     * when the player presses the ENTER key. If the player is dead, it disposes
+     * of the current screen and transitions to the Game Over screen. If the player
+     * is alive, it removes the message table and returns control to the player.
+     *
+     * @param theMessage The message to be displayed to the player.
+     */
+    public void showTrapMessage(final String theMessage) {
         final Table table = MessageScreen.getMessageTable();
         final InputMultiplexer inMux = new InputMultiplexer();
         inMux.addProcessor(myStage);
-        inMux.addProcessor(new InputAdapter(){
+        inMux.addProcessor(new InputAdapter() {
             @Override
-            public boolean keyDown(int keyCode){
-                if(keyCode == Input.Keys.ENTER){
-                    if(GameMaster.getInstance().getPlayer().getIsDead()){
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Input.Keys.ENTER) {
+                    if (GameMaster.getInstance().getPlayer().getIsDead()) {
                         dispose();
                         myGame.setScreen(new GameOverScreen(myGame));
-                    }
-                    else{
+                    } else {
                         myGameTable.removeActor(table);
                         Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
                     }
@@ -462,11 +483,10 @@ public class GameScreen implements Screen {
         MessageScreen.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(GameMaster.getInstance().getPlayer().getIsDead()){
+                if (GameMaster.getInstance().getPlayer().getIsDead()) {
                     dispose();
                     myGame.setScreen(new GameOverScreen(myGame));
-                }
-                else{
+                } else {
                     myGameTable.removeActor(table);
                     Gdx.input.setInputProcessor(new PlayerInputProcessor(myGame, GameScreen.this));
                 }
