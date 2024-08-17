@@ -76,6 +76,20 @@ public final class Priestess extends Hero implements Healable, Serializable {
     }
 
     /**
+     * Returns minimum health healed using special action for priestess
+     * @return int minimum health healed using special action for priestess.
+     */
+    public int getSpecialMinHeal(){
+        return PRIESTESS_SKILL_MIN_HEAL;
+    }
+    /**
+     * Returns maximum health healed using special action for priestess
+     * @return int maximum health healed using special action for priestess.
+     */
+    public int getSpecialMaxHeal(){
+        return PRIESTESS_SKILL_MAX_HEAL;
+    }
+    /**
      * Returns the name of special action for this character
      * @return string special action name.
      */

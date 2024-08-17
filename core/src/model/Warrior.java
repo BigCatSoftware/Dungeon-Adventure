@@ -112,6 +112,21 @@ public final class Warrior extends Hero implements Serializable {
         //class fields
         return "Crushing Blow";
     }
+
+    /**
+     * Returns min special action damage for warrior.
+     * @return int min special action damage for warrior.
+     */
+    public int getSpecialMinDamage(){
+        return WARRIOR_SKILL_MIN_DAMAGE;
+    }
+    /**
+     * Returns max special action damage for warrior.
+     * @return int max special action damage for warrior.
+     */
+    public int getSpecialMaxDamage(){
+        return WARRIOR_SKILL_MAX_DAMAGE;
+    }
     /**
      * Represents information about his character as string
      * @return string representation of data.

@@ -246,6 +246,9 @@ abstract public class Hero extends DungeonCharacter implements Serializable {
     public int getHeroHealthPotions(){
         return myHealthInv;
     }
+    public int getBlockChance(){
+        return myBlockChance;
+    }
     /**
      * Adds to Dungeon Character toString() hero's block chance.
      * @return string representation of data for this character.

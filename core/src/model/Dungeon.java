@@ -143,8 +143,8 @@ public class Dungeon implements Serializable {
                     && MAP[roomY + i][roomX + width - 1] == Tile.WALL
                     && MAP[roomY + i][roomX + width] == Tile.FLOOR) {
                 MAP[roomY + i][roomX + width - 1] = Tile.DOOR;
-                final Door newDoor = new Door(new Position(roomX + width - 1,
-                        roomY + i));
+                final Door newDoor = new Door(new Position(roomY + i,
+                    roomX + width - 1));
                 theRoom.getDoors().add(newDoor);
                 theRoom.setHasDoors(true);
                 break;
@@ -208,9 +208,10 @@ public class Dungeon implements Serializable {
                     && MAP[roomY + height - 1][roomX + i] == Tile.WALL
                     && MAP[roomY + height][roomX + i] == Tile.FLOOR) {
                 MAP[roomY + height - 1][roomX + i] = Tile.DOOR;
-                final Door newDoor = new Door(new Position(roomX + width - 1,
-                        roomY + i));
+                final Door newDoor = new Door(new Position(roomY + height - 1,
+                    roomX + i));
                 theRoom.getDoors().add(newDoor);
+                theRoom.setHasDoors(true);
                 break;
             }
         }
@@ -431,13 +432,13 @@ public class Dungeon implements Serializable {
             myTotalRooms = 0;
             generateDungeon();
         } else {
-            System.out.println("Dungeon Rooms " + myTotalRooms + ": ");
+            //System.out.println("Dungeon Rooms " + myTotalRooms + ": ");
             int i = 0;
             for (Room room : myRoomList) {
-                System.out.println();
-                System.out.println(room);
-                System.out.print("Adjacent Rooms");
-                System.out.println(room.getAdjacentRooms());
+                //System.out.println();
+                //System.out.println(room);
+                //System.out.print("Adjacent Rooms");
+               // System.out.println(room.getAdjacentRooms());
                 i++;
             }
         }

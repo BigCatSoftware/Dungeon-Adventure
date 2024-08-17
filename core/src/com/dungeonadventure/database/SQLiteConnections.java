@@ -142,4 +142,7 @@ public final class SQLiteConnections {
         }
         return enemy;
     }
+    public static boolean isConnected(){
+        return myDS != null;
+    }
 }

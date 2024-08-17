@@ -262,19 +262,19 @@ public class GameScreen implements Screen {
                         }
                     }
                     if(GameMaster.getInstance().getIsCheats()){
-                        myPixmap.fillRectangle(i*PIXEL_SIZE, (map[0].length - j)*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                        myPixmap.fillRectangle(i*PIXEL_SIZE, (map[0].length-1 - j)*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                     }else {
                         if(GameMaster.getInstance().getMapFOW()[i][j]){
-                            myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                            myPixmap.fillRectangle(i * PIXEL_SIZE,(map[0].length-1 - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                         }
                         else if(GameMaster.getInstance().getMapExploredFOW()[i][j]){
-                            myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                            myPixmap.fillRectangle(i * PIXEL_SIZE,(map[0].length-1 - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                             myPixmap.setColor(63f/255, 63f/255, 63f/255, 100f/255);
-                            myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                            myPixmap.fillRectangle(i * PIXEL_SIZE,(map[0].length-1 - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                         }
                         else{
                             myPixmap.setColor(0,0,0,1);
-                            myPixmap.fillRectangle(i * PIXEL_SIZE,(GameMaster.getInstance().getMap()[1].length - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                            myPixmap.fillRectangle(i * PIXEL_SIZE,(map[0].length-1 - j) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
                         }
                     }
                 }
@@ -304,12 +304,12 @@ public class GameScreen implements Screen {
                 }
                 //entity on the minimap
                 myPixmap.setColor(1,0,0,1);
-                myPixmap.fillRectangle(e.getPosition().getMyX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length - e.getPosition().getMyY()) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                myPixmap.fillRectangle(e.getPosition().getMyX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length-1 - e.getPosition().getMyY()) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
             }
         }
         //player on the minimap
         myPixmap.setColor(1,1,1,1);
-        myPixmap.fillRectangle(GameMaster.getInstance().getPlayerX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length - GameMaster.getInstance()
+        myPixmap.fillRectangle(GameMaster.getInstance().getPlayerX() * PIXEL_SIZE, (GameMaster.getInstance().getMap()[1].length-1 - GameMaster.getInstance()
             .getPlayerY()) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
     }
 //    private Texture initMiniMap(){
