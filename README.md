@@ -43,6 +43,6 @@ This fork showcases my specific contributions to the project, focusing on key ar
 
 ## Contact
 Feel free to reach out if you have any questions or are interested in collaboration:
-[LinkedIn](www.linkedin.com/in/tigerschueler/)
+[LinkedIn](https://www.linkedin.com/in/tigerschueler)
 [Email](mailto:tigerschuelerr@gmail.com)
 
